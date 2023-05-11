@@ -4,14 +4,14 @@
 
 namespace s21{
 
-template< class T, class Container = std::deque<T> >
+template<class T, class Container = std::deque<T>>
 class Stack{
 public:
     using container_type    = Container;
-    using value_type        = Container::value_type;
-    using size_type         = Container::size_type;
-    using reference         = Container::reference;
-    using const_reference   = Container::const_reference;
+    using value_type        = typename container_type::value_type;
+    using size_type         = typename container_type::size_type;
+    using reference         = typename container_type::reference;
+    using const_reference   = typename container_type::const_reference;
 
     Stack();
     Stack(const Stack& other);
@@ -25,14 +25,17 @@ public:
     
     void push(value_type&& value);
 
-    void pop();
+    value_type pop();
 
     reference top();
 
     const_reference top() const;
 
 private:
+    container_type innerContainer_;
 
 };
 
 }
+
+#include "../srcs/stack.tpp"
