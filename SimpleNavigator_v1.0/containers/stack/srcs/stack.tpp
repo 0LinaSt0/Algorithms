@@ -7,14 +7,14 @@ Stack<T, Container>::Stack(){
 
 template<class T, class Container>
 Stack<T, Container>::Stack(const Stack& other)
-    : innerContainer_(other.innerContainer_) {
-    
+    : inner_container_(other.inner_container_) {
+
 }
 
 template<class T, class Container>
 Stack<T, Container>::Stack(Stack&& other)
-    : innerContainer_(std::move(other.innerContainer_)) {
-    
+    : inner_container_(std::move(other.inner_container_)) {
+
 }
 
 template<class T, class Container>
@@ -24,41 +24,51 @@ Stack<T, Container>::~Stack(){
 
 template<class T, class Container>
 Stack<T, Container>& Stack<T, Container>::operator=(const Stack& other){
-    innerContainer_ = other.innerContainer_;
+    inner_container_ = other.inner_container_;
     return *this;
 }
 
 template<class T, class Container>
 Stack<T, Container>& Stack<T, Container>::operator=(Stack&& other){
-    innerContainer_ = std::move(other.innerContainer_);
+    inner_container_ = std::move(other.inner_container_);
     return *this;
 }
 
 template<class T, class Container>
 void Stack<T, Container>::push(const value_type& value){
-    innerContainer_.push_back(value);
+    inner_container_.push_back(value);
 }
 
 template<class T, class Container>
 void Stack<T, Container>::push(value_type&& value){
-    innerContainer_.push_back(value);
+    inner_container_.push_back(std::move(value));
 }
 
 template<class T, class Container>
 typename Stack<T, Container>::value_type Stack<T, Container>::pop(){
     T elem = top();
-    innerContainer_.pop_back();
+    inner_container_.pop_back();
     return elem;
 }
 
 template<class T, class Container>
 typename Stack<T, Container>::reference Stack<T, Container>::top(){
-    return innerContainer_.back();
+    return inner_container_.back();
 }
 
 template<class T, class Container>
 typename Stack<T, Container>::const_reference Stack<T, Container>::top() const{
-    return innerContainer_.back();
+    return inner_container_.back();
+}
+
+template<class T, class Container>
+typename Stack<T, Container>::size_type Stack<T, Container>::size() const{
+    return inner_container_.size();
+}
+
+template<class T, class Container>
+bool Stack<T, Container>::empty() const{
+    return size() == 0;
 }
 
 }

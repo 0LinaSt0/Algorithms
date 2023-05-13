@@ -21,18 +21,42 @@ public:
     Stack& operator=(const Stack& other);
     Stack& operator=(Stack&& other);
 
+    // Adding an element
     void push(const value_type& value);
     
+    // Adding an element
     void push(value_type&& value);
 
+    /**
+     * Getting an element from the stack
+     * followed by its removal from the stack
+     */
     value_type pop();
 
+    /**
+     * Getting an element from the stack without its removal from the stack
+     * @return reference to the stack element
+     */
     reference top();
 
+    /**
+     * Getting an element from the stack without its removal from the stack
+     * @return const reference to the stack element
+     */
     const_reference top() const;
 
+    /**
+     * @return size of stack
+     */
+    size_type size() const;
+
+    /**
+     * @return if stack empty
+     */
+    bool empty() const;
+
 private:
-    container_type innerContainer_;
+    container_type inner_container_;
 
 };
 
