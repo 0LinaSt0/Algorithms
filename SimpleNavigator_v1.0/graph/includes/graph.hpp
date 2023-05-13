@@ -5,11 +5,16 @@
 #include <fstream>
 #include <utility>
 #include <vector>
+#include <regex>
+
+#include "../../utils/includes/utils.hpp"
+
 
 namespace fs = std::filesystem;
 
 namespace s21{
 
+const std::string DEFAULT_DOT_NAME = "tmp_graph.dot";
 const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
 const fs::path DOTS_PATH = "materials/dots_representation";
@@ -31,8 +36,6 @@ public:
 private:
     graph_type graph_;
     bool is_directed_;
-
-    fs::path createFileIfNotExist_(std::string& filename);
 
     std::string dotFilename_(std::string& filename);
 
