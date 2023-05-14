@@ -1,11 +1,14 @@
 #pragma once
 
 #include <filesystem>
+#include <stdexcept>
 #include <iostream>
 #include <fstream>
 #include <utility>
 #include <vector>
 #include <regex>
+
+#include <random> // DELETE MEEEEEE
 
 #include "../../utils/includes/utils.hpp"
 
@@ -14,10 +17,10 @@ namespace fs = std::filesystem;
 
 namespace s21{
 
-const std::string DEFAULT_DOT_NAME = "tmp_graph.dot";
+const std::string DEFAULT_DOT_NAME = "graph_default.dot";
 const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
-const fs::path DOTS_PATH = "materials/dots_representation";
+const fs::path DOTS_PATH = "materials/dot_representations";
 
 class Graph{
 public:
@@ -33,6 +36,9 @@ public:
 
     void ExportGraphToDot(std::string filename);
 
+    void tmp_write_to_graph_DELETEME(int elem_number);
+    void tmp_print_graph_DELETEME(void);
+
 private:
     graph_type graph_;
     bool is_directed_;
@@ -41,5 +47,7 @@ private:
 
     std::string graphDotRepresentation_();
 };
+
+
 
 }

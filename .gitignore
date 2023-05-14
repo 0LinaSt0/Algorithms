@@ -10,5 +10,9 @@
 **/*.out
 **/*.exe
 
+**/materials/dot_representations/*
+
+
+!**/materials/dot_representations/example.dot
 !**/.gitkeep
 !**/.gitignore
