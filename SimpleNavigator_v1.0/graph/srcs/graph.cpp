@@ -4,6 +4,10 @@ namespace s21{
 
 Graph::Graph() : is_directed_(0){ }
 
+constexpr std::size_t Graph::Size(){
+    return graph_.size();
+}
+
 void Graph::ExportGraphToDot(std::string filename){
     try{
         std::string file = std::move(DotFilename_(filename));

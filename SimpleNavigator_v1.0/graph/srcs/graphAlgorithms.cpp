@@ -2,26 +2,13 @@
 
 namespace s21{
 
-GraphAlgorithms::GraphAlgorithms(){
+auto GraphAlgorithms::DepthFirstSearch(Graph &graph, int start_vertex){
+    const std::size_t graph_size = graph.Size();
+    std::array<bool, graph_size> is_in_set;
+    std::array<int, graph_size> nods_road;
 
-}
-GraphAlgorithms::GraphAlgorithms(const GraphAlgorithms& other){
-    (void)other;
-}
-GraphAlgorithms::GraphAlgorithms(GraphAlgorithms&& other){
-    (void)other;
-}
-GraphAlgorithms::~GraphAlgorithms(){
-
-}
-
-GraphAlgorithms& GraphAlgorithms::operator=(const GraphAlgorithms& other){
-    (void)other;
-    return *this;
-}
-GraphAlgorithms& GraphAlgorithms::operator=(GraphAlgorithms&& other){
-    (void)other;
-    return *this;
+    is_in_set.fill(false); nods_road.fill(-1);
+    return nods_road;
 }
 
 }
