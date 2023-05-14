@@ -6,7 +6,7 @@ Graph::Graph() : is_directed_(0){ }
 
 void Graph::ExportGraphToDot(std::string filename){
     try{
-        std::string file = std::move(dotFilename_(filename));
+        std::string file = std::move(DotFilename_(filename));
         fs::path result_path = ROOT_DIR / DOTS_PATH / file;
         std::ofstream dot_file(result_path.native());
         
@@ -14,7 +14,7 @@ void Graph::ExportGraphToDot(std::string filename){
             throw std::invalid_argument(result_path);
         }
 
-        std::string dot_graph = std::move(graphDotRepresentation_());
+        std::string dot_graph = std::move(GraphDotRepresentation_());
         
         dot_file << dot_graph << std::endl;
     }
@@ -27,7 +27,7 @@ void Graph::ExportGraphToDot(std::string filename){
     }
 }
 
-std::string Graph::dotFilename_(std::string& filename){
+std::string Graph::DotFilename_(std::string& filename){
     if (filename.empty()){
         return DEFAULT_DOT_NAME;
     }
@@ -41,7 +41,7 @@ std::string Graph::dotFilename_(std::string& filename){
     return filename + ".dot";
 }
 
-std::string Graph::graphDotRepresentation_(){
+std::string Graph::GraphDotRepresentation_(){
     std::string graph_dot = "graph graphname {\n";
     std::string dash = (is_directed_ ? " -> " : " -- ");
     std::string startline = "\t";

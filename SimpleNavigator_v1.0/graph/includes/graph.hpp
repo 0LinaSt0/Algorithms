@@ -43,9 +43,9 @@ private:
     graph_type graph_;
     bool is_directed_;
 
-    std::string dotFilename_(std::string& filename);
+    std::string DotFilename_(std::string& filename);
 
-    std::string graphDotRepresentation_();
+    std::string GraphDotRepresentation_();
 };
 
 

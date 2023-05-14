@@ -2,7 +2,7 @@
 
 namespace s21{
 
-void printError(const std::string& filename, 
+void PrintError(const std::string& filename, 
         const std::string& funcname, int line, const std::string& msg){
     std::cerr << filename << ": "
             << funcname << ": "
@@ -10,7 +10,7 @@ void printError(const std::string& filename,
             << msg << std::endl;
 }
 
-void readOnlyPermissions(std::string& filepath){
+void ReadOnlyPermissions(std::string& filepath){
     fs::path path = filepath;
 
     fs::permissions(
