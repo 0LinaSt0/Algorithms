@@ -1,6 +1,6 @@
 #pragma once
 
-#include <filesystem>
+// #include <filesystem>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -10,17 +10,17 @@
 
 #include <random> // DELETE MEEEEEE
 
-#include "../../utils/includes/utils.hpp"
+// #include "../../utils/includes/utils.hpp"
 
 
-namespace fs = std::filesystem;
+// namespace fs = std::filesystem;
 
 namespace s21{
 
-const std::string DEFAULT_DOT_NAME = "graph_default.dot";
-const fs::path ROOT_DIR = fs::current_path();
-const fs::path GRAPHS_PATH = "materials/graphs";
-const fs::path DOTS_PATH = "materials/dot_representations";
+// const std::string DEFAULT_DOT_NAME = "graph_default.dot";
+// const fs::path ROOT_DIR = fs::current_path();
+// const fs::path GRAPHS_PATH = "materials/graphs";
+// const fs::path DOTS_PATH = "materials/dot_representations";
 
 class Graph{
 public:

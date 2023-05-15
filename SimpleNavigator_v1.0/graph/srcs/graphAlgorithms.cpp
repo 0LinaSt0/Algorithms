@@ -15,9 +15,9 @@ std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
     nodes_road.push_back(current_vertex);
     is_in_sets[current_vertex] = 1;
     while (true){
-        for(std::size_t bind_vertex_i = 0;
-            bind_vertex_i < graph[current_vertex].size();
-            bind_vertex_i++
+        for(int bind_vertex_i = graph[current_vertex].size() - 1;
+            bind_vertex_i >= 0;
+            bind_vertex_i--
         ){
             if (graph[current_vertex][bind_vertex_i] > 0 &&
                 is_in_sets[bind_vertex_i] == 0
