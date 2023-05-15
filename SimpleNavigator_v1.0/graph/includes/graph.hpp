@@ -24,8 +24,10 @@ const fs::path DOTS_PATH = "materials/dot_representations";
 
 class Graph{
 public:
-    using graph_type    = std::vector<std::vector<int>>;
-    using size_type     = typename graph_type::size_type;
+    using graph_type        = std::vector<std::vector<int>>;
+    using size_type         = typename graph_type::size_type;
+    using reference         = typename graph_type::reference;
+    using const_reference   = typename graph_type::const_reference;
 
     Graph();
     Graph(const Graph& other) = default;
@@ -34,8 +36,10 @@ public:
 
     Graph& operator=(const Graph& other) = default;
     Graph& operator=(Graph&& other) = default;
+    reference operator[](size_type pos);
+    const_reference operator[](size_type pos) const;
 
-    constexpr std::size_t Size();
+    std::size_t Size();
 
     void ExportGraphToDot(std::string filename);
 

@@ -4,7 +4,15 @@ namespace s21{
 
 Graph::Graph() : is_directed_(0){ }
 
-constexpr std::size_t Graph::Size(){
+Graph::reference Graph::operator[](Graph::size_type pos){
+    return graph_.operator[](pos);
+}
+
+Graph::const_reference Graph::operator[](Graph::size_type pos) const{
+    return graph_.operator[](pos);
+}
+
+std::size_t Graph::Size(){
     return graph_.size();
 }
 
@@ -13,13 +21,13 @@ void Graph::ExportGraphToDot(std::string filename){
         std::string file = std::move(DotFilename_(filename));
         fs::path result_path = ROOT_DIR / DOTS_PATH / file;
         std::ofstream dot_file(result_path.native());
-        
+
         if (!dot_file.is_open()){
             throw std::invalid_argument(result_path);
         }
 
         std::string dot_graph = std::move(GraphDotRepresentation_());
-        
+
         dot_file << dot_graph << std::endl;
     }
     catch(const std::invalid_argument& e){
@@ -58,15 +66,15 @@ std::string Graph::GraphDotRepresentation_(){
     for(graph_type::size_type row = 0; row < graph_.size(); row++){
         for(graph_type::size_type col = 0; col < graph_.size(); col++){
             if (graph_[row][col] > 0){
-                graph_dot += startline + 
-                            std::to_string(row) + 
-                            dash + 
-                            std::to_string(col) + 
+                graph_dot += startline +
+                            std::to_string(row) +
+                            dash +
+                            std::to_string(col) +
                             endline;
             }
         }
     }
-    
+
     graph_dot += "}";
     return graph_dot;
 }

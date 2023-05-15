@@ -20,7 +20,7 @@ namespace fs = std::filesystem;
 namespace s21{
 
 // Print error like "filename: funcname: line: msg" to std::cerr
-void PrintError(const std::string& filename, 
+void PrintError(const std::string& filename,
         const std::string& funcname, int line, const std::string& msg);
 
 // Set permissions READ-ONLY for "filepath"

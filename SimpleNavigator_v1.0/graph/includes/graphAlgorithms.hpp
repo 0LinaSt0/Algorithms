@@ -1,5 +1,8 @@
 #pragma once
 
+#include <utility>
+#include <vector>
+
 #include "../../containers/stack/includes/stack.hpp"
 #include "graph.hpp"
 
@@ -15,7 +18,7 @@ public:
     GraphAlgorithms& operator=(const GraphAlgorithms& other) = default;
     GraphAlgorithms& operator=(GraphAlgorithms&& other) = default;
 
-    auto DepthFirstSearch(Graph &graph, int start_vertex);
+    std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 
 private:
 

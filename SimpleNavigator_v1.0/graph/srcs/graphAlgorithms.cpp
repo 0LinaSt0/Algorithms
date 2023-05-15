@@ -2,13 +2,37 @@
 
 namespace s21{
 
-auto GraphAlgorithms::DepthFirstSearch(Graph &graph, int start_vertex){
-    const std::size_t graph_size = graph.Size();
-    std::array<bool, graph_size> is_in_set;
-    std::array<int, graph_size> nods_road;
+std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
+                                    int start_vertex){
+    if(!graph.Size()) { return std::vector<int>(); }
 
-    is_in_set.fill(false); nods_road.fill(-1);
-    return nods_road;
+    std::vector<int> nodes_road;
+    s21::Stack<int> current_vertices;
+    std::vector<int> is_in_sets(graph.Size(), 0); // -1 - in stack; 0 - not in sets; 1 - in arr
+    int current_vertex;
+
+    current_vertex = start_vertex;
+    nodes_road.push_back(current_vertex);
+    is_in_sets[current_vertex] = 1;
+    while (true){
+        for(std::size_t bind_vertex_i = 0;
+            bind_vertex_i < graph[current_vertex].size();
+            bind_vertex_i++
+        ){
+            if (graph[current_vertex][bind_vertex_i] > 0 &&
+                is_in_sets[bind_vertex_i] == 0
+            ){
+                current_vertices.push(bind_vertex_i);
+                is_in_sets[bind_vertex_i] = -1;
+            }
+        }
+        current_vertex = current_vertices.top();
+        nodes_road.push_back(current_vertex);
+        current_vertices.pop();
+        is_in_sets[current_vertex] = 1;
+        if (current_vertices.empty()){ break; }
+    }
+    return nodes_road;
 }
 
 }

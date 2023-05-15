@@ -2,7 +2,7 @@
 
 namespace s21{
 
-void PrintError(const std::string& filename, 
+void PrintError(const std::string& filename,
         const std::string& funcname, int line, const std::string& msg){
     std::cerr << filename << ": "
             << funcname << ": "
@@ -15,11 +15,11 @@ void ReadOnlyPermissions(std::string& filepath){
 
     fs::permissions(
         path,
-        fs::perms::none | 
-            fs::perms::owner_read | 
-            fs::perms::group_read | 
+        fs::perms::none |
+            fs::perms::owner_read |
+            fs::perms::group_read |
             fs::perms::others_read,
-        fs::perm_options::replace 
+        fs::perm_options::replace
     );
 }
 
