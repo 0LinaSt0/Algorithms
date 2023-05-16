@@ -1,6 +1,6 @@
 #pragma once
 
-// #include <filesystem>
+#include <filesystem>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -10,28 +10,31 @@
 
 #include <random> // DELETE MEEEEEE
 
-// #include "../../utils/includes/utils.hpp"
+#include "../../utils/includes/utils.hpp"
 
 
-// namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 
 namespace s21{
 
-// const std::string DEFAULT_DOT_NAME = "graph_default.dot";
-// const fs::path ROOT_DIR = fs::current_path();
-// const fs::path GRAPHS_PATH = "materials/graphs";
-// const fs::path DOTS_PATH = "materials/dot_representations";
+const std::string DEFAULT_DOT_NAME = "graph_default.dot";
+const fs::path ROOT_DIR = fs::current_path();
+const fs::path GRAPHS_PATH = "materials/graphs";
+const fs::path DOTS_PATH = "materials/dot_representations";
 
 class Graph{
 public:
-    using graph_type        = std::vector<std::vector<int>>;
-    using size_type         = typename graph_type::size_type;
-    using reference         = typename graph_type::reference;
-    using const_reference   = typename graph_type::const_reference;
+    using elem_of_graph_type        = std::vector<int>;
+    using graph_type                = std::vector<elem_of_graph_type>;
+    using size_type                 = typename graph_type::size_type;
+    using reference                 = typename graph_type::reference;
+    using const_reference           = typename graph_type::const_reference;
 
     Graph();
     Graph(const Graph& other) = default;
     Graph(Graph&& other) = default;
+    Graph(const graph_type& inp_graph);
+    Graph(graph_type&& inp_graph);
     ~Graph() = default;
 
     Graph& operator=(const Graph& other) = default;
