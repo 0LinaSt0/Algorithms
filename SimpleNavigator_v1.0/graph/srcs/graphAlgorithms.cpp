@@ -36,7 +36,7 @@ std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
 }
 
 GraphAlgorithms::graph_type
-        GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
+        GraphAlgorithms::GetShortestPathsBetweenAllVerticesTMP(Graph &graph){
     std::size_t graph_size = graph.Size();
     graph_type FWL_matrix(graph_size, elem_of_graph_type(graph_size, 0));
 
@@ -62,7 +62,7 @@ GraphAlgorithms::graph_type
     return FWL_matrix;
 }
 
-Graph GraphAlgorithms::GetShortestPathsBetweenAllVerticesGr(Graph &graph){
+Graph GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
     std::size_t graph_size = graph.Size();
     Graph FWL_matrix(graph_type(graph_size, elem_of_graph_type(graph_size, 0)));
 
@@ -78,7 +78,7 @@ Graph GraphAlgorithms::GetShortestPathsBetweenAllVerticesGr(Graph &graph){
             }
         }
         std::cout << std::endl << "Graph with throgh_node = " << throgh_node << std::endl;
-        graph.tmp_print_graph_DELETEME();
+        FWL_matrix.tmp_print_graph_DELETEME();
     }
     return FWL_matrix;
 }

@@ -25,8 +25,8 @@ public:
 
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 
-    graph_type GetShortestPathsBetweenAllVertices(Graph &graph);
-    Graph GetShortestPathsBetweenAllVerticesGr(Graph &graph);
+    graph_type GetShortestPathsBetweenAllVerticesTMP(Graph &graph);
+    Graph GetShortestPathsBetweenAllVertices(Graph &graph);
 private:
 
 };
