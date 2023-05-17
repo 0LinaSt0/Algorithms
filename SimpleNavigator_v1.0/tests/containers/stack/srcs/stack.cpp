@@ -1,6 +1,6 @@
 #include "../includes/stack.hpp"
 
-namespace s21::tests::stack {
+namespace s21::tests {
 
 TEST(TEST_SUITE_NAME, EMPTY_CONSTRUCTOR) {
     s21::Stack<int> stack;

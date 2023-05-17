@@ -1,40 +1,6 @@
 namespace s21{
 
 template<class T, class Container>
-Stack<T, Container>::Stack(){
-
-}
-
-template<class T, class Container>
-Stack<T, Container>::Stack(const Stack& other)
-    : inner_container_(other.inner_container_) {
-
-}
-
-template<class T, class Container>
-Stack<T, Container>::Stack(Stack&& other)
-    : inner_container_(std::move(other.inner_container_)) {
-
-}
-
-template<class T, class Container>
-Stack<T, Container>::~Stack(){
-
-}
-
-template<class T, class Container>
-Stack<T, Container>& Stack<T, Container>::operator=(const Stack& other){
-    inner_container_ = other.inner_container_;
-    return *this;
-}
-
-template<class T, class Container>
-Stack<T, Container>& Stack<T, Container>::operator=(Stack&& other){
-    inner_container_ = std::move(other.inner_container_);
-    return *this;
-}
-
-template<class T, class Container>
 void Stack<T, Container>::push(const value_type& value){
     inner_container_.push_back(value);
 }

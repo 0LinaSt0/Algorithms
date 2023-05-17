@@ -13,13 +13,13 @@ public:
     using reference         = typename container_type::reference;
     using const_reference   = typename container_type::const_reference;
 
-    Stack();
-    Stack(const Stack& other);
-    Stack(Stack&& other);
-    ~Stack();
+    Stack() = default;
+    Stack(const Stack& other) = default;
+    Stack(Stack&& other) = default;
+    ~Stack() = default;
 
-    Stack& operator=(const Stack& other);
-    Stack& operator=(Stack&& other);
+    Stack& operator=(const Stack& other) = default;
+    Stack& operator=(Stack&& other) = default;
 
     // Adding an element
     void push(const value_type& value);

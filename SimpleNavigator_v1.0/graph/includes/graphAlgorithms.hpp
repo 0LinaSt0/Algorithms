@@ -25,10 +25,9 @@ public:
 
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 
-    graph_type GetShortestPathsBetweenAllVerticesTMP(Graph &graph);
     Graph GetShortestPathsBetweenAllVertices(Graph &graph);
 private:
-
+    int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
 };
 
 }
