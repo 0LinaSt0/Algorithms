@@ -86,7 +86,7 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
     std::vector<int> result;
     result.reserve(graph.Size());
     std::vector<bool> visited(graph.Size(), false);
-    std::queue<int> q;
+    s21::Queue<int> q;
 
     q.push(start_vertex);
     visited[start_vertex] = true;
@@ -106,8 +106,7 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
     return result;
 }
 
-GraphAlgorithms::graph_type
-        GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
+Graph GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
     std::size_t graph_size = graph.Size();
     graph_type FWL_matrix(graph_size, elem_of_graph_type(graph_size, 0));
 
@@ -129,31 +128,6 @@ GraphAlgorithms::graph_type
             }
             std::cout << std::endl;
         }
-    }
-    return FWL_matrix;
-}
-
-Graph GraphAlgorithms::GetShortestPathsBetweenAllVerticesGr(Graph &graph){
-Graph GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
-    if(!graph.Size()) { return Graph(); }
-
-    std::size_t graph_size = graph.Size();
-    Graph FWL_matrix(graph);
-
-    for (std::size_t throgh_node = 0; throgh_node < graph_size; throgh_node++){
-        for (std::size_t row = 0; row < graph_size; row++){
-            for (std::size_t column = 0; column < graph_size; column++){
-                if (row == column) {
-                    FWL_matrix[row][column] = 0;
-                } else {
-                    FWL_matrix[row][column] = MinWeight_(
-                        FWL_matrix, column, row, throgh_node
-                    );
-                }
-            }
-        }
-        std::cout << std::endl << "Graph with throgh_node = " << throgh_node << std::endl;
-        graph.tmp_print_graph_DELETEME();
     }
     return FWL_matrix;
 }

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../../containers/stack/includes/stack.hpp"
+#include "../../containers/queue/includes/queue.hpp"
 #include "../../utils/includes/utils.hpp"
 #include "graph.hpp"
 
@@ -26,12 +27,12 @@ public:
 
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 
+    std::vector<int> BreadthFirstSearch(Graph &graph, int start_vertex);
+
     Graph GetShortestPathsBetweenAllVertices(Graph &graph);
 private:
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
-    std::vector<int> BreadthFirstSearch(Graph &graph, int start_vertex);
 
-    graph_type GetShortestPathsBetweenAllVertices(Graph &graph);
     Graph GetShortestPathsBetweenAllVerticesGr(Graph &graph);
 
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
