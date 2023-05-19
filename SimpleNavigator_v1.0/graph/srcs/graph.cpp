@@ -16,8 +16,66 @@ Graph::const_reference Graph::operator[](Graph::size_type pos) const{
     return graph_.operator[](pos);
 }
 
+Graph::elem_of_graph_type::value_type Graph::at(size_type row, size_type col){
+    return graph_[row][col];
+}
+
+Graph::elem_of_graph_type::value_type Graph::at(size_type row, 
+                                                size_type col) const{
+    return graph_[row][col];
+}
+
 std::size_t Graph::Size(){
     return graph_.size();
+}
+
+bool Graph::LoadGraphFromFile(std::string filename){
+    if (graph_.size()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
+                    "Current 1 is not emtpy");
+        return false;
+    }
+
+    std::ifstream file_stream;
+    file_stream.open(filename, std::ios_base::in);
+    if (!file_stream.is_open()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
+                        "Cannot open file " + filename);
+        return false;
+    }
+
+    int size;
+    file_stream >> size;
+    if (size <= 0){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
+                        "Graph size must be positive");
+        return false;
+    }
+
+    graph_.reserve(size);
+    for (int i = 0; i < size; i++){
+        elem_of_graph_type row;
+        row.reserve(size);
+        for (int j = 0; j < size; j++){
+            int val;
+            if (!(file_stream >> val)){
+                PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
+                                "Invalid file line");
+                graph_.clear();
+                return false;
+            }
+            if (val < 0){
+                PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
+                                "Vertex value must be non-negative");
+                graph_.clear();
+                return false;
+            }
+            row.push_back(val);
+        }
+        graph_.push_back(std::move(row));
+    }
+
+    return true;
 }
 
 void Graph::ExportGraphToDot(std::string filename){
@@ -58,7 +116,7 @@ std::string Graph::DotFilename_(std::string& filename){
 }
 
 std::string Graph::GraphDotRepresentation_(){
-    std::string graph_dot = "graph graphname {\n";
+    std::string graph_dot = "1 graphname {\n";
     std::string dash = (is_directed_ ? " -> " : " -- ");
     std::string startline = "\t";
     std::string endline = ";\n";

@@ -7,34 +7,63 @@ GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g \
 TEST_DIR	=	tests
 TMP_DIR		=	tmp
 
-HDRS		=	$(addprefix containers/, 			\
-					$(addprefix stack/,				\
-						$(addprefix includes/,		\
-							stack.hpp				\
-						)							\
-					)								\
+HDRS		=	$(addprefix containers/, 									\
+					$(addprefix stack/,										\
+						$(addprefix includes/,								\
+							stack.hpp										\
+						)													\
+					)														\
+				)															\
+				$(addprefix graph/,											\
+					$(addprefix includes/,									\
+						graph.hpp graphAlgorithms.hpp						\
+					)														\
+				)															\
+				$(addprefix utils/,											\
+					$(addprefix includes/,									\
+						utils.hpp											\
+					)														\
 				)
-SRCS		=
+SRCS		=	$(addprefix graph/,											\
+					$(addprefix srcs/,										\
+						graph.cpp graphAlgorithms.cpp						\
+					)														\
+				)															\
+				$(addprefix utils/,											\
+					$(addprefix srcs/,										\
+						utils.cpp											\
+					)														\
+				)
 OBJS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.o))
 DPNDS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.d))
 
-TEST_HDRS	=	$(addprefix $(TEST_DIR)/,			\
-					$(addprefix containers/,		\
-						$(addprefix stack/,			\
-							$(addprefix includes/,	\
-								stack.hpp			\
-							)						\
-						)							\
-					)								\
+TEST_HDRS	=	$(addprefix $(TEST_DIR)/,									\
+					$(addprefix containers/,								\
+						$(addprefix stack/,									\
+							$(addprefix includes/,							\
+								stack.hpp									\
+							)												\
+						)													\
+					)														\
+					$(addprefix graph/,										\
+						$(addprefix includes/,								\
+							graph.hpp										\
+						)													\
+					)														\
 				)
-TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp	\
-					$(addprefix containers/,		\
-						$(addprefix stack/,			\
-							$(addprefix srcs/,		\
-								stack.cpp			\
-							)						\
-						)							\
-					)								\
+TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp							\
+					$(addprefix containers/,								\
+						$(addprefix stack/,									\
+							$(addprefix srcs/,								\
+								stack.cpp									\
+							)												\
+						)													\
+					)														\
+					$(addprefix graph/,										\
+						$(addprefix srcs/,									\
+							graph.cpp										\
+						)													\
+					)														\
 				)
 TEST_OBJS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.o))
 TEST_DPNDS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.d))

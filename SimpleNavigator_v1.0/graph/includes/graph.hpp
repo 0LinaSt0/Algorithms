@@ -41,8 +41,13 @@ public:
     Graph& operator=(Graph&& other) = default;
     reference operator[](size_type pos);
     const_reference operator[](size_type pos) const;
+    
+    elem_of_graph_type::value_type at(size_type row, size_type col);
+    elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
     std::size_t Size();
+
+    bool LoadGraphFromFile(std::string filename);
 
     void ExportGraphToDot(std::string filename);
 
@@ -56,6 +61,7 @@ private:
     std::string DotFilename_(std::string& filename);
 
     std::string GraphDotRepresentation_();
+
 };
 
 
