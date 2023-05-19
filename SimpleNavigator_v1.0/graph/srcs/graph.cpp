@@ -53,6 +53,22 @@ std::size_t Graph::Size(){
     return graph_.size();
 }
 
+Graph::iterator_type Graph::Begin(){
+    return graph_.begin();
+}
+
+Graph::iterator_type Graph::End(){
+    return graph_.end();
+}
+
+Graph::const_iterator_type Graph::Begin() const{
+    return graph_.begin();
+}
+
+Graph::const_iterator_type Graph::End() const{
+    return graph_.end();
+}
+
 bool Graph::IsDirected() const{
     return is_directed_;
 }
