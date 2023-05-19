@@ -34,7 +34,7 @@ public:
     Graph(const Graph& other) = default;
     Graph(Graph&& other) = default;
     Graph(const graph_type& inp_graph);
-    Graph(graph_type&& inp);
+    Graph(graph_type&& inp_graph);
     ~Graph() = default;
 
     Graph& operator=(const Graph& other) = default;

@@ -78,4 +78,52 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
     return result_weight;
 }
 
+GraphAlgorithms::graph_type
+        GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
+    std::size_t graph_size = graph.Size();
+    graph_type FWL_matrix(graph_size, elem_of_graph_type(graph_size, 0));
+
+    for (std::size_t throgh_node = 0; throgh_node < graph_size; throgh_node++){
+        for (std::size_t row = 0; row < graph_size; row++){
+            for (std::size_t column = 0; column < graph_size; column++){
+                FWL_matrix[row][column] = std::minmax(
+                    std::initializer_list<int>{
+                        graph[row][column],
+                        (graph[row][throgh_node] + graph[throgh_node][column])
+                    }
+                ).first;
+            }
+        }
+        std::cout << std::endl << "Graph with throgh_node = " << throgh_node << std::endl;
+        for (std::size_t i = 0; i < graph_size; i++){
+            for (std::size_t j = 0; j < graph_size; j++){
+                std::cout << FWL_matrix[i][j] << "  ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    return FWL_matrix;
+}
+
+Graph GraphAlgorithms::GetShortestPathsBetweenAllVerticesGr(Graph &graph){
+    std::size_t graph_size = graph.Size();
+    Graph FWL_matrix(graph_type(graph_size, elem_of_graph_type(graph_size, 0)));
+
+    for (std::size_t throgh_node = 0; throgh_node < graph_size; throgh_node++){
+        for (std::size_t row = 0; row < graph_size; row++){
+            for (std::size_t column = 0; column < graph_size; column++){
+                FWL_matrix[row][column] = std::minmax(
+                    std::initializer_list<int>{
+                        graph[row][column],
+                        (graph[row][throgh_node] + graph[throgh_node][column])
+                    }
+                ).first;
+            }
+        }
+        std::cout << std::endl << "Graph with throgh_node = " << throgh_node << std::endl;
+        graph.tmp_print_graph_DELETEME();
+    }
+    return FWL_matrix;
+}
+
 }
