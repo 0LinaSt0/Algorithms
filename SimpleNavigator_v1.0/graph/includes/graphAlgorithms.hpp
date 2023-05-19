@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../../containers/stack/includes/stack.hpp"
+#include "../../utils/includes/utils.hpp"
 #include "graph.hpp"
 
 namespace s21{
@@ -25,9 +26,10 @@ public:
 
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 
+    std::vector<int> BreadthFirstSearch(Graph &graph, int start_vertex);
+
     graph_type GetShortestPathsBetweenAllVertices(Graph &graph);
     Graph GetShortestPathsBetweenAllVerticesGr(Graph &graph);
-private:
 
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 

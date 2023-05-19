@@ -37,8 +37,8 @@ public:
     Graph(graph_type&& inp_graph);
     ~Graph() = default;
 
-    Graph& operator=(const Graph& other) = default;
-    Graph& operator=(Graph&& other) = default;
+    Graph& operator=(const Graph& other);
+    Graph& operator=(Graph&& other);
     reference operator[](size_type pos);
     const_reference operator[](size_type pos) const;
     
@@ -46,6 +46,8 @@ public:
     elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
     std::size_t Size();
+
+    bool IsDirected() const;
 
     bool LoadGraphFromFile(std::string filename);
 
@@ -58,12 +60,12 @@ private:
     graph_type graph_;
     bool is_directed_;
 
+    bool IsDirected_() const;
+
     std::string DotFilename_(std::string& filename);
 
     std::string GraphDotRepresentation_();
 
 };
-
-
 
 }

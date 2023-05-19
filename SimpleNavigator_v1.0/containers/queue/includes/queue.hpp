@@ -38,6 +38,8 @@ private:
     container_type qct_;
 };
 
+#include "../srcs/queue.tpp"
+
 }
 
 #include "../srcs/queue.tpp"

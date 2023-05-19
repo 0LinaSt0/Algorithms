@@ -47,7 +47,7 @@ TEST_HDRS	=	$(addprefix $(TEST_DIR)/,									\
 					)														\
 					$(addprefix graph/,										\
 						$(addprefix includes/,								\
-							graph.hpp										\
+							graph.hpp graphAlgorithms.hpp					\
 						)													\
 					)														\
 				)
@@ -61,7 +61,7 @@ TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp							\
 					)														\
 					$(addprefix graph/,										\
 						$(addprefix srcs/,									\
-							graph.cpp										\
+							graph.cpp graphAlgorithms.cpp					\
 						)													\
 					)														\
 				)
@@ -77,6 +77,7 @@ $(TMP_DIR)/%.o:	%.cpp $(TEST_HDRS) $(HDRS)
 
 test:			$(OBJS) $(TEST_OBJS)
 				$(GCC) $(OBJS) $(TEST_OBJS) -o $(TEST_EXE)
+				./$(TEST_EXE) 2> /dev/null
 
 clean:			
 				@rm -rf $(TMP_DIR)

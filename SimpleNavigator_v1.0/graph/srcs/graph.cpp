@@ -4,9 +4,33 @@ namespace s21{
 
 Graph::Graph() : is_directed_(0){ }
 
-Graph::Graph(const graph_type& inp_graph) : graph_(inp_graph){ }
+Graph::Graph(const graph_type& inp_graph) : graph_(inp_graph){ 
+    is_directed_ = IsDirected_();
+}
 
-Graph::Graph(graph_type&& inp_graph) : graph_(inp_graph){ }
+Graph::Graph(graph_type&& inp_graph) : graph_(std::move(inp_graph)){
+    is_directed_ = IsDirected_();
+}
+
+Graph& Graph::operator=(const Graph& other){
+    if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
+                                    "Graph is not empty");
+    else {
+        graph_ = other.graph_;
+        is_directed_ = other.is_directed_;
+    }
+    return *this;
+}
+
+Graph& Graph::operator=(Graph&& other){
+    if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
+                                    "Graph is not empty");
+    else {
+        graph_ = std::move(other.graph_);
+        is_directed_ = other.is_directed_;
+    }
+    return *this;
+}
 
 Graph::reference Graph::operator[](Graph::size_type pos){
     return graph_.operator[](pos);
@@ -27,6 +51,10 @@ Graph::elem_of_graph_type::value_type Graph::at(size_type row,
 
 std::size_t Graph::Size(){
     return graph_.size();
+}
+
+bool Graph::IsDirected() const{
+    return is_directed_;
 }
 
 bool Graph::LoadGraphFromFile(std::string filename){
@@ -76,6 +104,16 @@ bool Graph::LoadGraphFromFile(std::string filename){
     }
 
     return true;
+}
+
+bool Graph::IsDirected_() const{
+    for (size_t x = 0; x < graph_.size(); x++){
+    for (size_t y = 0; y < graph_.size(); y++){
+        if (graph_[x][y] != graph_[y][x]) return true;
+    }
+    }
+
+    return false;
 }
 
 void Graph::ExportGraphToDot(std::string filename){

@@ -12,6 +12,7 @@ TEST(TEST_SUITE_NAME, LOAD_VALID_FILE_1){
 
     ASSERT_TRUE(file_stream.is_open());
     ASSERT_TRUE(graph.LoadGraphFromFile(file_name));
+    ASSERT_FALSE(graph.IsDirected());
 
     size_type size;
     file_stream >> size;

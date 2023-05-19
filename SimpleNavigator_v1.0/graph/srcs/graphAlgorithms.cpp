@@ -1,4 +1,5 @@
 #include "../includes/graphAlgorithms.hpp"
+#include <queue>
 
 namespace s21{
 
@@ -76,6 +77,34 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
         ).first;
     }
     return result_weight;
+std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
+                                                        int start_vertex){
+    if (start_vertex < 0 || start_vertex > static_cast<int>(graph.Size())){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,  "Invalid vertex number");
+        return {};
+    }
+    
+    std::vector<int> result;
+    result.reserve(graph.Size());
+    std::vector<bool> visited(graph.Size(), false);
+    std::queue<int> q;
+    
+    q.push(start_vertex);
+    visited[start_vertex] = true;
+
+    while (q.size()){
+        int start = q.front();
+        q.pop();
+        result.push_back(start);
+
+        for (int v = 0; v < static_cast<int>(graph.Size()); v++){
+            if (visited[v] || !graph.at(start, v)) continue;
+            q.push(v);
+            visited[v] = true;
+        }
+    }
+
+    return result;
 }
 
 GraphAlgorithms::graph_type

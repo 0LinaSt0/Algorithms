@@ -1,9 +1,6 @@
 namespace s21{
 
 template< class T, class Container >
-Queue<T, Container>::Queue() { }
-
-template< class T, class Container >
 Queue<T, Container>::Queue(const Queue<T, Container>& other){
     qct_ = other.qct_;
 }
