@@ -40,6 +40,9 @@ private:
     Graph GetShortestPathsBetweenAllVertices(Graph &graph);
 private:
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
+
+    int FindMin_(const std::vector<int>& values,
+                    const std::vector<bool>& visited);
 };
 
 }

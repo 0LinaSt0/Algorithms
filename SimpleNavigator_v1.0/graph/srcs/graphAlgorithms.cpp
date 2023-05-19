@@ -35,6 +35,34 @@ std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
     return nodes_road;
 }
 
+int GraphAlgorithms::GetShortestPathBetweenVertices(Graph& graph, int vertex1,
+                                                        int vertex2){
+    const size_t size = graph.Size();
+
+    std::vector<int> values(size, -1);
+    std::vector<bool> visited(size, false);
+    values[vertex1] = 0;
+
+    int start;
+    while (true){
+        start = FindMin_(values, visited);
+        if (start == -1) break;
+
+        for (size_t i = 0; i < size; i++){
+            if (graph[start][i] == 0) continue;
+            if (values[i] == -1){
+                values[i] = graph[start][i];
+            } else {
+                int newVal = values[start] + graph[start][i];
+                if (newVal < values[i]) values[i] = newVal;
+            }
+        }
+        visited[start] = true;
+    }
+
+    return values[vertex2];
+}
+
 Graph GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
     if(!graph.Size()) { return Graph(); }
 
@@ -151,6 +179,20 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
         ).first;
     }
     return result_weight;
+}
+
+int GraphAlgorithms::FindMin_(const std::vector<int>& values, const std::vector<bool>& visited){
+    int minValue = -1, minIdx = -1;
+
+    for (size_t i = 0; i < values.size(); i++){
+        if (values[i] == -1 || visited[i]) continue;
+        if (minValue == -1 || values[i] < minValue){
+            minValue = values[i];
+            minIdx = static_cast<int>(i);
+        }
+    }
+
+    return minIdx;
 }
 
 }
