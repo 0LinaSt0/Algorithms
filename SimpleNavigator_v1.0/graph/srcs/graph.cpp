@@ -106,16 +106,6 @@ bool Graph::LoadGraphFromFile(std::string filename){
     return true;
 }
 
-bool Graph::IsDirected_() const{
-    for (size_t x = 0; x < graph_.size(); x++){
-    for (size_t y = 0; y < graph_.size(); y++){
-        if (graph_[x][y] != graph_[y][x]) return true;
-    }
-    }
-
-    return false;
-}
-
 void Graph::ExportGraphToDot(std::string filename){
     try{
         std::string file = std::move(DotFilename_(filename));
@@ -137,6 +127,16 @@ void Graph::ExportGraphToDot(std::string filename){
     catch(...){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, "Invalid file");
     }
+}
+
+bool Graph::IsDirected_() const{
+    for (size_t x = 0; x < graph_.size(); x++){
+    for (size_t y = 0; y < graph_.size(); y++){
+        if (graph_[x][y] != graph_[y][x]) return true;
+    }
+    }
+
+    return false;
 }
 
 std::string Graph::DotFilename_(std::string& filename){

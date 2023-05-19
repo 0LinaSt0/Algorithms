@@ -29,6 +29,8 @@ public:
     using size_type                 = typename graph_type::size_type;
     using reference                 = typename graph_type::reference;
     using const_reference           = typename graph_type::const_reference;
+    using iterator_type             = typename graph_type::iterator;
+    using const_iterator_type       = typename graph_type::const_iterator;
 
     Graph();
     Graph(const Graph& other) = default;
@@ -46,6 +48,10 @@ public:
     elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
     std::size_t Size();
+    iterator_type Begin();
+    iterator_type End();
+    const_iterator_type Begin() const;
+    const_iterator_type End() const;
 
     bool IsDirected() const;
 
