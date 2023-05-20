@@ -125,24 +125,40 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
     std::vector<Ant> ants(graph.Size());
     std::vector<int> current_ant_nodes(graph.Size());
     TsmResult return_path;
-    float q_parameter;
+    // float q_parameter;
 
-    q_parameter = AverageDistance_(graph);
+    // q_parameter = AverageDistance_(graph);
     std::iota(current_ant_nodes.begin(), current_ant_nodes.end(), 0);
     while (!ants.empty()){
-        for (int choosed_node, ant_index = 0; !ants.empty(); ant_index++){
-            choosed_node = ants[ant_index].ChooseNextNode(
-                graph[current_ant_nodes[ant_index]],
-                pheromones[current_ant_nodes[ant_index]]
-            );
+        for (int /*choosed_node, */ant_index = 0; !ants.empty(); ant_index++){
+            // choosed_node = ants[ant_index].ChooseNextNode(
+            //     graph[current_ant_nodes[ant_index]],
+            //     pheromones[current_ant_nodes[ant_index]]
+            // );
 
 
-            if (!ants.empty() && ant_index == (ants.size() - 1) ){
+            if (!ants.empty() && ant_index == static_cast<int>((ants.size() - 1))){
                 ant_index = 0;
             }
         }
     }
     return return_path;
+}
+
+Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
+    std::vector<bool> visited(graph.Size(), false);
+    Graph::graph_type matrix;
+
+    for (Graph::size_type i = 0; i < graph.Size(); i++){
+        int minVal = INT_MAX;
+        int minIdx = -1;
+
+        for (Graph::size_type j = 0; j < graph.Size(); j++){
+
+        }
+    }
+
+    return matrix;
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
@@ -178,6 +194,10 @@ int GraphAlgorithms::FindMin_(const std::vector<int>& values, const std::vector<
     }
 
     return minIdx;
+}
+
+int FindMin_(const std::vector<int>& veticex){
+    
 }
 
 float GraphAlgorithms::AverageDistance_(Graph& graph){

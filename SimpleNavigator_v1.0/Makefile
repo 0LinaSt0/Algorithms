@@ -13,10 +13,15 @@ HDRS		=	$(addprefix containers/, 									\
 							stack.hpp										\
 						)													\
 					)														\
+					$(addprefix queue/,										\
+						$(addprefix includes/,								\
+							queue.hpp										\
+						)													\
+					)														\
 				)															\
 				$(addprefix graph/,											\
 					$(addprefix includes/,									\
-						graph.hpp graphAlgorithms.hpp						\
+						ant.hpp graph.hpp graphAlgorithms.hpp				\
 					)														\
 				)															\
 				$(addprefix utils/,											\
@@ -26,7 +31,7 @@ HDRS		=	$(addprefix containers/, 									\
 				)
 SRCS		=	$(addprefix graph/,											\
 					$(addprefix srcs/,										\
-						graph.cpp graphAlgorithms.cpp						\
+						ant.cpp graph.cpp graphAlgorithms.cpp				\
 					)														\
 				)															\
 				$(addprefix utils/,											\

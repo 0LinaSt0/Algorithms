@@ -23,10 +23,10 @@ const int TSM_ALPHA = 1; // parameter depending on the number of pheromones [0;2
 const int TSM_BETA = 2; // parameter depending on the length [0;2]
 const double TSM_PYRA = 0.1; // evaporation rate constant of pheromones [0;1]
 
-struct TsmResult {
-    std::vector<int> vertices; // an array with the route
-    double distance;  // the length of this route
-};
+// struct TsmResult {
+//     std::vector<int> vertices; // an array with the route
+//     double distance;  // the length of this route
+// };
 
 class GraphAlgorithms{
 public:
@@ -48,7 +48,9 @@ public:
 
     int GetShortestPathBetweenVertices(Graph& graph, int vertex1, int vertex2);
 
-    Graph GetShortestPathsBetweenAllVertices(Graph &graph);
+    Graph GetShortestPathsBetweenAllVertices(Graph& graph);
+
+    Graph GetLeastSpanningTree(Graph &graph);
 
     // average_distance_length
     TsmResult SolveTravelingSalesmanProblem(Graph &graph);
@@ -57,6 +59,8 @@ private:
 
     int FindMin_(const std::vector<int>& values,
             const std::vector<bool>& visited);
+
+    int FindMin_(const std::vector<int>& veticex);
                     
     float AverageDistance_(Graph& graph);
 };
