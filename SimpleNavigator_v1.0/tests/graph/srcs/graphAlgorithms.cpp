@@ -74,4 +74,19 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree){
     }
 }
 
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 5), 11);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 20);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 4), 20);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 1), 21);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 1), 21);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 2, 4), 11);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 3, 5), 13);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 0), 20);
+}
+
 }

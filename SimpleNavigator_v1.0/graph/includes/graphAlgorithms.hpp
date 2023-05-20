@@ -24,11 +24,6 @@ const int TSM_ALPHA = 1; // parameter depending on the number of pheromones [0;2
 const int TSM_BETA = 2; // parameter depending on the length [0;2]
 const double TSM_PYRA = 0.1; // evaporation rate constant of pheromones [0;1]
 
-// struct TsmResult {
-//     std::vector<int> vertices; // an array with the route
-//     double distance;  // the length of this route
-// };
-
 class GraphAlgorithms{
 public:
     using elem_of_graph_type    = typename Graph::elem_of_graph_type;

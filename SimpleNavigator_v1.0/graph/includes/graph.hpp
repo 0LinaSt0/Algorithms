@@ -22,6 +22,11 @@ const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
 const fs::path DOTS_PATH = "materials/dot_representations";
 
+struct TsmResult {
+    std::vector<int> vertices; // an array with the route
+    double distance;  // the length of this route
+};
+
 class Graph{
 public:
     using elem_of_graph_type        = std::vector<int>;

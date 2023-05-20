@@ -14,7 +14,7 @@ public:
     using reference	        = typename container_type::reference;
     using const_reference	= typename container_type::const_reference;
 
-    Queue();
+    Queue() = default;
     Queue(const Queue& other);
     Queue(Queue&& other);
     ~Queue();

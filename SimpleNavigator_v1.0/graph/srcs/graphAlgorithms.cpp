@@ -2,9 +2,10 @@
 
 namespace s21{
 
-
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
                                                         int start_vertex){
+    (void)graph; (void)start_vertex;
+    
     if (start_vertex < 0 || start_vertex > static_cast<int>(graph.Size())){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,  "Invalid vertex number");
         return {};
@@ -30,7 +31,7 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
         }
     }
 
-    return result;
+    return result; 
 }
 
 std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
@@ -70,7 +71,7 @@ int GraphAlgorithms::GetShortestPathBetweenVertices(Graph& graph, int vertex1,
                                                         int vertex2){
     const size_t size = graph.Size();
 
-    std::vector<int> values(size, -1);
+    std::vector<int> values(size, INT_MAX);
     std::vector<bool> visited(size, false);
     values[vertex1] = 0;
 
@@ -95,13 +96,10 @@ int GraphAlgorithms::GetShortestPathBetweenVertices(Graph& graph, int vertex1,
         if (start == -1) break;
 
         for (size_t i = 0; i < size; i++){
+            if (visited[i]) continue;
             if (graph[start][i] == 0) continue;
-            if (values[i] == -1){
-                values[i] = graph[start][i];
-            } else {
-                int newVal = values[start] + graph[start][i];
-                if (newVal < values[i]) values[i] = newVal;
-            }
+            int newVal = values[start] + graph[start][i];
+            if (newVal < values[i]) values[i] = newVal;
         }
         visited[start] = true;
     }
@@ -152,7 +150,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
             // );
 
 
-            if (!ants.empty() && ant_index == static_cast<int>((ants.size() - 1))){
+            if (!ants.empty() && ant_index == static_cast<int>(ants.size() - 1)){
                 ant_index = 0;
             }
         }
