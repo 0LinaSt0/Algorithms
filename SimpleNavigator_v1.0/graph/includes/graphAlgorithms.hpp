@@ -16,13 +16,7 @@
 
 namespace s21{
 
-class Graph;
-struct TsmResult;
-class GraphAlgorithms;
-
-const int TSM_ALPHA = 1; // parameter depending on the number of pheromones [0;2]
-const int TSM_BETA = 2; // parameter depending on the length [0;2]
-const double TSM_PYRA = 0.1; // evaporation rate constant of pheromones [0;1]
+class Ant;
 
 class GraphAlgorithms{
 public:
@@ -54,6 +48,10 @@ private:
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
                     
     float AverageDistance_(Graph& graph);
+
+    std::vector<Ant>&& AntsColony_(Graph& graph);
+
+    TsmResult&& UpdateReturnedWay_(TsmResult& new_way, TsmResult& best_way);
 };
 
 }

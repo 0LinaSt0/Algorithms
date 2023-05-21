@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRAPH_HPP
+#define GRAPH_HPP
 
 #include <filesystem>
 #include <stdexcept>
@@ -16,16 +17,6 @@
 namespace fs = std::filesystem;
 
 namespace s21{
-
-const std::string DEFAULT_DOT_NAME = "graph_default.dot";
-const fs::path ROOT_DIR = fs::current_path();
-const fs::path GRAPHS_PATH = "materials/graphs";
-const fs::path DOTS_PATH = "materials/dot_representations";
-
-struct TsmResult {
-    std::vector<int> vertices; // an array with the route
-    double distance;  // the length of this route
-};
 
 class Graph{
 public:
@@ -84,3 +75,5 @@ private:
 };
 
 }
+
+#endif

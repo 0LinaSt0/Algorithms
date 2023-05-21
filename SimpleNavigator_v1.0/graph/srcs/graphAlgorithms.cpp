@@ -130,30 +130,37 @@ Graph GraphAlgorithms::GetShortestPathsBetweenAllVertices(Graph &graph){
 }
 
 TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
-    Graph pheromones(
-        std::vector<elem_of_graph_type>(
-            graph.Size(), std::vector<int>(graph.Size(), 0)
-        )
+    std::vector<std::vector<double>> pheromones(
+        graph.Size(), std::vector<double>(graph.Size(), 0)
     );
-    std::vector<Ant> ants(graph.Size());
-    std::vector<int> current_ant_nodes(graph.Size());
+    std::vector<Ant> ants(std::move(AntsColony_(graph)));
     TsmResult return_path;
-    // float q_parameter;
+    float q_parameter;
 
-    // q_parameter = AverageDistance_(graph);
-    std::iota(current_ant_nodes.begin(), current_ant_nodes.end(), 0);
+    q_parameter = AverageDistance_(graph);
     while (!ants.empty()){
-        for (int /*choosed_node, */ant_index = 0; !ants.empty(); ant_index++){
-            // choosed_node = ants[ant_index].ChooseNextNode(
-            //     graph[current_ant_nodes[ant_index]],
-            //     pheromones[current_ant_nodes[ant_index]]
-            // );
-
-
-            if (!ants.empty() && ant_index == static_cast<int>(ants.size() - 1)){
-                ant_index = 0;
+        for (size_t choosed_node, ant_index = 0; ant_index < ants.size();){
+            choosed_node = ants[ant_index].ChooseNextNode(
+                graph[ants[ant_index].CurrentNode()],
+                pheromones[(ants[ant_index].CurrentNode())]
+            );
+            if (choosed_node == ants[ant_index].StartNode()){
+                if (ants[ant_index].EndCodeStatus() == 1){
+                    return_path = std::move(UpdateReturnedWay_(
+                        ants[ant_index].CurrentWay(), return_path
+                    ));
+                    // засчитай феромон
+                    ants.erase(ants.begin() + ant_index);
+                } else if (ants[ant_index].EndCodeStatus() == 2){
+                    ants.erase(ants.begin() + ant_index);
+                } else {
+                    ant_index++;
+                }
+            } else {
+                ant_index++;
             }
         }
+        // засчитай феромон
     }
     return return_path;
 }
@@ -242,6 +249,25 @@ float GraphAlgorithms::AverageDistance_(Graph& graph){
         }
     }
     return (float)total_length_count / (float)edges_count;
+}
+
+std::vector<Ant>&& GraphAlgorithms::AntsColony_(Graph& graph){
+    std::vector<Ant> ants;
+
+    for(size_t i = 0; i < graph.Size(); i++){
+        ants.push_back(Ant(i));
+    }
+    return std::move(ants);
+}
+
+TsmResult&& GraphAlgorithms::UpdateReturnedWay_(TsmResult& new_way, 
+                                TsmResult& best_way){
+    if (best_way.vertices.empty() || 
+        new_way.distance < best_way.distance){
+        return std::move(new_way);
+    } else {
+        return std::move(best_way);
+    }
 }
 
 }

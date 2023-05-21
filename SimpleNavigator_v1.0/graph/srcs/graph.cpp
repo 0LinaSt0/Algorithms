@@ -139,7 +139,7 @@ bool Graph::LoadGraphFromFile(std::string filename){
 
 void Graph::ExportGraphToDot(std::string filename){
     try{
-        std::string file = std::move(DotFilename_(filename));
+        std::string&& file = DotFilename_(filename);
         fs::path result_path = ROOT_DIR / DOTS_PATH / file;
         std::ofstream dot_file(result_path.native());
 
@@ -147,7 +147,7 @@ void Graph::ExportGraphToDot(std::string filename){
             throw std::invalid_argument(result_path);
         }
 
-        std::string dot_graph = std::move(GraphDotRepresentation_());
+        std::string dot_graph = GraphDotRepresentation_();
 
         dot_file << dot_graph << std::endl;
     }
