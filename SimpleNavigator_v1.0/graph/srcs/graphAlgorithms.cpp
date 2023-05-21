@@ -74,9 +74,24 @@ int GraphAlgorithms::GetShortestPathBetweenVertices(Graph& graph, int vertex1,
     std::vector<bool> visited(size, false);
     values[vertex1] = 0;
 
+    auto find_min = [](const std::vector<int>& values,
+                        const std::vector<bool>& visited){
+        int minValue = -1, minIdx = -1;
+
+        for (size_t i = 0; i < values.size(); i++){
+            if (values[i] == -1 || visited[i]) continue;
+            if (minValue == -1 || values[i] < minValue){
+                minValue = values[i];
+                minIdx = static_cast<int>(i);
+            }
+        }
+
+        return minIdx;
+    };
+
     int start;
     while (true){
-        start = FindMin_(values, visited);
+        start = find_min(values, visited);
         if (start == -1) break;
 
         for (size_t i = 0; i < size; i++){
@@ -146,19 +161,51 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 }
 
 Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
+    using edge_type = std::pair<int, int>;
+    if (!graph.Size()) return Graph();
+    
     std::vector<bool> visited(graph.Size(), false);
-    Graph::graph_type matrix;
+    visited[0] = true;
+    size_t visited_count = 1;
+    Graph::size_type spanning_tree_size = 0;
 
-    for (Graph::size_type i = 0; i < graph.Size(); i++){
-        int minVal = INT_MAX;
-        int minIdx = -1;
+    std::vector<std::vector<int>> matrix(graph.Size(),
+                                            std::vector<int>(graph.Size(), 0));
 
-        for (Graph::size_type j = 0; j < graph.Size(); j++){
+    auto find_min = [](const Graph& graph, const std::vector<bool>& visited){
+        const int size = static_cast<int>(graph.Size());
+        int min_edge_value = INT_MAX;
+        edge_type min_edge = {-1, -1};
+        
+        for (int begin = 0; begin < size; begin++){
+            if (!visited[begin]) continue;
+            for (int end = 0; end < size; end++){
+                if (visited[end]) continue;
+                if (graph[begin][end] == 0) continue;
+                if (graph[begin][end] < min_edge_value){
+                    min_edge_value = graph[begin][end];
+                    min_edge.first = begin;
+                    min_edge.second = end;
+                }
+            }
+        }
 
+        return min_edge;
+    };
+
+    while (true){
+        edge_type min_edge = find_min(graph, visited);
+        if (min_edge.first == -1) return Graph(matrix);
+        matrix[min_edge.first][min_edge.second] =
+            matrix[min_edge.second][min_edge.first] =
+                graph.at(min_edge.first, min_edge.second);
+        visited_count++;
+        visited[min_edge.second] = true;
+        spanning_tree_size += graph.at(min_edge.first, min_edge.second);
+        if (visited_count == graph.Size()) {
+            return Graph(matrix, spanning_tree_size);
         }
     }
-
-    return matrix;
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
@@ -180,24 +227,6 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
         ).first;
     }
     return result_weight;
-}
-
-int GraphAlgorithms::FindMin_(const std::vector<int>& values, const std::vector<bool>& visited){
-    int minValue = -1, minIdx = -1;
-
-    for (size_t i = 0; i < values.size(); i++){
-        if (values[i] == -1 || visited[i]) continue;
-        if (minValue == -1 || values[i] < minValue){
-            minValue = values[i];
-            minIdx = static_cast<int>(i);
-        }
-    }
-
-    return minIdx;
-}
-
-int FindMin_(const std::vector<int>& veticex){
-    
 }
 
 float GraphAlgorithms::AverageDistance_(Graph& graph){

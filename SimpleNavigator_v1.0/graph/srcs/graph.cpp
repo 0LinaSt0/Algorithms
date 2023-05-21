@@ -12,6 +12,17 @@ Graph::Graph(graph_type&& inp_graph) : graph_(std::move(inp_graph)){
     is_directed_ = IsDirected_();
 }
 
+Graph::Graph(const graph_type& inp_graph, size_type min_spanning_tree_size)
+    : graph_(inp_graph), min_spanning_tree_size_(min_spanning_tree_size) {
+    is_directed_ = IsDirected_();
+}
+
+Graph::Graph(graph_type&& inp_graph, size_type min_spanning_tree_size)
+    : graph_(std::move(inp_graph)),
+        min_spanning_tree_size_(min_spanning_tree_size) {
+    is_directed_ = IsDirected_();
+}
+
 Graph& Graph::operator=(const Graph& other){
     if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
                                     "Graph is not empty");
@@ -49,8 +60,12 @@ Graph::elem_of_graph_type::value_type Graph::at(size_type row,
     return graph_[row][col];
 }
 
-std::size_t Graph::Size(){
+std::size_t Graph::Size() const{
     return graph_.size();
+}
+
+Graph::size_type Graph::MinSpanningTreeSize() const{
+    return min_spanning_tree_size_;
 }
 
 Graph::iterator_type Graph::Begin(){

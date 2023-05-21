@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <algorithm>
+#include <climits>
 #include <utility>
 #include <numeric>
 #include <vector>
@@ -56,11 +57,6 @@ public:
     TsmResult SolveTravelingSalesmanProblem(Graph &graph);
 private:
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
-
-    int FindMin_(const std::vector<int>& values,
-            const std::vector<bool>& visited);
-
-    int FindMin_(const std::vector<int>& veticex);
                     
     float AverageDistance_(Graph& graph);
 };

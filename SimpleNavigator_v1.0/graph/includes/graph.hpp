@@ -37,6 +37,8 @@ public:
     Graph(Graph&& other) = default;
     Graph(const graph_type& inp_graph);
     Graph(graph_type&& inp_graph);
+    Graph(const graph_type& inp_graph, size_type min_spanning_tree_size);
+    Graph(graph_type&& inp_graph, size_type min_spanning_tree_size);
     ~Graph() = default;
 
     Graph& operator=(const Graph& other);
@@ -47,7 +49,8 @@ public:
     elem_of_graph_type::value_type at(size_type row, size_type col);
     elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
-    std::size_t Size();
+    std::size_t Size() const;
+    size_type MinSpanningTreeSize() const;
     iterator_type Begin();
     iterator_type End();
     const_iterator_type Begin() const;
@@ -65,6 +68,7 @@ public:
 private:
     graph_type graph_;
     bool is_directed_;
+    size_type min_spanning_tree_size_;
 
     bool IsDirected_() const;
 

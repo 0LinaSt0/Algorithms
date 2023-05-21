@@ -38,4 +38,40 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch){
     }
 }
 
+TEST(TEST_SUITE_NAME, MinimumSpanningTree){
+    s21::GraphAlgorithms graphAlgorithms;
+    
+    {
+        s21::Graph graph;
+        ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/1"));
+        s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
+        ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 150);
+    }
+
+    {
+        s21::Graph graph;
+        ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/2"));
+        s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
+        
+        ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 33);
+        for (s21::Graph::size_type i = 0; i < minSpanningTree.Size(); i++){
+        for (s21::Graph::size_type j = 0; j < minSpanningTree.Size(); j++){
+            int val = minSpanningTree.at(i, j);
+            if (i == 0 && j == 1 && val == 7) ASSERT_TRUE(true);
+            else if (i == 1 && j == 0 && val == 7) ASSERT_TRUE(true);
+            else if (i == 0 && j == 2 && val == 9) ASSERT_TRUE(true);
+            else if (i == 2 && j == 0 && val == 9) ASSERT_TRUE(true);
+            else if (i == 3 && j == 4 && val == 6) ASSERT_TRUE(true);
+            else if (i == 4 && j == 3 && val == 6) ASSERT_TRUE(true);
+            else if (i == 2 && j == 5 && val == 2) ASSERT_TRUE(true);
+            else if (i == 5 && j == 2 && val == 2) ASSERT_TRUE(true);
+            else if (i == 4 && j == 5 && val == 9) ASSERT_TRUE(true);
+            else if (i == 5 && j == 4 && val == 9) ASSERT_TRUE(true);
+            else if (val == 0) ASSERT_TRUE(true);
+            else ASSERT_TRUE(false);
+        }
+        }
+    }
+}
+
 }
