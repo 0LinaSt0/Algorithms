@@ -10,6 +10,7 @@
 
 #include "../../containers/stack/includes/stack.hpp"
 #include "../../containers/queue/includes/queue.hpp"
+#include "../../utils/includes/antAlgorithmUtils.hpp"
 #include "../../utils/includes/utils.hpp"
 #include "graph.hpp"
 #include "ant.hpp"
@@ -45,13 +46,9 @@ public:
     // average_distance_length
     TsmResult SolveTravelingSalesmanProblem(Graph &graph);
 private:
+    AntAlgorithmUtils ants_utils_;
+
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
-                    
-    float AverageDistance_(Graph& graph);
-
-    std::vector<Ant>&& AntsColony_(Graph& graph);
-
-    TsmResult&& UpdateReturnedWay_(TsmResult& new_way, TsmResult& best_way);
 };
 
 }

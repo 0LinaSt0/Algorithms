@@ -2,7 +2,7 @@
 
 namespace s21{
 
-Ant::Ant(int start_node) : start_node_(start_node), best_way_count_(0), 
+Ant::Ant(int start_node) : start_node_(start_node), best_way_count_(0),
         bad_way_count_(0), end_status_(0){
     current_way_.vertices.push_back(start_node_);
 }
@@ -18,7 +18,7 @@ int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
             std::distance(
                 node_and_probability.second.begin(),
                 std::max_element(
-                    node_and_probability.second.begin(), 
+                    node_and_probability.second.begin(),
                     node_and_probability.second.end()
                 )
             )
@@ -36,7 +36,7 @@ int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
         if (next_node == start_node_){
             UpdateBestWay_();
             ResetCurrentWay_();
-        } 
+        }
     }
     UpdateEndStatus_();
     return next_node;
@@ -50,6 +50,10 @@ int Ant::StartNode(){
     return start_node_;
 }
 
+int Ant::FromNode(){
+    return current_way_.vertices.end()[-2];
+}
+
 int Ant::CurrentNode(){
     return current_way_.vertices.back();
 }
@@ -58,7 +62,15 @@ int Ant::EndCodeStatus(){
     return end_status_;
 }
 
-std::pair<std::vector<int>, std::vector<double>>&& 
+int Ant::BestWayCount(){
+    return best_way_count_;
+}
+
+int Ant::BadWayCount(){
+    return bad_way_count_;
+}
+
+std::pair<std::vector<int>, std::vector<double>>&&
     Ant::NodeSelectionProbability_(Ant::elem_of_graph_type& available_nodes,
                                     std::vector<double>& pheromones){
     std::vector<int>& current_way = current_way_.vertices;
@@ -73,8 +85,8 @@ std::pair<std::vector<int>, std::vector<double>>&&
 
     for (size_t i = 0; i < available_nodes.size(); i++){
         int node = available_nodes[i];
-        if ((node && is_permitted_node(node)) || 
-            (node == start_node_ && 
+        if ((node && is_permitted_node(node)) ||
+            (node == start_node_ &&
                 current_way.size() == (available_nodes.size() - 1))){
             node_and_probability.first.push_back(node);
             node_and_probability.second.push_back(
@@ -87,7 +99,7 @@ std::pair<std::vector<int>, std::vector<double>>&&
         node_and_probability.second.push_back(-1);
     } else {
         double probability_sum = std::reduce(
-            node_and_probability.second.begin(), 
+            node_and_probability.second.begin(),
             node_and_probability.second.end()
         );
 
@@ -101,7 +113,7 @@ std::pair<std::vector<int>, std::vector<double>>&&
 }
 
 void Ant::UpdateBestWay_(){
-    if (best_way_.vertices.empty() || 
+    if (best_way_.vertices.empty() ||
         current_way_.distance < best_way_.distance){
         best_way_ = current_way_;
         best_way_count_ = 1;

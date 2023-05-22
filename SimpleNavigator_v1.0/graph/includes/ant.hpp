@@ -37,9 +37,15 @@ public:
 
     int StartNode();
 
+    int FromNode();
+
     int CurrentNode();
 
     int EndCodeStatus();
+
+    int BestWayCount();
+
+    int BadWayCount();
 private:
     TsmResult current_way_;
     TsmResult best_way_;
@@ -48,7 +54,7 @@ private:
     int bad_way_count_;
     int end_status_; // 0 -> continue; 1 -> best end; 2 -> bad end
 
-    std::pair<std::vector<int>, std::vector<double>>&& 
+    std::pair<std::vector<int>, std::vector<double>>&&
         NodeSelectionProbability_(elem_of_graph_type& available_nodes,
                                     std::vector<double>& pheromones);
 

@@ -5,7 +5,7 @@ namespace s21{
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
                                                         int start_vertex){
     (void)graph; (void)start_vertex;
-    
+
     if (start_vertex < 0 || start_vertex > static_cast<int>(graph.Size())){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,  "Invalid vertex number");
         return {};
@@ -31,7 +31,7 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
         }
     }
 
-    return result; 
+    return result;
 }
 
 std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
@@ -133,34 +133,37 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
     std::vector<std::vector<double>> pheromones(
         graph.Size(), std::vector<double>(graph.Size(), 0)
     );
-    std::vector<Ant> ants(std::move(AntsColony_(graph)));
+    std::vector<Ant> ants(std::move(ants_utils_.AntsColony(graph)));
     TsmResult return_path;
-    float q_parameter;
 
-    q_parameter = AverageDistance_(graph);
     while (!ants.empty()){
-        for (size_t choosed_node, ant_index = 0; ant_index < ants.size();){
-            choosed_node = ants[ant_index].ChooseNextNode(
-                graph[ants[ant_index].CurrentNode()],
-                pheromones[(ants[ant_index].CurrentNode())]
+        Ant* ant;
+        for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
+            ant = &ants[ant_index];
+            ant->ChooseNextNode(
+                graph[ant->CurrentNode()],
+                pheromones[(ant->CurrentNode())]
             );
-            if (choosed_node == ants[ant_index].StartNode()){
-                if (ants[ant_index].EndCodeStatus() == 1){
-                    return_path = std::move(UpdateReturnedWay_(
-                        ants[ant_index].CurrentWay(), return_path
+        }
+        for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
+            ant = &ants[ant_index];
+            if (ant->BadWayCount() == 0){
+                ants_utils_.RefreshPheromones(
+                    ant->FromNode(), ant->CurrentNode(), graph, pheromones
+                );
+                if (ant->EndCodeStatus() == 1){
+                    return_path = std::move(ants_utils_.UpdateReturnedWay(
+                        ant->CurrentWay(), return_path
                     ));
-                    // засчитай феромон
                     ants.erase(ants.begin() + ant_index);
-                } else if (ants[ant_index].EndCodeStatus() == 2){
-                    ants.erase(ants.begin() + ant_index);
-                } else {
-                    ant_index++;
                 }
             } else {
-                ant_index++;
+                if (ant->EndCodeStatus() == 2){
+                    ants.erase(ants.begin() + ant_index);
+                }
             }
         }
-        // засчитай феромон
+        ants_utils_.PheromoneEvaporation(pheromones);
     }
     return return_path;
 }
@@ -168,7 +171,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
     using edge_type = std::pair<int, int>;
     if (!graph.Size()) return Graph();
-    
+
     std::vector<bool> visited(graph.Size(), false);
     visited[0] = true;
     size_t visited_count = 1;
@@ -181,7 +184,7 @@ Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
         const int size = static_cast<int>(graph.Size());
         int min_edge_value = INT_MAX;
         edge_type min_edge = {-1, -1};
-        
+
         for (int begin = 0; begin < size; begin++){
             if (!visited[begin]) continue;
             for (int end = 0; end < size; end++){
@@ -232,42 +235,6 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
         ).first;
     }
     return result_weight;
-}
-
-float GraphAlgorithms::AverageDistance_(Graph& graph){
-    int edges_count;
-    int total_length_count;
-
-    edges_count = 0;
-    total_length_count = 0;
-    for (graph_iterator row = graph.Begin(); row != graph.End(); ++row){
-        for (auto weight : *row){
-            if (weight){
-                edges_count++;
-                total_length_count++;
-            }
-        }
-    }
-    return (float)total_length_count / (float)edges_count;
-}
-
-std::vector<Ant>&& GraphAlgorithms::AntsColony_(Graph& graph){
-    std::vector<Ant> ants;
-
-    for(size_t i = 0; i < graph.Size(); i++){
-        ants.push_back(Ant(i));
-    }
-    return std::move(ants);
-}
-
-TsmResult&& GraphAlgorithms::UpdateReturnedWay_(TsmResult& new_way, 
-                                TsmResult& best_way){
-    if (best_way.vertices.empty() || 
-        new_way.distance < best_way.distance){
-        return std::move(new_way);
-    } else {
-        return std::move(best_way);
-    }
 }
 
 }
