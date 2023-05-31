@@ -12,11 +12,13 @@
 #include "../../containers/queue/includes/queue.hpp"
 #include "../../utils/includes/antAlgorithmUtils.hpp"
 #include "../../utils/includes/utils.hpp"
+#include "../../utils/includes/ant.hpp"
 #include "graph.hpp"
 
 namespace s21{
 
 class Ant;
+class AntAlgorithmUtils;
 
 class GraphAlgorithms{
 public:
@@ -47,7 +49,7 @@ public:
 
     TsmResult STSPBranchBoundMethodAlgorithm(Graph &graph);
 private:
-    AntAlgorithmUtils ants_utils_;
+    AntAlgorithmUtils* ants_utils_;
 
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
 };

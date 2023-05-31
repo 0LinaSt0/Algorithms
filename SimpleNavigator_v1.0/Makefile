@@ -21,24 +21,24 @@ HDRS		=	$(addprefix containers/, 									\
 				)															\
 				$(addprefix graph/,											\
 					$(addprefix includes/,									\
-						graph.hpp graphAlgorithms.hpp				\
+						graph.hpp graphAlgorithms.hpp						\
 					)														\
 				)															\
 				$(addprefix utils/,											\
 					$(addprefix includes/,									\
-						utils.hpp											\
+						utils.hpp ant.hpp antAlgorithmUtils.hpp				\
 					)														\
 				)
-SRCS		=	$(addprefix graph/,											\
+SRCS		=	$(addprefix utils/,											\
 					$(addprefix srcs/,										\
-						graph.cpp graphAlgorithms.cpp				\
+						utils.cpp ant.cpp antAlgorithmUtils.cpp				\
 					)														\
 				)															\
-				$(addprefix utils/,											\
+				$(addprefix graph/,											\
 					$(addprefix srcs/,										\
-						utils.cpp											\
+						graph.cpp graphAlgorithms.cpp						\
 					)														\
-				)
+				)															
 OBJS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.o))
 DPNDS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.d))
 

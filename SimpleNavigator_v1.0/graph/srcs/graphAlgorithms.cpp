@@ -133,7 +133,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
     std::vector<std::vector<double>> pheromones(
         graph.Size(), std::vector<double>(graph.Size(), 0)
     );
-    std::vector<Ant> ants(std::move(ants_utils_.AntsColony(graph)));
+    std::vector<Ant> ants(std::move(ants_utils_->AntsColony(graph)));
     TsmResult return_path;
 
     while (!ants.empty()){
@@ -148,11 +148,11 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
         for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
             ant = &ants[ant_index];
             if (ant->BadWayCount() == 0){
-                ants_utils_.RefreshPheromones(
+                ants_utils_->RefreshPheromones(
                     ant->FromNode(), ant->CurrentNode(), graph, pheromones
                 );
                 if (ant->EndCodeStatus() == 1){
-                    return_path = std::move(ants_utils_.UpdateReturnedWay(
+                    return_path = std::move(ants_utils_->UpdateReturnedWay(
                         ant->CurrentWay(), return_path
                     ));
                     ants.erase(ants.begin() + ant_index);
@@ -163,7 +163,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                 }
             }
         }
-        ants_utils_.PheromoneEvaporation(pheromones);
+        ants_utils_->PheromoneEvaporation(pheromones);
     }
     // IF WAY EMPTY ADD ERROR TO TERMINAL
     return return_path;
