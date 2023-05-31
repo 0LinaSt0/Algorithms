@@ -1,6 +1,6 @@
 #pragma once
 
-// #include <filesystem>
+#include <filesystem>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -16,14 +16,14 @@
 )
 
 
-// namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 
 namespace s21{
 
 const std::string DEFAULT_DOT_NAME = "graph_default.dot";
-// const fs::path ROOT_DIR = fs::current_path();
-// const fs::path GRAPHS_PATH = "materials/graphs";
-// const fs::path DOTS_PATH = "materials/dot_representations";
+const fs::path ROOT_DIR = fs::current_path();
+const fs::path GRAPHS_PATH = "materials/graphs";
+const fs::path DOTS_PATH = "materials/dot_representations";
 
 const int TSM_ALPHA = 1; // parameter depending on the number of pheromones [0;2]
 const int TSM_BETA = 2; // parameter depending on the length [0;2]

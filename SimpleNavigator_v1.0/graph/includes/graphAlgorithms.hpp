@@ -13,7 +13,6 @@
 #include "../../utils/includes/antAlgorithmUtils.hpp"
 #include "../../utils/includes/utils.hpp"
 #include "graph.hpp"
-#include "ant.hpp"
 
 namespace s21{
 

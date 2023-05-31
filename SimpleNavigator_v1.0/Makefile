@@ -21,7 +21,7 @@ HDRS		=	$(addprefix containers/, 									\
 				)															\
 				$(addprefix graph/,											\
 					$(addprefix includes/,									\
-						ant.hpp graph.hpp graphAlgorithms.hpp				\
+						graph.hpp graphAlgorithms.hpp				\
 					)														\
 				)															\
 				$(addprefix utils/,											\
@@ -31,7 +31,7 @@ HDRS		=	$(addprefix containers/, 									\
 				)
 SRCS		=	$(addprefix graph/,											\
 					$(addprefix srcs/,										\
-						ant.cpp graph.cpp graphAlgorithms.cpp				\
+						graph.cpp graphAlgorithms.cpp				\
 					)														\
 				)															\
 				$(addprefix utils/,											\
