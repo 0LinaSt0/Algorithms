@@ -44,6 +44,8 @@ public:
 
     // average_distance_length
     TsmResult SolveTravelingSalesmanProblem(Graph &graph);
+
+    TsmResult STSPBranchBoundMethodAlgorithm(Graph &graph);
 private:
     AntAlgorithmUtils ants_utils_;
 

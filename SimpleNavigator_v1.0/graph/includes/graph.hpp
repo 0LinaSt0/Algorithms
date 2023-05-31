@@ -1,7 +1,6 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
-// #include <filesystem>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -13,8 +12,6 @@
 
 #include "../../utils/includes/utils.hpp"
 
-
-// namespace fs = std::filesystem;
 
 namespace s21{
 

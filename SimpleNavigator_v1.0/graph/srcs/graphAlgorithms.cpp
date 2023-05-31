@@ -165,6 +165,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
         }
         ants_utils_.PheromoneEvaporation(pheromones);
     }
+    // IF WAY EMPTY ADD ERROR TO TERMINAL
     return return_path;
 }
 
