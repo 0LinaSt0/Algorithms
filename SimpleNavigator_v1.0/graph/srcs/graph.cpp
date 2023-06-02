@@ -6,10 +6,12 @@ Graph::Graph() : is_directed_(0){ }
 
 Graph::Graph(const graph_type& inp_graph) : graph_(inp_graph){ 
     is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
 }
 
 Graph::Graph(graph_type&& inp_graph) : graph_(std::move(inp_graph)){
     is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
 }
 
 Graph::Graph(const graph_type& inp_graph, size_type min_spanning_tree_size)
@@ -30,6 +32,7 @@ Graph& Graph::operator=(const Graph& other){
         graph_ = other.graph_;
         min_spanning_tree_size_ = other.min_spanning_tree_size_;
         is_directed_ = other.is_directed_;
+        is_connected_ = other.is_connected_;
     }
     return *this;
 }
@@ -41,6 +44,7 @@ Graph& Graph::operator=(Graph&& other){
         graph_ = std::move(other.graph_);
         min_spanning_tree_size_ = other.min_spanning_tree_size_;
         is_directed_ = other.is_directed_;
+        is_connected_ = other.is_connected_;
     }
     return *this;
 }
@@ -90,6 +94,10 @@ bool Graph::IsDirected() const{
     return is_directed_;
 }
 
+bool Graph::IsConnected() const{
+    return is_connected_;
+}
+
 bool Graph::LoadGraphFromFile(std::string filename){
     if (graph_.size()){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
@@ -134,6 +142,31 @@ bool Graph::LoadGraphFromFile(std::string filename){
             row.push_back(val);
         }
         graph_.push_back(std::move(row));
+    }
+
+    return true;
+}
+
+bool Graph::IsDirected_() const{
+    for (size_t x = 0; x < graph_.size(); x++){
+    for (size_t y = 0; y < graph_.size(); y++){
+        if (graph_[x][y] != graph_[y][x]) return true;
+    }
+    }
+
+    return false;
+}
+
+bool Graph::IsConnected_() const{
+    for (size_t x = 0; x < graph_.size(); x++){
+        for (size_t y = 0; y < graph_.size(); y++){
+            if (graph_[x][y] != 0) break;
+            if (y + 1 == graph_.size()) return false;
+        }
+        for (size_t y = 0; y < graph_.size(); y++){
+            if (graph_[y][x] != 0) break;
+            if (y + 1 == graph_.size()) return false;
+        }
     }
 
     return true;

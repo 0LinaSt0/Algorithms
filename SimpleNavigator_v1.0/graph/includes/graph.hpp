@@ -12,6 +12,7 @@
 
 #include "../../utils/includes/utils.hpp"
 
+namespace fs = std::filesystem;
 
 namespace s21{
 
@@ -50,6 +51,7 @@ public:
     const_iterator_type End() const;
 
     bool IsDirected() const;
+    bool IsConnected() const;
 
     bool LoadGraphFromFile(std::string filename);
 
@@ -61,9 +63,11 @@ public:
 private:
     graph_type graph_;
     bool is_directed_;
+    bool is_connected_;
     size_type min_spanning_tree_size_;
 
     bool IsDirected_() const;
+    bool IsConnected_() const;
 
     std::string DotFilename_(std::string& filename);
 
