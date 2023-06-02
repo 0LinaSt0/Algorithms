@@ -20,6 +20,11 @@ namespace fs = std::filesystem;
 
 namespace s21{
 
+using coordinate    = std::array<int, 2>;
+using coordinates   = std::vector<coordinates>;
+using matrix_ptr    = std::unique_ptr<std::vector<std::vector<int>>>;
+
+
 const std::string DEFAULT_DOT_NAME = "graph_default.dot";
 const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
