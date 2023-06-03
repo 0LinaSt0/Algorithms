@@ -23,7 +23,8 @@
 namespace s21{
 
 class Ant;
-class aa_utils;
+class AntAlgorithmUtils;
+class BranchBoundMethodAlgoritmUtils;
 
 class GraphAlgorithms{
 public:

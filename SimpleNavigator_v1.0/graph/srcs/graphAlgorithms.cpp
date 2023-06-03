@@ -240,6 +240,19 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         current_included_it = unforked_nodes.begin();
     }
     
+    std::vector<int> root_row;
+    root_row.push_back(0);
+    int min_row_weight = INT_MAX;
+    std::vector<int> min_row;
+
+    ExhaustiveSearch_(
+        min_row_weight,
+        min_row,
+        root_row,
+        graph
+    );
+
+    return { min_row, static_cast<double>(min_row_weight) };
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
