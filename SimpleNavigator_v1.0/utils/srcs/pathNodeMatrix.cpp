@@ -20,7 +20,7 @@ coordinate PathNodeMatrix::GetPathNodeVertices(void) const{
 }
 
 coordinate PathNodeMatrix::ReducedCellsEvaluating(void){
-    void;
+    return coordinate();
 }
 
 }

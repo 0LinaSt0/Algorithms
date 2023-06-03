@@ -89,4 +89,14 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices){
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 0), 20);
 }
 
+TEST(TEST_SUITE_NAME, ExhaustiveSearch){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    s21::TsmResult tsmResult = graphAlgorithms.ExhaustiveSearch(graph);
+    ASSERT_EQ(tsmResult.distance, 48);
+    std::cout << std::endl;
+}
+
 }

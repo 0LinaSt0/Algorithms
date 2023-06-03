@@ -22,12 +22,18 @@ matrix_unique_ptr BranchBoundMethodAlgoritmUtils::InitialMatrix(
 
 int BranchBoundMethodAlgoritmUtils::CostDeterminingIncludingPathNode(
         int current_way_cost, matrix_type& matrix, coordinates& reducing_nodes){
-    
+    (void)current_way_cost;
+    (void)matrix;
+    (void)reducing_nodes;
+    return 0;
 }
 
 int BranchBoundMethodAlgoritmUtils::CostDeterminingNotIncludingPathNode(
         int current_way_cost, matrix_type& matrix, coordinates& reducing_nodes){
-    return current_way_cost;
+    (void)current_way_cost;
+    (void)matrix;
+    (void)reducing_nodes;
+    return 0;
 }
 
 }

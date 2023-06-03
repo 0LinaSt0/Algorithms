@@ -21,7 +21,7 @@ namespace fs = std::filesystem;
 namespace s21{
 
 using coordinate            = std::array<int, 2>;
-using coordinates           = std::vector<coordinates>;
+using coordinates           = std::vector<coordinate>;
 using matrix_type           = std::vector<std::vector<int>>;
 using matrix_unique_ptr     = std::unique_ptr<matrix_type>;
 

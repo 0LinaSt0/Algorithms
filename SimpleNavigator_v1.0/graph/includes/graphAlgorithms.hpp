@@ -8,6 +8,7 @@
 #include <numeric>
 #include <vector>
 #include <limits>
+#include <set>
 
 #include "../../containers/stack/includes/stack.hpp"
 #include "../../containers/queue/includes/queue.hpp"
@@ -22,6 +23,7 @@ namespace s21{
 
 class Ant;
 class AntAlgorithmUtils;
+class BranchBoundMethodAlgoritmUtils;
 
 class GraphAlgorithms{
 public:
@@ -51,11 +53,20 @@ public:
     TsmResult SolveTravelingSalesmanProblem(Graph &graph);
 
     TsmResult STSPBranchBoundMethodAlgorithm(Graph &graph);
+
+    TsmResult ExhaustiveSearch(Graph &graph) const;
+
 private:
     AntAlgorithmUtils* ants_utils_;
     BranchBoundMethodAlgoritmUtils* bbmethod_utils_;
 
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
+
+    void ExhaustiveSearch_(int& min_row_weight,
+                            std::vector<int>& min_row,
+                            const std::vector<int>& parent_row,
+                            const Graph& graph) const;
+
 };
 
 }

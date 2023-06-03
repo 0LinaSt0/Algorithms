@@ -26,12 +26,20 @@ HDRS		=	$(addprefix containers/, 									\
 				)															\
 				$(addprefix utils/,											\
 					$(addprefix includes/,									\
-						utils.hpp ant.hpp antAlgorithmUtils.hpp				\
+						ant.hpp												\
+						antAlgorithmUtils.hpp								\
+						branchBoundMethodAlgorithmUtils.hpp					\
+						pathNodeMatrix.hpp									\
+						utils.hpp											\
 					)														\
 				)
 SRCS		=	$(addprefix utils/,											\
 					$(addprefix srcs/,										\
-						utils.cpp ant.cpp antAlgorithmUtils.cpp				\
+						ant.cpp												\
+						antAlgorithmUtils.cpp								\
+						branchBoundMethodAlgorithmUtils.cpp					\
+						pathNodeMatrix.cpp									\
+						utils.cpp											\
 					)														\
 				)															\
 				$(addprefix graph/,											\
