@@ -20,10 +20,16 @@ namespace fs = std::filesystem;
 
 namespace s21{
 
-using coordinate            = std::array<int, 2>;
-using coordinates           = std::vector<coordinate>;
-using matrix_type           = std::vector<std::vector<int>>;
-using matrix_unique_ptr     = std::unique_ptr<matrix_type>;
+using coordinate                    = std::array<int, 2>;
+using coordinates                   = std::vector<coordinate>;
+using row_matrix_type               = std::vector<int>;
+using matrix_type                   = std::vector<row_matrix_type>;
+using matrix_unique_ptr             = std::unique_ptr<matrix_type>;
+using matrix_reference              = typename matrix_type::reference;
+using matrix_const_reference        = typename matrix_type::const_reference;
+using matrix_iterator_type          = typename matrix_type::iterator;
+using matrix_const_iterator_type    = typename matrix_type::const_iterator;
+
 
 
 const std::string DEFAULT_DOT_NAME = "graph_default.dot";

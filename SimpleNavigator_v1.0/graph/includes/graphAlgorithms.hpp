@@ -23,14 +23,17 @@
 namespace s21{
 
 class Ant;
-class AntAlgorithmUtils;
-class BranchBoundMethodAlgoritmUtils;
+class aa_utils;
 
 class GraphAlgorithms{
 public:
-    using elem_of_graph_type    = typename Graph::elem_of_graph_type;
-    using graph_type            = typename Graph::graph_type;
-    using graph_iterator        = typename Graph::iterator_type;
+    using aa_utils                  = aa_utils;
+    using bbma_utils                = bbma_utils;
+    using elem_of_graph_type        = typename Graph::elem_of_graph_type;
+    using graph_type                = typename Graph::graph_type;
+    using graph_iterator            = typename Graph::iterator_type;
+    using multyset_type             = bbma_utils::multiset_type;
+    using multyset_iterator_type    = multyset_type::iterator;
 
     GraphAlgorithms() = default;
     GraphAlgorithms(const GraphAlgorithms& other) = default;
@@ -58,8 +61,8 @@ public:
     TsmResult ExhaustiveSearch(Graph &graph) const;
 
 private:
-    AntAlgorithmUtils* ants_utils_;
-    BranchBoundMethodAlgoritmUtils* bbmethod_utils_;
+    aa_utils* ants_utils_;
+    bbma_utils* bbmethod_utils_;
 
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
 

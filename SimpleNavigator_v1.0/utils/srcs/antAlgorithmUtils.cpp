@@ -2,7 +2,7 @@
 
 namespace s21{
 
-double AntAlgorithmUtils::AverageDistance(const Graph& graph){
+double aa_utils::AverageDistance(const Graph& graph){
     int edges_count;
     int total_length_count;
 
@@ -20,7 +20,7 @@ double AntAlgorithmUtils::AverageDistance(const Graph& graph){
     return (float)total_length_count / (float)edges_count;
 }
 
-std::vector<Ant> AntAlgorithmUtils::AntsColony(const Graph& graph){
+std::vector<Ant> aa_utils::AntsColony(const Graph& graph){
     std::vector<Ant> ants;
 
     for(size_t i = 0; i < graph.Size(); i++){
@@ -29,7 +29,7 @@ std::vector<Ant> AntAlgorithmUtils::AntsColony(const Graph& graph){
     return (ants);
 }
 
-TsmResult&& AntAlgorithmUtils::UpdateReturnedWay(TsmResult& new_way,
+TsmResult&& aa_utils::UpdateReturnedWay(TsmResult& new_way,
                                 TsmResult& best_way){
     if (best_way.vertices.empty() ||
         new_way.distance < best_way.distance){
@@ -39,7 +39,7 @@ TsmResult&& AntAlgorithmUtils::UpdateReturnedWay(TsmResult& new_way,
     }
 }
 
-void AntAlgorithmUtils::RefreshPheromones(int from_node, int to_node,
+void aa_utils::RefreshPheromones(int from_node, int to_node,
         const Graph &graph, std::vector<std::vector<double>>& pheromones){
     double q_parameter;
 
@@ -48,7 +48,7 @@ void AntAlgorithmUtils::RefreshPheromones(int from_node, int to_node,
         q_parameter / (double)(graph[from_node][to_node]);
 }
 
-void AntAlgorithmUtils::PheromoneEvaporation(
+void aa_utils::PheromoneEvaporation(
         std::vector<std::vector<double>>& pheromones){
     for (auto& string_pheromones : pheromones){
         for (auto& node_pheromone : string_pheromones){

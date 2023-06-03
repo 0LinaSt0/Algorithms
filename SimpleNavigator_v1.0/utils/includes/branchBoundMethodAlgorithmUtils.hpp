@@ -4,23 +4,30 @@
 #include <vector>
 #include <limits>
 #include <memory>
+#include <set>
 
 #include "utils.hpp"
+#include "pathNodeMatrix.hpp"
 #include "../../graph/includes/graph.hpp"
-#include "../../graph/includes/graphAlgorithms.hpp"
 
 namespace s21{
 
-class BranchBoundMethodAlgoritmUtils{
+bool NodesCostCompare(const PathNodeRootMatrix& a, const PathNodeRootMatrix& b);
+
+class bbma_utils{
 public:
+    using multiset_type = std::multiset<PathNodeRootMatrix, 
+                                        decltype(NodesCostCompare)*>;
+
     matrix_unique_ptr InitialMatrix(const Graph& graph);
 
-    int CostDeterminingIncludingPathNode(int current_way_cost, 
-                            matrix_type& matrix, coordinates& reducing_nodes);
-
-    int CostDeterminingNotIncludingPathNode(int current_way_cost, 
-                            matrix_type& matrix, coordinates& reducing_nodes);
+    // return itertor to added PathNodeIncludeMatrix
+    multiset_type::iterator AddWayNodesToUnforkedNodes(
+                                multiset_type& unforked_nodes, 
+                                PathNodeRootMatrix& matrix, 
+                                int from_node, int to_node);
 };
+
 
 }
 

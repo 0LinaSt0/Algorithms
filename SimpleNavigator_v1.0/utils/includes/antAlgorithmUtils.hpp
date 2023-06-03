@@ -12,7 +12,7 @@ namespace s21{
 
 class Ant;
 
-class AntAlgorithmUtils{
+class aa_utils{
 public:
     double AverageDistance(const Graph& graph);
 

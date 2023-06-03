@@ -17,8 +17,8 @@ namespace s21{
 
 class Graph{
 public:
-    using elem_of_graph_type        = std::vector<int>;
-    using graph_type                = std::vector<elem_of_graph_type>;
+    using elem_of_graph_type        = row_matrix_type;
+    using graph_type                = matrix_type;
     using size_type                 = typename graph_type::size_type;
     using reference                 = typename graph_type::reference;
     using const_reference           = typename graph_type::const_reference;
