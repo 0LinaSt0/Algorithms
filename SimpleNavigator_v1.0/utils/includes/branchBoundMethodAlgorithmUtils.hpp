@@ -13,12 +13,13 @@ namespace s21{
 
 class BranchBoundMethodAlgoritmUtils{
 public:
-    matrix_ptr InitialMatrix(const Graph& graph);
+    matrix_unique_ptr InitialMatrix(const Graph& graph);
 
-    int CostDeterminingIncludingPathNode(matrix_ptr matrix,
-                                    coordinates& reducing_nodes);
-    int CostDeterminingNotIncludingPathNode(matrix_ptr matrix,
-                                    coordinates& reducing_nodes);
+    int CostDeterminingIncludingPathNode(int current_way_cost, 
+                            matrix_type& matrix, coordinates& reducing_nodes);
+
+    int CostDeterminingNotIncludingPathNode(int current_way_cost, 
+                            matrix_type& matrix, coordinates& reducing_nodes);
 };
 
 }

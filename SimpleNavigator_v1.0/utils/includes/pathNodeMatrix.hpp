@@ -17,14 +17,17 @@ struct PathNode{
 
 class PathNodeMatrix{
 public:
-    PathNodeMatrix(matrix_ptr matrix, int from_node, int to_node,
-        int(*costDetermining)(matrix_ptr, coordinates&));
+    PathNodeMatrix(matrix_unique_ptr matrix,
+        int from_node, int to_node, int current_way_cost, 
+        int(*costDetermining)(int, matrix_type&, coordinates&));
 
     int GetWayCost(void) const;
 
     coordinate GetPathNodeVertices(void) const;
+
+    coordinate ReducedCellsEvaluating(void);
 private:
-    matrix_ptr matrix_;
+    matrix_unique_ptr matrix_;
     coordinates reducing_nodes_;
     PathNode tree_node_;
 };
