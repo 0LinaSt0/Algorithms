@@ -229,8 +229,8 @@ TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
                         std::string("salesman problem with current graph"));
     }
 
-    double min_row_weight = DBL_MAX;
-    std::vector<int> min_row;
+    double res_row_weight = DBL_MAX;
+    std::vector<int> res_row;
 
     for (size_t i = 0; i < graph.Size(); i++){
         std::vector<int> root_row;
@@ -245,13 +245,13 @@ TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
             graph
         );
 
-        if (row.size()){
-            min_row_weight = row_weight;
-            min_row = std::move(row);
+        if (row.size() && row_weight < res_row_weight){
+            res_row_weight = row_weight;
+            res_row = std::move(row);
         }
     }
 
-    return { min_row, min_row_weight };
+    return { res_row, res_row_weight };
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
