@@ -239,20 +239,30 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         unforked_nodes.begin()->GetWayCost()){
         current_included_it = unforked_nodes.begin();
     }
-    
-    std::vector<int> root_row;
-    root_row.push_back(0);
-    int min_row_weight = INT_MAX;
+
+    double min_row_weight = DBL_MAX;
     std::vector<int> min_row;
 
-    ExhaustiveSearch_(
-        min_row_weight,
-        min_row,
-        root_row,
-        graph
-    );
+    for (size_t i = 0; i < graph.Size(); i++){
+        std::vector<int> root_row;
+        root_row.push_back(static_cast<int>(i));
+        double row_weight = DBL_MAX;
+        std::vector<int> row;
 
-    return { min_row, static_cast<double>(min_row_weight) };
+        ExhaustiveSearch_(
+            row_weight,
+            row,
+            root_row,
+            graph
+        );
+
+        if (row.size()){
+            min_row_weight = row_weight;
+            min_row = std::move(row);
+        }
+    }
+
+    return { min_row, min_row_weight };
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
