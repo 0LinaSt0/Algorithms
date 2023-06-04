@@ -20,8 +20,29 @@ matrix_unique_ptr bbma_utils::InitialMatrix(
     return matrix;
 }
 
-bool NodesCostCompare(const PathNodeRootMatrix& a, const PathNodeRootMatrix& b){
-    return a.GetWayCost() < b.GetWayCost();
+bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
+                                multiset_type& unforked_nodes, 
+                                PathNodeRootMatrix& matrix, 
+                                int from_node, int to_node){
+    multiset_type::iterator included_path_it;
+
+    included_path_it = unforked_nodes.insert(
+        node_unique_ptr(
+            new PathNodeIncludeMatrix(matrix, from_node, to_node)
+        )
+    );
+    unforked_nodes.insert(
+        node_unique_ptr(
+            new PathNodeNotIncludeMatrix(matrix, from_node, to_node)
+        )
+    );
+    return included_path_it;
+}
+
+
+
+bool NodesCostCompare(const node_unique_ptr& a, const node_unique_ptr& b){
+    return a->GetWayCost() < b->GetWayCost();
 }
 
 }

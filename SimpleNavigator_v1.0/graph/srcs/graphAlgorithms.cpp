@@ -227,42 +227,22 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 }
 
 TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
-    PathNodeRootMatrix root_node(bbmethod_utils_->InitialMatrix(graph));
+    node_unique_ptr current_node(
+        new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
+    );
     multyset_type unforked_nodes(NodesCostCompare);
-    coordinate current_edge_way{root_node.ReducedCellsEvaluating()};
+    coordinate current_edge_way{current_node->ReducedCellsEvaluating()};
     multyset_iterator_type current_included_it;
 
     current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
-        unforked_nodes, root_node, current_edge_way[0], current_edge_way[1]
+        unforked_nodes, *current_node, current_edge_way[0], current_edge_way[1]
     );
-    if (current_included_it->GetWayCost() > 
-        unforked_nodes.begin()->GetWayCost()){
+    if ((*current_included_it)->GetWayCost() >
+        (*unforked_nodes.begin())->GetWayCost()){
         current_included_it = unforked_nodes.begin();
     }
-
-    double res_row_weight = DBL_MAX;
-    std::vector<int> res_row;
-
-    for (size_t i = 0; i < graph.Size(); i++){
-        std::vector<int> root_row;
-        root_row.push_back(static_cast<int>(i));
-        double row_weight = DBL_MAX;
-        std::vector<int> row;
-
-        ExhaustiveSearch_(
-            row_weight,
-            row,
-            root_row,
-            graph
-        );
-
-        if (row.size() && row_weight < res_row_weight){
-            res_row_weight = row_weight;
-            res_row = std::move(row);
-        }
-    }
-
-    return { res_row, res_row_weight };
+    current_edge_way = (*current_included_it)->ReducedCellsEvaluating();
+    current_node = *current_included_it;
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,

@@ -12,11 +12,13 @@
 
 namespace s21{
 
-bool NodesCostCompare(const PathNodeRootMatrix& a, const PathNodeRootMatrix& b);
+using node_unique_ptr   = std::shared_ptr<PathNodeRootMatrix>;
+
+bool NodesCostCompare(const node_unique_ptr& a, const node_unique_ptr& b);
 
 class bbma_utils{
 public:
-    using multiset_type = std::multiset<PathNodeRootMatrix, 
+    using multiset_type     = std::multiset<node_unique_ptr, 
                                         decltype(NodesCostCompare)*>;
 
     matrix_unique_ptr InitialMatrix(const Graph& graph);
