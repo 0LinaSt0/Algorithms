@@ -228,20 +228,30 @@ TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
                         std::string("It is impossible to solve travelling ") +
                         std::string("salesman problem with current graph"));
     }
-    
-    std::vector<int> root_row;
-    root_row.push_back(0);
-    int min_row_weight = INT_MAX;
+
+    double min_row_weight = DBL_MAX;
     std::vector<int> min_row;
 
-    ExhaustiveSearch_(
-        min_row_weight,
-        min_row,
-        root_row,
-        graph
-    );
+    for (size_t i = 0; i < graph.Size(); i++){
+        std::vector<int> root_row;
+        root_row.push_back(static_cast<int>(i));
+        double row_weight = DBL_MAX;
+        std::vector<int> row;
 
-    return { min_row, static_cast<double>(min_row_weight) };
+        ExhaustiveSearch_(
+            row_weight,
+            row,
+            root_row,
+            graph
+        );
+
+        if (row.size()){
+            min_row_weight = row_weight;
+            min_row = std::move(row);
+        }
+    }
+
+    return { min_row, min_row_weight };
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
@@ -265,7 +275,7 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
     return result_weight;
 }
 
-void GraphAlgorithms::ExhaustiveSearch_(int& min_row_weight,
+bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
                                             std::vector<int>& min_row,
                                             const std::vector<int>& parent_row,
                                             const Graph& graph) const{
@@ -289,12 +299,26 @@ void GraphAlgorithms::ExhaustiveSearch_(int& min_row_weight,
     for (size_t y = 0; y < graph.Size(); y++){
         // check if edge exists
         if (graph.at(parent_row.back(), y) == 0) continue;
+
+        // check if new element is already in row
+        std::vector<int>::const_iterator iter = std::find(
+            parent_row.begin(),
+            parent_row.end(),
+            y
+        );
+            
+        if (parent_row.size() == graph.Size()) {
+            if (y != static_cast<size_t>(parent_row.front())){
+                continue;
+            }
+        } else if (iter != parent_row.end()) {
+            continue;
+        }
+        
         // parent's copy to be appended
         std::vector<int> new_row(parent_row);
         new_row.push_back(y);
-        const size_t size = new_row.size();
-        // check if there is no loop
-        if (size > graph.Size() * 10) continue;
+
         const bool is_full = check_if_full(new_row, graph);
         const int new_row_weight = row_weight(new_row, graph);
         if (new_row_weight >= min_row_weight) continue;
@@ -312,6 +336,8 @@ void GraphAlgorithms::ExhaustiveSearch_(int& min_row_weight,
             );
         }
     }
+
+    return true;
 }
 
 }

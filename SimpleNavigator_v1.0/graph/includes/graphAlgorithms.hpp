@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <algorithm>
+#include <float.h>
 #include <climits>
 #include <utility>
 #include <numeric>
@@ -62,7 +63,7 @@ private:
 
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
 
-    void ExhaustiveSearch_(int& min_row_weight,
+    bool ExhaustiveSearch_(double& min_row_weight,
                             std::vector<int>& min_row,
                             const std::vector<int>& parent_row,
                             const Graph& graph) const;
