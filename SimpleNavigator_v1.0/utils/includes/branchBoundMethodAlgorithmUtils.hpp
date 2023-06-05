@@ -12,24 +12,25 @@
 
 namespace s21{
 
-using node_unique_ptr   = std::shared_ptr<PathNodeRootMatrix>;
+using node_shared_ptr   = std::shared_ptr<PathNodeRootMatrix>;
 
-bool NodesCostCompare(const node_unique_ptr& a, const node_unique_ptr& b);
+bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b);
 
 class bbma_utils{
 public:
-    using multiset_type     = std::multiset<node_unique_ptr, 
+    using multiset_type     = std::multiset<node_shared_ptr,
                                         decltype(NodesCostCompare)*>;
 
     matrix_unique_ptr InitialMatrix(const Graph& graph);
 
     // return itertor to added PathNodeIncludeMatrix
     multiset_type::iterator AddWayNodesToUnforkedNodes(
-                                multiset_type& unforked_nodes, 
-                                PathNodeRootMatrix& matrix, 
+                                multiset_type& unforked_nodes,
+                                PathNodeRootMatrix& matrix,
                                 int from_node, int to_node);
-};
 
+    TsmResult FinalPathFormation(const coordinates& way, double way_cost);
+};
 
 }
 

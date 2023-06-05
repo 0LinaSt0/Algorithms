@@ -8,8 +8,8 @@ matrix_unique_ptr bbma_utils::InitialMatrix(
     std::vector<int> current_row;
     int current_cell_value;
 
-    for(Graph::const_iterator_type row = graph.Begin(); 
-        row < graph.End(); 
+    for(Graph::const_iterator_type row = graph.Begin();
+        row < graph.End();
         ++row){
         for(auto cell : (*row)){
             current_cell_value = !cell ? std::numeric_limits<int>::max() : cell;
@@ -21,18 +21,18 @@ matrix_unique_ptr bbma_utils::InitialMatrix(
 }
 
 bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
-                                multiset_type& unforked_nodes, 
-                                PathNodeRootMatrix& matrix, 
+                                multiset_type& unforked_nodes,
+                                PathNodeRootMatrix& matrix,
                                 int from_node, int to_node){
     multiset_type::iterator included_path_it;
 
     included_path_it = unforked_nodes.insert(
-        node_unique_ptr(
+        node_shared_ptr(
             new PathNodeIncludeMatrix(matrix, from_node, to_node)
         )
     );
     unforked_nodes.insert(
-        node_unique_ptr(
+        node_shared_ptr(
             new PathNodeNotIncludeMatrix(matrix, from_node, to_node)
         )
     );
@@ -41,7 +41,7 @@ bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
 
 
 
-bool NodesCostCompare(const node_unique_ptr& a, const node_unique_ptr& b){
+bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b){
     return a->GetWayCost() < b->GetWayCost();
 }
 

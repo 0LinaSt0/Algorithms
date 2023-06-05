@@ -227,22 +227,34 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 }
 
 TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
-    node_unique_ptr current_node(
+    node_shared_ptr current_node(
         new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
     );
     multyset_type unforked_nodes(NodesCostCompare);
-    coordinate current_edge_way{current_node->ReducedCellsEvaluating()};
+    coordinate current_edge{current_node->ReducedCellsEvaluating()};
+    coordinates way;
     multyset_iterator_type current_included_it;
 
-    current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
-        unforked_nodes, *current_node, current_edge_way[0], current_edge_way[1]
-    );
-    if ((*current_included_it)->GetWayCost() >
-        (*unforked_nodes.begin())->GetWayCost()){
-        current_included_it = unforked_nodes.begin();
+    while(1){
+        current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
+            unforked_nodes, *current_node, current_edge[0], current_edge[1]
+        );
+        current_node = *current_included_it;
+        if (current_node->IsMatrixEmpty()){
+            way.push_back(current_edge);
+            break ;
+        }
+        if ((*current_included_it)->GetWayCost() >
+            (*unforked_nodes.begin())->GetWayCost()){
+            current_node = *unforked_nodes.begin();
+        }
+        if (current_node->IsIncludedEdgeNode()){
+            way.push_back(current_edge);
+        }
+        current_edge = current_node->ReducedCellsEvaluating();
+        unforked_nodes.erase(current_included_it);
     }
-    current_edge_way = (*current_included_it)->ReducedCellsEvaluating();
-    current_node = *current_included_it;
+    return bbmethod_utils_->FinalPathFormation(way, current_node->GetWayCost());
 }
 
 int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
