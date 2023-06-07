@@ -28,6 +28,7 @@ Graph& Graph::operator=(const Graph& other){
                                     "Graph is not empty");
     else {
         graph_ = other.graph_;
+        min_spanning_tree_size_ = other.min_spanning_tree_size_;
         is_directed_ = other.is_directed_;
     }
     return *this;
@@ -38,6 +39,7 @@ Graph& Graph::operator=(Graph&& other){
                                     "Graph is not empty");
     else {
         graph_ = std::move(other.graph_);
+        min_spanning_tree_size_ = other.min_spanning_tree_size_;
         is_directed_ = other.is_directed_;
     }
     return *this;
