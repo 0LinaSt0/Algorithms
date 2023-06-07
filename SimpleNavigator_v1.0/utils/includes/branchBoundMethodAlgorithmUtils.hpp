@@ -26,7 +26,7 @@ public:
     // return itertor to added PathNodeIncludeMatrix
     multiset_type::iterator AddWayNodesToUnforkedNodes(
                                 multiset_type& unforked_nodes,
-                                PathNodeRootMatrix& matrix,
+                                PathNodeRootMatrix& matrix_node,
                                 int from_node, int to_node);
 
     TsmResult FinalPathFormation(const coordinates& way, double way_cost);

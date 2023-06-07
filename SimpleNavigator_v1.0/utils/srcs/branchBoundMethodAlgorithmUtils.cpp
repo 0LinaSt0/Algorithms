@@ -22,18 +22,18 @@ matrix_unique_ptr bbma_utils::InitialMatrix(
 
 bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
                                 multiset_type& unforked_nodes,
-                                PathNodeRootMatrix& matrix,
+                                PathNodeRootMatrix& matrix_node,
                                 int from_node, int to_node){
     multiset_type::iterator included_path_it;
 
     included_path_it = unforked_nodes.insert(
         node_shared_ptr(
-            new PathNodeIncludeMatrix(matrix, from_node, to_node)
+            new PathNodeIncludeMatrix(matrix_node, from_node, to_node)
         )
     );
     unforked_nodes.insert(
         node_shared_ptr(
-            new PathNodeNotIncludeMatrix(matrix, from_node, to_node)
+            new PathNodeNotIncludeMatrix(matrix_node, from_node, to_node)
         )
     );
     return included_path_it;
