@@ -18,10 +18,14 @@ bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b);
 
 class bbma_utils{
 public:
-    using multiset_type     = std::multiset<node_shared_ptr,
-                                        decltype(NodesCostCompare)*>;
+    using coorsinate_cell           = std::pair<const coordinate, int>;
+    using row_matrix_pair_type      = std::vector<coorsinate_cell>;
+    using matrix_pair_type          = std::vector<row_matrix_pair_type>;
+    using matrix_pair_unique_ptr    = std::unique_ptr<matrix_pair_type>;
+    using multiset_type             = std::multiset<node_shared_ptr,
+                                            decltype(NodesCostCompare)*>;
 
-    matrix_unique_ptr InitialMatrix(const Graph& graph);
+    matrix_pair_unique_ptr InitialMatrix(const Graph& graph);
 
     // return itertor to added PathNodeIncludeMatrix
     multiset_type::iterator AddWayNodesToUnforkedNodes(

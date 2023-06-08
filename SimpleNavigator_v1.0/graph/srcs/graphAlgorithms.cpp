@@ -246,7 +246,8 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         }
         if ((*current_included_it)->GetWayCost() >
             (*unforked_nodes.begin())->GetWayCost()){
-            current_node = *unforked_nodes.begin();
+            current_included_it = unforked_nodes.begin();
+            current_node = *current_included_it;
         }
         if (current_node->IsIncludedEdgeNode()){
             way.push_back(current_edge);
