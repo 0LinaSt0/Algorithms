@@ -40,10 +40,37 @@ bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
     return included_path_it;
 }
 
-TsmResult bbma_utils::FinalPathFormation(const coordinates& way,
-                                double way_cost){
+TsmResult bbma_utils::FinalPathFormation(coordinates way, double way_cost){
+    TsmResult hamiltonian_path;
+    coordinates_iter current_edge_it;
+    int current_from;
+    int current_to;
 
+    hamiltonian_path.distance = way_cost;
+    current_edge_it = way.begin();
+    current_from = current_edge_it[0];
+    hamiltonian_path.vertices.push_back(current_from);
+    while (!way.empty()){
+        current_to = current_edge_it[1];
+        hamiltonian_path.vertices.push_back(current_to);
+        way.erase(current_edge_it);
+        current_from = current_to;
+        current_edge_it = FindNextNode_(way, current_from);
+    }
+    return hamiltonian_path;
 }
+
+bbma_utils::coordinates_iter bbma_utils::FindNextNode_(const coordinates& way,
+                                                int finded_from){
+    if (way.empty()) { return way.end(); }
+    for (coordinates_iter edge = way.begin(); edge != way.end(); ++edge){
+        if (edge[0] == finded_from) {
+            return edge;
+        }
+    }
+    // THROW PORQUE DIDN'T FIND
+}
+
 
 
 bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b){

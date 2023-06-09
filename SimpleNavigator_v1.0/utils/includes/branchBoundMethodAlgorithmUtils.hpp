@@ -18,6 +18,7 @@ bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b);
 
 class bbma_utils{
 public:
+    using coordinates_iter          = typename coordinates::iterator;
     using coorsinate_cell           = std::pair<const coordinate, int>;
     using row_matrix_pair_type      = std::vector<coorsinate_cell>;
     using matrix_pair_type          = std::vector<row_matrix_pair_type>;
@@ -33,7 +34,10 @@ public:
                                 PathNodeRootMatrix& matrix_node,
                                 int from_node, int to_node);
 
-    TsmResult FinalPathFormation(const coordinates& way, double way_cost);
+    TsmResult FinalPathFormation(coordinates way, double way_cost);
+
+    private:
+        coordinates_iter FindNextNode_(const coordinates& way, int finded_from);
 };
 
 }
