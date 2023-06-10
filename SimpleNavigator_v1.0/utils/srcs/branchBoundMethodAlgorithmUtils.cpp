@@ -48,10 +48,10 @@ TsmResult bbma_utils::FinalPathFormation(coordinates way, double way_cost){
 
     hamiltonian_path.distance = way_cost;
     current_edge_it = way.begin();
-    current_from = current_edge_it[0];
+    current_from = (*current_edge_it)[0];
     hamiltonian_path.vertices.push_back(current_from);
     while (!way.empty()){
-        current_to = current_edge_it[1];
+        current_to = (*current_edge_it)[1];
         hamiltonian_path.vertices.push_back(current_to);
         way.erase(current_edge_it);
         current_from = current_to;
@@ -60,11 +60,11 @@ TsmResult bbma_utils::FinalPathFormation(coordinates way, double way_cost){
     return hamiltonian_path;
 }
 
-bbma_utils::coordinates_iter bbma_utils::FindNextNode_(const coordinates& way,
+bbma_utils::coordinates_iter bbma_utils::FindNextNode_(coordinates way,
                                                 int finded_from){
     if (way.empty()) { return way.end(); }
     for (coordinates_iter edge = way.begin(); edge != way.end(); ++edge){
-        if (edge[0] == finded_from) {
+        if ((*edge)[0] == finded_from) {
             return edge;
         }
     }
