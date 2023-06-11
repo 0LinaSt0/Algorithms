@@ -187,11 +187,14 @@ Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
 }
 
 TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
+    TsmResult return_path;
+    if (IsInappropriateGraph_(graph)){
+        return return_path;
+    }
     std::vector<std::vector<double>> pheromones(
         graph.Size(), std::vector<double>(graph.Size(), 0)
     );
     std::vector<Ant> ants(std::move(ants_utils_->AntsColony(graph)));
-    TsmResult return_path;
 
     while (!ants.empty()){
         Ant* ant;
@@ -222,40 +225,52 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
         }
         ants_utils_->PheromoneEvaporation(pheromones);
     }
-    // IF WAY EMPTY ADD ERROR TO TERMINAL
+    if (return_path.vertices.empty()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+    }
     return return_path;
 }
 
 TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
-    node_shared_ptr current_node(
-        new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
-    );
-    multyset_type unforked_nodes(NodesCostCompare);
-    coordinate current_edge{current_node->ReducedCellsEvaluating()};
-    coordinates way;
-    multyset_iterator_type current_included_it;
-
-    while(1){
-        current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
-            unforked_nodes, *current_node, current_edge[0], current_edge[1]
-        );
-        current_node = *current_included_it;
-        if (current_node->IsMatrixEmpty()){
-            way.push_back(current_edge);
-            break ;
-        }
-        if ((*current_included_it)->GetWayCost() >
-            (*unforked_nodes.begin())->GetWayCost()){
-            current_included_it = unforked_nodes.begin();
-            current_node = *current_included_it;
-        }
-        if (current_node->IsIncludedEdgeNode()){
-            way.push_back(current_edge);
-        }
-        current_edge = current_node->ReducedCellsEvaluating();
-        unforked_nodes.erase(current_included_it);
+    if (IsInappropriateGraph_(graph)){
+        return TsmResult();
     }
-    return bbmethod_utils_->FinalPathFormation(way, current_node->GetWayCost());
+    try {
+        node_shared_ptr current_node(
+            new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
+        );
+        multyset_type unforked_nodes(NodesCostCompare);
+        coordinate current_edge{current_node->ReducedCellsEvaluating()};
+        coordinates way;
+        multyset_iterator_type current_included_it;
+
+        while(1){
+            current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
+                unforked_nodes, *current_node, current_edge[0], current_edge[1]
+            );
+            current_node = *current_included_it;
+            if (current_node->IsMatrixEmpty()){
+                way.push_back(current_edge);
+                break ;
+            }
+            if ((*current_included_it)->GetWayCost() >
+                (*unforked_nodes.begin())->GetWayCost()){
+                current_included_it = unforked_nodes.begin();
+                current_node = *current_included_it;
+            }
+            if (current_node->IsIncludedEdgeNode()){
+                way.push_back(current_edge);
+            }
+            current_edge = current_node->ReducedCellsEvaluating();
+            unforked_nodes.erase(current_included_it);
+        }
+        return bbmethod_utils_->FinalPathFormation(
+            way, current_node->GetWayCost()
+        );
+    } catch (...) {
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+        return TsmResult();
+    }
 }
 
 TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
@@ -374,6 +389,14 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
     }
 
     return true;
+}
+
+bool GraphAlgorithms::IsInappropriateGraph_(const Graph& graph){
+    if (!graph.Size() || !graph.IsConnected()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+        return true;
+    }
+    return false;
 }
 
 }

@@ -41,6 +41,9 @@ bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
 }
 
 TsmResult bbma_utils::FinalPathFormation(coordinates way, double way_cost){
+    if (way.empty()) {
+        throw "Throw from bbma_utils::FinalPathFormation(): empty way";
+    }
     TsmResult hamiltonian_path;
     coordinates_iter current_edge_it;
     int current_from;
@@ -69,6 +72,7 @@ bbma_utils::coordinates_iter bbma_utils::FindNextNode_(coordinates way,
         }
     }
     // THROW PORQUE DIDN'T FIND
+    throw "Throw from bbma_utils::FindNextNode_(): ";
 }
 
 

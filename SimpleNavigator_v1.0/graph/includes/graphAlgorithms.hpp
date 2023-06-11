@@ -72,6 +72,8 @@ private:
                             const std::vector<int>& parent_row,
                             const Graph& graph) const;
 
+    bool IsInappropriateGraph_(const Graph& graph);
+
 };
 
 }

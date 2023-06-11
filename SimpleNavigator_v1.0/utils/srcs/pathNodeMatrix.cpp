@@ -104,6 +104,9 @@ void PathNodeRootMatrix::RowCellsReduced_(void){
         current_column_it = std::min_element(
             (*matrix_)[row_i].begin(), (*matrix_)[row_i].end()
         );
+        if (current_column_it->second == std::numeric_limits<int>::max()){
+            throw "Throw from PathNodeRootMatrix::RowCellsReduced_()";
+        }
         selected_cell_value = current_column_it->second;
         selected_column_i = current_column_it - (*matrix_)[row_i].begin();
         reducing_nodes_[selected_column_i].push_back(row_i);
@@ -129,6 +132,10 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
 
     for (int column_i = 0; column_i != (*matrix_)[0].size(); column_i++){
         selected_row_i = FindMinInColumn_(column_i);
+        if ((*matrix_)[selected_row_i][column_i].second == 
+                std::numeric_limits<int>::max()){
+            throw "Throw from PathNodeRootMatrix::ColumnCellsReduced_()";
+        }
         selected_cell_value = (*matrix_)[selected_row_i][column_i].second;
         if (std::find(
                 reducing_nodes_.find(column_i)->second.begin(),
