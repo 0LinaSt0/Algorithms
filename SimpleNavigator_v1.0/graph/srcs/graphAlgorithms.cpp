@@ -246,7 +246,7 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
 
         while(1){
             current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
-                unforked_nodes, *current_node, current_edge[0], current_edge[1]
+                unforked_nodes, *current_node
             );
             current_node = *current_included_it;
             if (current_node->IsMatrixEmpty()){

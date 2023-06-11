@@ -13,11 +13,12 @@
 
 namespace s21{
 
+class BbmaUtils;
+
 class PathNodeRootMatrix{
 public:
-    using row_matrix_pair         = typename bbma_utils::row_matrix_pair_type;
-    using matrix_pair             = typename bbma_utils::matrix_pair_type;
-    using matrix_pair_unique_ptr  = typename bbma_utils::matrix_pair_unique_ptr;
+    using row_matrix_pair         = row_matrix_pair_type;
+    using matrix_pair             = matrix_pair_type;
     using row_matrix_iter         = typename matrix_pair::iterator;
     using column_matrix_iter      = typename row_matrix_pair::iterator;
     using matrix_pair_ref         = row_matrix_pair&;

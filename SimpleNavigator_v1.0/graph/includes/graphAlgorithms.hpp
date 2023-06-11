@@ -28,12 +28,12 @@ class BranchBoundMethodAlgoritmUtils;
 
 class GraphAlgorithms{
 public:
-    using aa_utils                  = aa_utils;
-    using bbma_utils                = bbma_utils;
+    using aa_utils                  = AntAlgorithmUtils;
+    using bbma_utils                = BbmaUtils;
     using elem_of_graph_type        = typename Graph::elem_of_graph_type;
     using graph_type                = typename Graph::graph_type;
     using graph_iterator            = typename Graph::iterator_type;
-    using multyset_type             = bbma_utils::multiset_type;
+    using multyset_type             = BbmaUtils::multiset_type;
     using multyset_iterator_type    = multyset_type::iterator;
 
     GraphAlgorithms() = default;

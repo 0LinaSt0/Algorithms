@@ -2,14 +2,14 @@
 
 namespace s21{
 
-bbma_utils::matrix_pair_unique_ptr bbma_utils::InitialMatrix(
+matrix_pair_unique_ptr BbmaUtils::InitialMatrix(
                     const Graph& graph){
     matrix_pair_unique_ptr matrix(new matrix_pair_type);
     std::vector<coorsinate_cell> current_row;
     int current_cell_value;
 
-    for(int row_i = 0; row_i < graph.Size(); row_i++){
-        for(int column_i = 0; column_i < graph[row_i].size(); column_i++){
+    for(int row_i = 0; row_i < (int)graph.Size(); row_i++){
+        for(int column_i = 0; column_i < (int)graph[row_i].size(); column_i++){
             current_cell_value = !graph[row_i][column_i] ?
                                 std::numeric_limits<int>::max() :
                                 graph[row_i][column_i];
@@ -25,10 +25,9 @@ bbma_utils::matrix_pair_unique_ptr bbma_utils::InitialMatrix(
     return matrix;
 }
 
-bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
+BbmaUtils::multiset_type::iterator BbmaUtils::AddWayNodesToUnforkedNodes(
                                 multiset_type& unforked_nodes,
-                                PathNodeRootMatrix& matrix_node,
-                                int from_node, int to_node){
+                                PathNodeRootMatrix& matrix_node){
     multiset_type::iterator included_path_it;
 
     included_path_it = unforked_nodes.insert(
@@ -40,9 +39,9 @@ bbma_utils::multiset_type::iterator bbma_utils::AddWayNodesToUnforkedNodes(
     return included_path_it;
 }
 
-TsmResult bbma_utils::FinalPathFormation(coordinates way, double way_cost){
+TsmResult BbmaUtils::FinalPathFormation(coordinates way, double way_cost){
     if (way.empty()) {
-        throw "Throw from bbma_utils::FinalPathFormation(): empty way";
+        throw "Throw from BbmaUtils::FinalPathFormation(): empty way";
     }
     TsmResult hamiltonian_path;
     coordinates_iter current_edge_it;
@@ -63,7 +62,7 @@ TsmResult bbma_utils::FinalPathFormation(coordinates way, double way_cost){
     return hamiltonian_path;
 }
 
-bbma_utils::coordinates_iter bbma_utils::FindNextNode_(coordinates way,
+coordinates_iter BbmaUtils::FindNextNode_(coordinates way,
                                                 int finded_from){
     if (way.empty()) { return way.end(); }
     for (coordinates_iter edge = way.begin(); edge != way.end(); ++edge){
@@ -71,7 +70,7 @@ bbma_utils::coordinates_iter bbma_utils::FindNextNode_(coordinates way,
             return edge;
         }
     }
-    throw "Throw from bbma_utils::FindNextNode_(): ";
+    throw "Throw from BbmaUtils::FindNextNode_(): ";
 }
 
 

@@ -12,17 +12,17 @@
 
 namespace s21{
 
+class PathNodeRootMatrix;
+class PathNodeIncludeMatrix;
+class PathNodeNotIncludeMatrix;
+
 using node_shared_ptr   = std::shared_ptr<PathNodeRootMatrix>;
 
 bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b);
 
-class bbma_utils{
+class BbmaUtils{
 public:
-    using coordinates_iter          = typename coordinates::iterator;
-    using coorsinate_cell           = std::pair<const coordinate, int>;
-    using row_matrix_pair_type      = std::vector<coorsinate_cell>;
-    using matrix_pair_type          = std::vector<row_matrix_pair_type>;
-    using matrix_pair_unique_ptr    = std::unique_ptr<matrix_pair_type>;
+
     using multiset_type             = std::multiset<node_shared_ptr,
                                             decltype(NodesCostCompare)*>;
 
@@ -31,13 +31,12 @@ public:
     // return itertor to added PathNodeIncludeMatrix
     multiset_type::iterator AddWayNodesToUnforkedNodes(
                                 multiset_type& unforked_nodes,
-                                PathNodeRootMatrix& matrix_node,
-                                int from_node, int to_node);
+                                PathNodeRootMatrix& matrix_node);
 
     TsmResult FinalPathFormation(coordinates way, double way_cost);
 
-    private:
-        coordinates_iter FindNextNode_(coordinates way, int finded_from);
+private:
+    coordinates_iter FindNextNode_(coordinates way, int finded_from);
 };
 
 }

@@ -36,7 +36,7 @@ PathNodeRootMatrix::column_matrix_iter
     return finded_edge_column_it_;
 }
 
-PathNodeRootMatrix::matrix_pair_unique_ptr PathNodeRootMatrix::GetMatrixCopy(
+matrix_pair_unique_ptr PathNodeRootMatrix::GetMatrixCopy(
                                                                     void) const{
     return matrix_pair_unique_ptr(new matrix_pair(*matrix_));
 }
@@ -76,7 +76,7 @@ coordinate PathNodeRootMatrix::CellsEvaluating_(void){
     for (matrix_map::iterator column_it = reducing_nodes_.begin();
             column_it != reducing_nodes_.end();
             ++column_it){
-        for (int row_i = 0; row_i < column_it->second.size(); row_i++){
+        for (int row_i = 0; row_i < (int)column_it->second.size(); row_i++){
             current_grade = CellGradeDeterminig_(row_i, column_it->first);
             if (current_grade > selected_grade){
                 selected_row_i = row_i;
@@ -100,7 +100,7 @@ void PathNodeRootMatrix::RowCellsReduced_(void){
     int selected_column_i;
     int selected_cell_value;
 
-    for (int row_i = 0; row_i != matrix_->size(); row_i++){
+    for (int row_i = 0; row_i != (int)matrix_->size(); row_i++){
         current_column_it = std::min_element(
             (*matrix_)[row_i].begin(), (*matrix_)[row_i].end()
         );
@@ -112,7 +112,7 @@ void PathNodeRootMatrix::RowCellsReduced_(void){
         reducing_nodes_[selected_column_i].push_back(row_i);
         if (selected_cell_value){
             for (int column_i = 0;
-                    column_i != (*matrix_)[row_i].size();
+                    column_i != (int)(*matrix_)[row_i].size();
                     column_i++){
                 if ((*matrix_)[row_i][column_i].second !=
                                             std::numeric_limits<int>::max()){
@@ -130,7 +130,7 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
     int selected_row_i;
     int selected_cell_value;
 
-    for (int column_i = 0; column_i != (*matrix_)[0].size(); column_i++){
+    for (int column_i = 0; column_i != (int)(*matrix_)[0].size(); column_i++){
         selected_row_i = FindMinInColumn_(column_i);
         if ((*matrix_)[selected_row_i][column_i].second == 
                 std::numeric_limits<int>::max()){
@@ -145,7 +145,7 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
             reducing_nodes_[column_i].push_back(selected_row_i);
         }
         if (selected_cell_value){
-            for (int row_i = 0; row_i != matrix_->size(); row_i++){
+            for (int row_i = 0; row_i != (int)matrix_->size(); row_i++){
                 if ((*matrix_)[row_i][column_i].second !=
                         std::numeric_limits<int>::max()){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
@@ -160,7 +160,7 @@ int PathNodeRootMatrix::FindMinInColumn_(int column_i){
     int min_i;
 
     min_i = 0;
-    for (int row_i = 0; row_i != matrix_->size(); row_i++){
+    for (int row_i = 0; row_i != (int)matrix_->size(); row_i++){
         if ((*matrix_)[row_i][column_i].second <
                 (*matrix_)[min_i][column_i].second
             ){
@@ -222,7 +222,7 @@ void PathNodeIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
     column_i = matrix_node.GetFindedEdgeColumnIter() -
                                                     (*matrix_)[row_i].begin();
     matrix_->erase(matrix_->begin() + row_i);
-    for (auto row : (*matrix_)){
+    for (auto& row : (*matrix_)){
         row.erase(row.begin() + column_i);
     }
     if (matrix_->empty()){
@@ -245,7 +245,7 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
 
     row_elem_i = 0;
     column_elem_i = 0;
-    for (;current_i < (*matrix_).size(); current_i++){
+    for (;current_i < (int)(*matrix_).size(); current_i++){
         if ((*matrix_)[current_i][0].first[0] == row_coordinate){
             row_elem_i = current_i;
             break ;
@@ -253,8 +253,8 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
             return ;
         }
     }
-    if (row_elem_i == 0 && current_i == (*matrix_).size()) { return ; }
-    for (;current_i < (*matrix_)[row_elem_i].size(); current_i++){
+    if (row_elem_i == 0 && current_i == (int)(*matrix_).size()) { return ; }
+    for (;current_i < (int)(*matrix_)[row_elem_i].size(); current_i++){
         if ((*matrix_)[row_elem_i][current_i].first[1] == column_coordinate){
             column_elem_i = current_i;
             break ;
@@ -263,7 +263,7 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
             return ;
         }
     }
-    if (column_elem_i == 0 && current_i == (*matrix_)[row_elem_i].size()) {
+    if (column_elem_i == 0 && current_i == (int)(*matrix_)[row_elem_i].size()) {
         return ;
     }
     (*matrix_)[row_elem_i][column_elem_i].second =

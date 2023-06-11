@@ -197,16 +197,6 @@ void Graph::ExportGraphToDot(std::string filename){
     }
 }
 
-bool Graph::IsDirected_() const{
-    for (size_t x = 0; x < graph_.size(); x++){
-    for (size_t y = 0; y < graph_.size(); y++){
-        if (graph_[x][y] != graph_[y][x]) return true;
-    }
-    }
-
-    return false;
-}
-
 std::string Graph::DotFilename_(std::string& filename){
     if (filename.empty()){
         return DEFAULT_DOT_NAME;
