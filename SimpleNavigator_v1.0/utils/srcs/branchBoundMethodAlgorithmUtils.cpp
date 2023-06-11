@@ -71,7 +71,6 @@ bbma_utils::coordinates_iter bbma_utils::FindNextNode_(coordinates way,
             return edge;
         }
     }
-    // THROW PORQUE DIDN'T FIND
     throw "Throw from bbma_utils::FindNextNode_(): ";
 }
 
