@@ -1,6 +1,8 @@
 #ifndef ANT
 #define ANT
 
+#include <memory>
+
 #include "../../graph/includes/graphAlgorithms.hpp"
 
 namespace s21{
@@ -10,8 +12,13 @@ class Graph;
 
 class Ant{
 public:
-    using graph_type            = Graph;
-    using elem_of_graph_type    = typename graph_type::elem_of_graph_type;
+    using graph_type                            = Graph;
+    using elem_of_graph_type                    = typename graph_type::
+                                                            elem_of_graph_type;
+    using probability_pair_matrix               = std::pair<std::vector<int>, 
+                                                        std::vector<double>>;
+    using probability_pair_matrix_unique_ptr    = std::unique_ptr<
+                                                    probability_pair_matrix>;
 
     Ant(int start_node);
     Ant(const Ant& other) = default;
@@ -45,8 +52,8 @@ private:
     int bad_way_count_;
     int end_status_; // 0 -> continue; 1 -> best end; 2 -> bad end
 
-    std::pair<std::vector<int>, std::vector<double>>
-        NodeSelectionProbability_(elem_of_graph_type& available_nodes,
+    probability_pair_matrix_unique_ptr NodeSelectionProbability_(
+                                    elem_of_graph_type& available_nodes,
                                     std::vector<double>& pheromones);
 
     void UpdateBestWay_();

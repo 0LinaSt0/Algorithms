@@ -20,11 +20,12 @@ double AntAlgorithmUtils::AverageDistance(const Graph& graph){
     return (float)total_length_count / (float)edges_count;
 }
 
-std::vector<Ant> AntAlgorithmUtils::AntsColony(const Graph& graph){
-    std::vector<Ant> ants;
+std::unique_ptr<std::vector<Ant>> AntAlgorithmUtils::AntsColony(
+                                                        const Graph& graph){
+    std::unique_ptr<std::vector<Ant>> ants(new std::vector<Ant>);
 
     for(size_t i = 0; i < graph.Size(); i++){
-        ants.push_back(Ant(i));
+        ants->push_back(Ant(i));
     }
     return (ants);
 }

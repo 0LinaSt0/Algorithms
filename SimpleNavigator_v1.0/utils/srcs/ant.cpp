@@ -10,16 +10,16 @@ Ant::Ant(int start_node) : start_node_(start_node), best_way_count_(0),
 int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
             std::vector<double>& pheromones){
     int next_node;
-    std::pair<std::vector<int>, std::vector<double>> node_and_probability =
+    probability_pair_matrix_unique_ptr node_and_probability =
         (NodeSelectionProbability_(available_nodes, pheromones));
 
     next_node = (
-        node_and_probability.first[
+        node_and_probability->first[
             std::distance(
-                node_and_probability.second.begin(),
+                node_and_probability->second.begin(),
                 std::max_element(
-                    node_and_probability.second.begin(),
-                    node_and_probability.second.end()
+                    node_and_probability->second.begin(),
+                    node_and_probability->second.end()
                 )
             )
         ]
@@ -70,7 +70,7 @@ int Ant::BadWayCount(){
     return bad_way_count_;
 }
 
-std::pair<std::vector<int>, std::vector<double>>
+Ant::probability_pair_matrix_unique_ptr
     Ant::NodeSelectionProbability_(Ant::elem_of_graph_type& available_nodes,
                                     std::vector<double>& pheromones){
     std::vector<int>& current_way = current_way_.vertices;
@@ -81,31 +81,33 @@ std::pair<std::vector<int>, std::vector<double>>
     auto node_probability = [](double pheromone, double visible) -> double{
         return (std::pow(pheromone, TSM_ALPHA) * std::pow(visible, TSM_BETA));
     };
-    std::pair<std::vector<int>, std::vector<double>> node_and_probability;
+    probability_pair_matrix_unique_ptr node_and_probability(
+        new probability_pair_matrix()
+    );
 
     for (size_t i = 0; i < available_nodes.size(); i++){
-        int node = available_nodes[i];
-        if ((node && is_permitted_node(node)) ||
-            (node == start_node_ &&
+        int node_value = available_nodes[i];
+        if ((node_value && is_permitted_node(i)) ||
+            (i == start_node_ &&
                 current_way.size() == (available_nodes.size() - 1))){
-            node_and_probability.first.push_back(node);
-            node_and_probability.second.push_back(
-                node_probability(pheromones[i], ((double)1 / (double)node))
+            node_and_probability->first.push_back(i);
+            node_and_probability->second.push_back(
+                node_probability(pheromones[i], ((double)1 / (double)node_value))
             );
         }
     }
-    if (node_and_probability.first.empty()){
-        node_and_probability.first.push_back(-1);
-        node_and_probability.second.push_back(-1);
+    if (node_and_probability->first.empty()){
+        node_and_probability->first.push_back(-1);
+        node_and_probability->second.push_back(-1);
     } else {
         double probability_sum = std::reduce(
-            node_and_probability.second.begin(),
-            node_and_probability.second.end()
+            node_and_probability->second.begin(),
+            node_and_probability->second.end()
         );
 
-        for (size_t i = 0; i < node_and_probability.first.size(); i++){
-            node_and_probability.second[i] = (
-                node_and_probability.second[i] / probability_sum
+        for (size_t i = 0; i < node_and_probability->first.size(); i++){
+            node_and_probability->second[i] = (
+                node_and_probability->second[i] / probability_sum
             );
         }
     }
@@ -117,7 +119,8 @@ void Ant::UpdateBestWay_(){
         current_way_.distance < best_way_.distance){
         best_way_ = current_way_;
         best_way_count_ = 1;
-    } else {
+    } else if (current_way_.distance == best_way_.distance && 
+                current_way_.vertices == best_way_.vertices) {
         best_way_count_++;
     }
 }

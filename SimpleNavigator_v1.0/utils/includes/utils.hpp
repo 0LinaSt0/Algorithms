@@ -30,11 +30,12 @@ using matrix_const_reference        = typename matrix_type::const_reference;
 using matrix_iterator_type          = typename matrix_type::iterator;
 using matrix_const_iterator_type    = typename matrix_type::const_iterator;
 
-    using coordinates_iter          = typename coordinates::iterator;
-    using coorsinate_cell           = std::pair<coordinate, int>;
-    using row_matrix_pair_type      = std::vector<coorsinate_cell>;
-    using matrix_pair_type          = std::vector<row_matrix_pair_type>;
-    using matrix_pair_unique_ptr    = std::unique_ptr<matrix_pair_type>;
+// typedefs for BranchBoundMethodAlgorithm implementation
+using coordinates_iter              = typename coordinates::iterator;
+using coorsinate_cell               = std::pair<coordinate, int>;
+using row_matrix_pair_type          = std::vector<coorsinate_cell>;
+using matrix_pair_type              = std::vector<row_matrix_pair_type>;
+using matrix_pair_unique_ptr        = std::unique_ptr<matrix_pair_type>;
 
 
 const std::string INAPPROPRIATE_GRAPH_MSG = "It is impossible to solve "

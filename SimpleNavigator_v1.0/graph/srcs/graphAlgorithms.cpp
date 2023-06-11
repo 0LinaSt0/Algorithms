@@ -194,19 +194,19 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
     std::vector<std::vector<double>> pheromones(
         graph.Size(), std::vector<double>(graph.Size(), 0)
     );
-    std::vector<Ant> ants(std::move(ants_utils_->AntsColony(graph)));
+    std::unique_ptr<std::vector<Ant>> ants = ants_utils_->AntsColony(graph);
 
-    while (!ants.empty()){
+    while (!ants->empty()){
         Ant* ant;
-        for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
-            ant = &ants[ant_index];
+        for (size_t ant_index = 0; ant_index < ants->size(); ant_index++){
+            ant = &(*ants)[ant_index];
             ant->ChooseNextNode(
                 graph[ant->CurrentNode()],
                 pheromones[(ant->CurrentNode())]
             );
         }
-        for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
-            ant = &ants[ant_index];
+        for (size_t ant_index = 0; ant_index < ants->size(); ant_index++){
+            ant = &(*ants)[ant_index];
             if (ant->BadWayCount() == 0){
                 ants_utils_->RefreshPheromones(
                     ant->FromNode(), ant->CurrentNode(), graph, pheromones
@@ -215,11 +215,11 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                     return_path = std::move(ants_utils_->UpdateReturnedWay(
                         ant->CurrentWay(), return_path
                     ));
-                    ants.erase(ants.begin() + ant_index);
+                    ants->erase(ants->begin() + ant_index);
                 }
             } else {
                 if (ant->EndCodeStatus() == 2){
-                    ants.erase(ants.begin() + ant_index);
+                    ants->erase(ants->begin() + ant_index);
                 }
             }
         }

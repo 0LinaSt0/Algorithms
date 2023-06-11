@@ -16,7 +16,7 @@ class AntAlgorithmUtils{
 public:
     double AverageDistance(const Graph& graph);
 
-    std::vector<Ant> AntsColony(const Graph& graph);
+    std::unique_ptr<std::vector<Ant>> AntsColony(const Graph& graph);
 
     TsmResult&& UpdateReturnedWay(TsmResult& new_way,
                     TsmResult& best_way);
