@@ -17,12 +17,14 @@ Graph::Graph(graph_type&& inp_graph) : graph_(std::move(inp_graph)){
 Graph::Graph(const graph_type& inp_graph, size_type min_spanning_tree_size)
     : graph_(inp_graph), min_spanning_tree_size_(min_spanning_tree_size) {
     is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
 }
 
 Graph::Graph(graph_type&& inp_graph, size_type min_spanning_tree_size)
     : graph_(std::move(inp_graph)),
         min_spanning_tree_size_(min_spanning_tree_size) {
     is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
 }
 
 Graph& Graph::operator=(const Graph& other){

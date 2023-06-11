@@ -274,11 +274,7 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
 }
 
 TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
-    if (graph.Size() == 0){
-        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
-                        std::string("It is impossible to solve travelling ") +
-                        std::string("salesman problem with current graph"));
-    }
+    if (!IsInappropriateGraph_) return {};
 
     double res_row_weight = DBL_MAX;
     std::vector<int> res_row;
@@ -302,6 +298,9 @@ TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
         }
     }
 
+    if (!res_row.size()) {
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+    }
     return { res_row, res_row_weight };
 }
 
