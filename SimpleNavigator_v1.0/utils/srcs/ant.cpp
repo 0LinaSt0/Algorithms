@@ -46,6 +46,10 @@ TsmResult& Ant::CurrentWay(){
     return current_way_;
 }
 
+TsmResult& Ant::BestWay(){
+    return best_way_;
+}
+
 int Ant::StartNode(){
     return start_node_;
 }
@@ -85,11 +89,21 @@ Ant::probability_pair_matrix_unique_ptr
         new probability_pair_matrix()
     );
 
-    for (size_t i = 0; i < available_nodes.size(); i++){
+    /////// TEST
+    // {
+    //     std::cout << "\t available_nodes: ";
+    //     for (auto& elem : available_nodes){
+    //         std::cout << elem << "  ";
+    //     }
+    //     std::cout << std::endl;
+    // } //////////
+    
+    for (int i = 0; i < (int)available_nodes.size(); i++){
         int node_value = available_nodes[i];
         if ((node_value && is_permitted_node(i)) ||
             (i == start_node_ &&
-                current_way.size() == (available_nodes.size() - 1))){
+                current_way.size() == (available_nodes.size()))){
+            // std::cout << current_way.size() << " --- " << node_value << "       ";
             node_and_probability->first.push_back(i);
             node_and_probability->second.push_back(
                 node_probability(pheromones[i], ((double)1 / (double)node_value))

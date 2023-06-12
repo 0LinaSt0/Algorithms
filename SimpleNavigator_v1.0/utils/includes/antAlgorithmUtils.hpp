@@ -18,7 +18,7 @@ public:
 
     std::unique_ptr<std::vector<Ant>> AntsColony(const Graph& graph);
 
-    TsmResult&& UpdateReturnedWay(TsmResult& new_way,
+    TsmResult UpdateReturnedWay(TsmResult& new_way,
                     TsmResult& best_way);
 
     void RefreshPheromones(int from_node, int to_node, const Graph &graph,

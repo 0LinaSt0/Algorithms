@@ -41,8 +41,11 @@ BbmaUtils::multiset_type::iterator BbmaUtils::AddWayNodesToUnforkedNodes(
 
 TsmResult BbmaUtils::FinalPathFormation(coordinates way, double way_cost){
     if (way.empty()) {
-        throw "Throw from BbmaUtils::FinalPathFormation(): empty way";
+        throw std::invalid_argument(
+            "Throw from BbmaUtils::FinalPathFormation(): empty way"
+        );
     }
+
     TsmResult hamiltonian_path;
     coordinates_iter current_edge_it;
     int current_from;
@@ -62,7 +65,7 @@ TsmResult BbmaUtils::FinalPathFormation(coordinates way, double way_cost){
     return hamiltonian_path;
 }
 
-coordinates_iter BbmaUtils::FindNextNode_(coordinates way,
+coordinates_iter BbmaUtils::FindNextNode_(coordinates& way,
                                                 int finded_from){
     if (way.empty()) { return way.end(); }
     for (coordinates_iter edge = way.begin(); edge != way.end(); ++edge){
@@ -70,7 +73,7 @@ coordinates_iter BbmaUtils::FindNextNode_(coordinates way,
             return edge;
         }
     }
-    throw "Throw from BbmaUtils::FindNextNode_(): ";
+    throw std::invalid_argument("Throw from BbmaUtils::FindNextNode_(): ");
 }
 
 

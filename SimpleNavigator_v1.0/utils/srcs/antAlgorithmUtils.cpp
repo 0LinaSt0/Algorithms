@@ -30,13 +30,13 @@ std::unique_ptr<std::vector<Ant>> AntAlgorithmUtils::AntsColony(
     return (ants);
 }
 
-TsmResult&& AntAlgorithmUtils::UpdateReturnedWay(TsmResult& new_way,
+TsmResult AntAlgorithmUtils::UpdateReturnedWay(TsmResult& new_way,
                                 TsmResult& best_way){
     if (best_way.vertices.empty() ||
         new_way.distance < best_way.distance){
-        return std::move(new_way);
+        return new_way;
     } else {
-        return std::move(best_way);
+        return best_way;
     }
 }
 

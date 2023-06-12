@@ -187,10 +187,9 @@ Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
 }
 
 TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
+    if (IsInappropriateGraph_(graph)){ return {}; }
+
     TsmResult return_path;
-    if (IsInappropriateGraph_(graph)){
-        return return_path;
-    }
     std::vector<std::vector<double>> pheromones(
         graph.Size(), std::vector<double>(graph.Size(), 0)
     );
@@ -204,22 +203,33 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                 graph[ant->CurrentNode()],
                 pheromones[(ant->CurrentNode())]
             );
+            // std::cout << "ANT NO " << ant_index << ":";
+            // ant->CurrentWay().tmp_print_DELETEME();
+            // std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
         }
-        for (size_t ant_index = 0; ant_index < ants->size(); ant_index++){
-            ant = &(*ants)[ant_index];
+        // std::cout << "HEEEEEEEEEEEEE" <<std::endl;
+        for (std::vector<Ant>::iterator ant_it = ants->begin(); 
+                ant_it < ants->end();){
+            ant = &(*ant_it);
             if (ant->BadWayCount() == 0){
-                ants_utils_->RefreshPheromones(
-                    ant->FromNode(), ant->CurrentNode(), graph, pheromones
-                );
+                if (ant->CurrentWay().vertices.size() > 1){
+                    ants_utils_->RefreshPheromones(
+                        ant->FromNode(), ant->CurrentNode(), graph, pheromones
+                    );
+                }
                 if (ant->EndCodeStatus() == 1){
                     return_path = std::move(ants_utils_->UpdateReturnedWay(
-                        ant->CurrentWay(), return_path
+                        ant->BestWay(), return_path
                     ));
-                    ants->erase(ants->begin() + ant_index);
+                    ant_it = ants->erase(ant_it);
+                } else {
+                    ++ant_it;
                 }
             } else {
                 if (ant->EndCodeStatus() == 2){
-                    ants->erase(ants->begin() + ant_index);
+                    ant_it = ants->erase(ant_it);
+                } else {
+                    ++ant_it;
                 }
             }
         }
@@ -232,9 +242,8 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 }
 
 TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
-    if (IsInappropriateGraph_(graph)){
-        return TsmResult();
-    }
+    if (IsInappropriateGraph_(graph)){ return {}; }
+    
     try {
         node_shared_ptr current_node(
             new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
@@ -248,6 +257,7 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
             current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
                 unforked_nodes, *current_node
             );
+            // std::cout << "HRRRRR" << std::endl;
             current_node = *current_included_it;
             if (current_node->IsMatrixEmpty()){
                 way.push_back(current_edge);
@@ -267,14 +277,15 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         return bbmethod_utils_->FinalPathFormation(
             way, current_node->GetWayCost()
         );
-    } catch (...) {
+    } catch (std::invalid_argument& e) {
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+        std::cout << std::string(e.what()) << std::endl;
         return TsmResult();
     }
 }
 
 TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
-    if (!IsInappropriateGraph_) return {};
+    if (IsInappropriateGraph_(graph)) return {};
 
     double res_row_weight = DBL_MAX;
     std::vector<int> res_row;
@@ -390,7 +401,7 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
     return true;
 }
 
-bool GraphAlgorithms::IsInappropriateGraph_(const Graph& graph){
+bool GraphAlgorithms::IsInappropriateGraph_(const Graph& graph) const{
     if (!graph.Size() || !graph.IsConnected()){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
         return true;

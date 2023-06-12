@@ -36,7 +36,7 @@ public:
     TsmResult FinalPathFormation(coordinates way, double way_cost);
 
 private:
-    coordinates_iter FindNextNode_(coordinates way, int finded_from);
+    coordinates_iter FindNextNode_(coordinates& way, int finded_from);
 };
 
 }

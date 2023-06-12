@@ -39,6 +39,8 @@ public:
 
     column_matrix_iter GetFindedEdgeColumnIter(void) const;
 
+    row_matrix_iter Begin() const;
+
     matrix_pair_unique_ptr GetMatrixCopy(void) const;
 
     bool IsIncludedEdgeNode(void) const;
@@ -68,7 +70,9 @@ protected:
 
     void ColumnCellsReduced_(void);
 
-    int FindMinInColumn_(int column_i);
+    int FindMinInRow_(int row_i, int column);
+
+    int FindMinInColumn_(int column_i, int row);
 
     double CellGradeDeterminig_(int row_i, int column_i);
 
@@ -80,7 +84,7 @@ public:
     PathNodeIncludeMatrix(PathNodeRootMatrix& matrix_node);
 
 private:
-    void CostDeterminingPathNode_(int current_way_cost);
+    void CostDeterminingPathNode_(double current_way_cost);
 
     void RestructMatrix_(PathNodeRootMatrix& matrix_node);
 
@@ -94,7 +98,7 @@ public:
     coordinate ReducedCellsEvaluating(void);
 
 private:
-    void CostDeterminingPathNode_(int current_way_cost, int current_cell_score);
+    void CostDeterminingPathNode_(double current_way_cost, int current_cell_score);
 
     void RestructMatrix_(PathNodeRootMatrix& matrix_node);
 };

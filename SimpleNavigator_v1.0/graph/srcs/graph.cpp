@@ -145,6 +145,7 @@ bool Graph::LoadGraphFromFile(std::string filename){
         }
         graph_.push_back(std::move(row));
     }
+    is_connected_ = IsConnected_();
 
     return true;
 }

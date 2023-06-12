@@ -33,6 +33,8 @@ public:
 
     TsmResult& CurrentWay();
 
+    TsmResult& BestWay();
+
     int StartNode();
 
     int FromNode();
