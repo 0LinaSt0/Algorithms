@@ -30,7 +30,6 @@ int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
         bad_way_count_++;
         next_node = start_node_;
     } else {
-        bad_way_count_ = 0;
         current_way_.vertices.push_back(next_node);
         current_way_.distance += available_nodes[next_node];
         if (next_node == start_node_){
@@ -39,6 +38,10 @@ int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
         }
     }
     UpdateEndStatus_();
+    // if (start_node_ == 1){
+    //     std::cout << "\t bad_way_count: " << bad_way_count_ << std::endl;
+    //     std::cout << "\t best_way_count: " << best_way_count_ << std::endl;
+    // }
     return next_node;
 }
 
@@ -91,11 +94,13 @@ Ant::probability_pair_matrix_unique_ptr
 
     /////// TEST
     // {
-    //     std::cout << "\t available_nodes: ";
-    //     for (auto& elem : available_nodes){
-    //         std::cout << elem << "  ";
-    //     }
-    //     std::cout << std::endl;
+        // if (start_node_ == 1){
+        //     std::cout << "\t available_nodes: ";
+        //     for (auto& elem : available_nodes){
+        //         std::cout << elem << "  ";
+        //     }
+        //     std::cout << std::endl;
+        // }
     // } //////////
     
     for (int i = 0; i < (int)available_nodes.size(); i++){
@@ -129,6 +134,7 @@ Ant::probability_pair_matrix_unique_ptr
 }
 
 void Ant::UpdateBestWay_(){
+    bad_way_count_ = 0;
     if (best_way_.vertices.empty() ||
         current_way_.distance < best_way_.distance){
         best_way_ = current_way_;

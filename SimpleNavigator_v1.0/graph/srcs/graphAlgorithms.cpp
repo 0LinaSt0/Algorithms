@@ -203,9 +203,11 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                 graph[ant->CurrentNode()],
                 pheromones[(ant->CurrentNode())]
             );
-            // std::cout << "ANT NO " << ant_index << ":";
-            // ant->CurrentWay().tmp_print_DELETEME();
-            // std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
+            // if (ant->StartNode() == 1){
+            //     std::cout << "ANT NO " << ant->StartNode() << ":";
+            //     ant->CurrentWay().tmp_print_DELETEME();
+            //     std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
+            // }
         }
         // std::cout << "HEEEEEEEEEEEEE" <<std::endl;
         for (std::vector<Ant>::iterator ant_it = ants->begin(); 
@@ -257,7 +259,6 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
             current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
                 unforked_nodes, *current_node
             );
-            // std::cout << "HRRRRR" << std::endl;
             current_node = *current_included_it;
             if (current_node->IsMatrixEmpty()){
                 way.push_back(current_edge);

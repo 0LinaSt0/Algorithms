@@ -160,11 +160,12 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
             );
         }
         selected_cell_value = (*matrix_)[selected_row_i][column_i].second;
+        std::cout << selected_cell_value << std::endl;
         if (std::find(
                 reducing_nodes_.find(column_i)->second.begin(),
                 reducing_nodes_.find(column_i)->second.end(),
                 selected_row_i
-                ) == reducing_nodes_.find(column_i)->second.end()){
+            ) == reducing_nodes_.find(column_i)->second.end()){
             reducing_nodes_[column_i].push_back(selected_row_i);
         }
         if (selected_cell_value){
