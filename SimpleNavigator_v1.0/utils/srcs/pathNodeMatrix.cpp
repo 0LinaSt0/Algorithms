@@ -160,8 +160,17 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
             );
         }
         selected_cell_value = (*matrix_)[selected_row_i][column_i].second;
-        std::cout << selected_cell_value << std::endl;
-        if (std::find(
+            // {
+            //     std::cout << "FROM_VERTEX: " << from_vertex_ << std::endl;
+            //     std::cout << "FOR_COLUMN: " << column_i << std::endl;
+            //     for (auto& elem : reducing_nodes_.find(column_i)->second){
+            //             std::cout << elem << "\t";
+            //         }
+            //         std::cout << std::endl;
+            //     std::cout << selected_row_i << std::endl;
+            // }
+        if ((reducing_nodes_.find(column_i)) != reducing_nodes_.end() && 
+                std::find(
                 reducing_nodes_.find(column_i)->second.begin(),
                 reducing_nodes_.find(column_i)->second.end(),
                 selected_row_i

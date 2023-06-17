@@ -2,6 +2,9 @@
 
 namespace s21{
 
+GraphAlgorithms::GraphAlgorithms() : ants_utils_(new aa_utils), 
+    bbmethod_utils_(new bbma_utils){}
+
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
                                                         int start_vertex){
     (void)graph; (void)start_vertex;
