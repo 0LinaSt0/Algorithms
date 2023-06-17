@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "timer.hpp"
 #include "../../graph/includes/graph.hpp"
 #include "../../graph/includes/graphAlgorithms.hpp"
 

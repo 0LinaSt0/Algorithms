@@ -176,26 +176,57 @@ void CLI::GetLeastSpanningTree_(){
 }
 
 void CLI::SolveTravelingSalesmanProblem_(){
+    Timer timer;
+    timer.Start();
+    TsmResult tsmResult = graph_algorithms_.SolveTravelingSalesmanProblem(
+                                                                *graph_.get()
+                                                                );
+    timer.End();
+
     std::cout
-        << "Solving the salesman problem (ant algorithm): "
+        << "Solving the salesman problem (branch and bound method): "
         << std::endl
-        << graph_algorithms_.SolveTravelingSalesmanProblem(*graph_.get())
+        << tsmResult
+        << std::endl
+        << "Duration: "
+        << timer.GetDuration()
+        << " ms"
         << std::endl;
 }
 
 void CLI::STSPBranchBoundMethodAlgorithm_(){
+    Timer timer;
+    timer.Start();
+    TsmResult tsmResult = graph_algorithms_.STSPBranchBoundMethodAlgorithm(
+                                                                *graph_.get()
+                                                                );
+    timer.End();
+
     std::cout
         << "Solving the salesman problem (branch and bound method): "
         << std::endl
-        << graph_algorithms_.STSPBranchBoundMethodAlgorithm(*graph_.get())
+        << tsmResult
+        << std::endl
+        << "Duration: "
+        << timer.GetDuration()
+        << " ms"
         << std::endl;
 }
 
 void CLI::ExhaustiveSearch_(){
+    Timer timer;
+    timer.Start();
+    TsmResult tsmResult = graph_algorithms_.ExhaustiveSearch(*graph_.get());
+    timer.End();
+
     std::cout
-        << "Solving the salesman problem (exhaustive search): "
+        << "Solving the salesman problem (branch and bound method): "
         << std::endl
-        << graph_algorithms_.ExhaustiveSearch(*graph_.get())
+        << tsmResult
+        << std::endl
+        << "Duration: "
+        << timer.GetDuration()
+        << " ms"
         << std::endl;
 }
 

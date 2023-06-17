@@ -22,7 +22,7 @@ HDRS		=	$(addprefix containers/, 									\
 				)															\
 				$(addprefix cli/,											\
 					$(addprefix includes/,									\
-						cli.hpp												\
+						cli.hpp	timer.hpp									\
 					)														\
 				)															\
 				$(addprefix graph/,											\
@@ -50,7 +50,7 @@ SRCS		=	$(addprefix utils/,											\
 				)															\
 				$(addprefix cli/,											\
 					$(addprefix srcs/,										\
-						cli.cpp												\
+						cli.cpp	timer.cpp									\
 					)														\
 				)															\
 				$(addprefix graph/,											\
