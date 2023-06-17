@@ -1,3 +1,4 @@
+MAIN_EXE	=	SimpleNavigator.out
 TEST_EXE	=	test.out
 
 CC			=	g++
@@ -17,6 +18,11 @@ HDRS		=	$(addprefix containers/, 									\
 						$(addprefix includes/,								\
 							queue.hpp										\
 						)													\
+					)														\
+				)															\
+				$(addprefix cli/,											\
+					$(addprefix includes/,									\
+						cli.hpp												\
 					)														\
 				)															\
 				$(addprefix graph/,											\
@@ -40,6 +46,11 @@ SRCS		=	$(addprefix utils/,											\
 						branchBoundMethodAlgorithmUtils.cpp					\
 						pathNodeMatrix.cpp									\
 						utils.cpp											\
+					)														\
+				)															\
+				$(addprefix cli/,											\
+					$(addprefix srcs/,										\
+						cli.cpp												\
 					)														\
 				)															\
 				$(addprefix graph/,											\
@@ -81,12 +92,13 @@ TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp							\
 TEST_OBJS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.o))
 TEST_DPNDS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.d))
 
-all:
-
 # $@			$<
 $(TMP_DIR)/%.o:	%.cpp $(TEST_HDRS) $(HDRS)
 				@mkdir -p $(dir $@)
 				$(GCC) -c -o $@ $<
+
+all:			$(OBJS) $(TMP_DIR)/main.o
+				$(GCC) $(OBJS) $(TMP_DIR)/main.o -o $(MAIN_EXE)
 
 test:			$(OBJS) $(TEST_OBJS)
 				$(GCC) $(OBJS) $(TEST_OBJS) -o $(TEST_EXE)

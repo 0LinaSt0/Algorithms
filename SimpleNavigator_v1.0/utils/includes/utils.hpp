@@ -72,3 +72,5 @@ void PrintError(const std::string& filename,
 void ReadOnlyPermissions(std::string& filepath);
 
 }
+
+std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result);

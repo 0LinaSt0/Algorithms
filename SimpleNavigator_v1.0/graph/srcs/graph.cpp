@@ -2,14 +2,17 @@
 
 namespace s21{
 
-Graph::Graph() : is_directed_(0){ }
+Graph::Graph()
+    : is_directed_(0), is_connected_(0), min_spanning_tree_size_(0){ }
 
 Graph::Graph(const graph_type& inp_graph) : graph_(inp_graph){ 
+    min_spanning_tree_size_ = 0;
     is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
 }
 
 Graph::Graph(graph_type&& inp_graph) : graph_(std::move(inp_graph)){
+    min_spanning_tree_size_ = 0;
     is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
 }
@@ -145,6 +148,7 @@ bool Graph::LoadGraphFromFile(std::string filename){
         }
         graph_.push_back(std::move(row));
     }
+    is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
 
     return true;
@@ -262,4 +266,19 @@ void Graph::tmp_print_graph_DELETEME(void){
     }
 }
 
+}
+
+std::ostream& operator<<(std::ostream& out, const s21::Graph& graph){
+    for (size_t x = 0; x < graph.Size(); x++){
+    for (size_t y = 0; y < graph.Size(); y++){
+        out << graph.at(x, y);
+        if (y + 1 != graph.Size()) out << "\t";
+        else out << std::endl;
+    }
+    }
+    return out 
+            << std::endl
+            << "IsDirected: " << graph.IsDirected() << std::endl
+            << "IsConnected: " << graph.IsConnected() << std::endl
+            << "Min spanning tree size: " << graph.MinSpanningTreeSize();
 }

@@ -77,4 +77,6 @@ private:
 
 }
 
+std::ostream& operator<<(std::ostream& out, const s21::Graph& graph);
+
 #endif
