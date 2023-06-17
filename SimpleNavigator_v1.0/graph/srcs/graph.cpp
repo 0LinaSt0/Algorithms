@@ -157,6 +157,7 @@ bool Graph::LoadGraphFromFile(std::string filename){
 bool Graph::IsDirected_() const{
     for (size_t x = 0; x < graph_.size(); x++){
     for (size_t y = 0; y < graph_.size(); y++){
+        // std::cout << graph_[x][y] << "  " << graph_[y][x] << std::endl;
         if (graph_[x][y] != graph_[y][x]) return true;
     }
     }
@@ -217,7 +218,8 @@ std::string Graph::DotFilename_(std::string& filename){
 }
 
 std::string Graph::GraphDotRepresentation_(){
-    std::string graph_dot = "1 graphname {\n";
+    std::string graph_dot = (is_directed_ ? "digraph" : "graph") + 
+                            std::string(" graphname {\n");
     std::string dash = (is_directed_ ? " -> " : " -- ");
     std::string startline = "\t";
     std::string endline = ";\n";

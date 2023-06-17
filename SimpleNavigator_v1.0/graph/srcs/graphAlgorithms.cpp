@@ -216,12 +216,12 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
         for (std::vector<Ant>::iterator ant_it = ants->begin(); 
                 ant_it < ants->end();){
             ant = &(*ant_it);
+            if (ant->CurrentWay().vertices.size() > 1){
+                ants_utils_->RefreshPheromones(
+                    ant->FromNode(), ant->CurrentNode(), graph, pheromones
+                );
+            }
             if (ant->BadWayCount() == 0){
-                if (ant->CurrentWay().vertices.size() > 1){
-                    ants_utils_->RefreshPheromones(
-                        ant->FromNode(), ant->CurrentNode(), graph, pheromones
-                    );
-                }
                 if (ant->EndCodeStatus() == 1){
                     return_path = std::move(ants_utils_->UpdateReturnedWay(
                         ant->BestWay(), return_path
@@ -267,6 +267,9 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
                 way.push_back(current_edge);
                 break ;
             }
+            // std::cout << "\t\t~~~> include_cost: " << (*current_included_it)->GetWayCost()
+            //     << "    ~~~> not_include_cost: " << (*unforked_nodes.begin())->GetWayCost()
+            //     << std::endl;
             if ((*current_included_it)->GetWayCost() >
                 (*unforked_nodes.begin())->GetWayCost()){
                 current_included_it = unforked_nodes.begin();
@@ -277,6 +280,9 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
             }
             current_edge = current_node->ReducedCellsEvaluating();
             unforked_nodes.erase(current_included_it);
+        }
+        for(auto& coor : way){
+            std::cout << coor[0] << "  " << coor[1] << std::endl;
         }
         return bbmethod_utils_->FinalPathFormation(
             way, current_node->GetWayCost()

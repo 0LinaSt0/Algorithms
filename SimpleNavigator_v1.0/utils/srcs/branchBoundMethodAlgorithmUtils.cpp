@@ -10,7 +10,8 @@ matrix_pair_unique_ptr BbmaUtils::InitialMatrix(
 
     for(int row_i = 0; row_i < (int)graph.Size(); row_i++){
         for(int column_i = 0; column_i < (int)graph[row_i].size(); column_i++){
-            current_cell_value = !graph[row_i][column_i] ?
+            current_cell_value = (!graph[row_i][column_i] || 
+                                row_i == column_i) ?
                                 std::numeric_limits<int>::max() :
                                 graph[row_i][column_i];
             current_row.push_back(
@@ -67,9 +68,15 @@ TsmResult BbmaUtils::FinalPathFormation(coordinates way, double way_cost){
 
 coordinates_iter BbmaUtils::FindNextNode_(coordinates& way,
                                                 int finded_from){
+    
+    // for(auto& coor : way){
+    //     std::cout << coor[0] << "  " << coor[1] << std::endl;
+    // }
     if (way.empty()) { return way.end(); }
     for (coordinates_iter edge = way.begin(); edge != way.end(); ++edge){
         if ((*edge)[0] == finded_from) {
+    //         std::cout << finded_from << std::endl;
+    // std::cout << std::endl;
             return edge;
         }
     }

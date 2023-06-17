@@ -92,24 +92,25 @@ Ant::probability_pair_matrix_unique_ptr
         new probability_pair_matrix()
     );
 
-    /////// TEST
+    // /////// TEST
     // {
-        // if (start_node_ == 1){
-        //     std::cout << "\t available_nodes: ";
-        //     for (auto& elem : available_nodes){
-        //         std::cout << elem << "  ";
-        //     }
-        //     std::cout << std::endl;
-        // }
+    //     if (start_node_ == 0){
+    //         std::cout << "\t available_nodes: ";
+    //         for (auto& elem : available_nodes){
+    //             std::cout << elem << "  ";
+    //         }
+    //         std::cout << std::endl;
+    //     }
     // } //////////
     
     for (int i = 0; i < (int)available_nodes.size(); i++){
         int node_value = available_nodes[i];
         if ((node_value && is_permitted_node(i)) ||
-            (i == start_node_ &&
+            (node_value && i == start_node_ &&
                 current_way.size() == (available_nodes.size()))){
             // std::cout << current_way.size() << " --- " << node_value << "       ";
             node_and_probability->first.push_back(i);
+            // std::cout << node_probability(pheromones[i], ((double)1 / (double)node_value)) << std::endl;
             node_and_probability->second.push_back(
                 node_probability(pheromones[i], ((double)1 / (double)node_value))
             );

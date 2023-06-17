@@ -13,7 +13,7 @@ double AntAlgorithmUtils::AverageDistance(const Graph& graph){
         for (auto weight : *row){
             if (weight){
                 edges_count++;
-                total_length_count++;
+                total_length_count += weight;
             }
         }
     }
