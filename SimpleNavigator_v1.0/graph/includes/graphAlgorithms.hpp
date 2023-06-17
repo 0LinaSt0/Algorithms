@@ -28,15 +28,17 @@ class BranchBoundMethodAlgoritmUtils;
 
 class GraphAlgorithms{
 public:
-    using aa_utils                  = aa_utils;
-    using bbma_utils                = bbma_utils;
+    using aa_utils                  = AntAlgorithmUtils;
+    using bbma_utils                = BbmaUtils;
+    using aa_utils_shared_ptr       = std::shared_ptr<aa_utils>;
+    using bbma_utils_shared_ptr     = std::shared_ptr<bbma_utils>;
     using elem_of_graph_type        = typename Graph::elem_of_graph_type;
     using graph_type                = typename Graph::graph_type;
     using graph_iterator            = typename Graph::iterator_type;
-    using multyset_type             = bbma_utils::multiset_type;
+    using multyset_type             = BbmaUtils::multiset_type;
     using multyset_iterator_type    = multyset_type::iterator;
 
-    GraphAlgorithms() = default;
+    GraphAlgorithms();
     GraphAlgorithms(const GraphAlgorithms& other) = default;
     GraphAlgorithms(GraphAlgorithms&& other) = default;
     ~GraphAlgorithms() = default;
@@ -62,8 +64,8 @@ public:
     TsmResult ExhaustiveSearch(Graph &graph) const;
 
 private:
-    aa_utils* ants_utils_;
-    bbma_utils* bbmethod_utils_;
+    aa_utils_shared_ptr ants_utils_;
+    bbma_utils_shared_ptr bbmethod_utils_;
 
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
 
@@ -71,6 +73,8 @@ private:
                             std::vector<int>& min_row,
                             const std::vector<int>& parent_row,
                             const Graph& graph) const;
+
+    bool IsInappropriateGraph_(const Graph& graph) const;
 
 };
 

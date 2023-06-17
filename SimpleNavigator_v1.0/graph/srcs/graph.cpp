@@ -17,12 +17,14 @@ Graph::Graph(graph_type&& inp_graph) : graph_(std::move(inp_graph)){
 Graph::Graph(const graph_type& inp_graph, size_type min_spanning_tree_size)
     : graph_(inp_graph), min_spanning_tree_size_(min_spanning_tree_size) {
     is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
 }
 
 Graph::Graph(graph_type&& inp_graph, size_type min_spanning_tree_size)
     : graph_(std::move(inp_graph)),
         min_spanning_tree_size_(min_spanning_tree_size) {
     is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
 }
 
 Graph& Graph::operator=(const Graph& other){
@@ -143,6 +145,7 @@ bool Graph::LoadGraphFromFile(std::string filename){
         }
         graph_.push_back(std::move(row));
     }
+    is_connected_ = IsConnected_();
 
     return true;
 }
@@ -193,16 +196,6 @@ void Graph::ExportGraphToDot(std::string filename){
     catch(...){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, "Invalid file");
     }
-}
-
-bool Graph::IsDirected_() const{
-    for (size_t x = 0; x < graph_.size(); x++){
-    for (size_t y = 0; y < graph_.size(); y++){
-        if (graph_[x][y] != graph_[y][x]) return true;
-    }
-    }
-
-    return false;
 }
 
 std::string Graph::DotFilename_(std::string& filename){

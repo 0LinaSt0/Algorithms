@@ -36,8 +36,11 @@ PathNodeRootMatrix::column_matrix_iter
     return finded_edge_column_it_;
 }
 
-PathNodeRootMatrix::matrix_pair_unique_ptr PathNodeRootMatrix::GetMatrixCopy(
-                                                                    void) const{
+PathNodeRootMatrix::row_matrix_iter PathNodeRootMatrix::Begin() const{
+    return matrix_->begin();
+}
+
+matrix_pair_unique_ptr PathNodeRootMatrix::GetMatrixCopy(void) const{
     return matrix_pair_unique_ptr(new matrix_pair(*matrix_));
 }
 
@@ -56,6 +59,7 @@ coordinate PathNodeRootMatrix::ReducedCellsEvaluating(void){
 void PathNodeRootMatrix::FieldInitialization_(int from_node, int to_node){
     from_vertex_ = from_node;
     to_vertex_ = to_node;
+    way_cost_ = 0;
     is_empty_ = 0;
 }
 
@@ -76,16 +80,21 @@ coordinate PathNodeRootMatrix::CellsEvaluating_(void){
     for (matrix_map::iterator column_it = reducing_nodes_.begin();
             column_it != reducing_nodes_.end();
             ++column_it){
-        for (int row_i = 0; row_i < column_it->second.size(); row_i++){
-            current_grade = CellGradeDeterminig_(row_i, column_it->first);
+        for (auto row_it = column_it->second.begin(); 
+                row_it < column_it->second.end(); 
+                ++row_it){
+            current_grade = CellGradeDeterminig_((*row_it), column_it->first);
             if (current_grade > selected_grade){
-                selected_row_i = row_i;
+                selected_row_i = (*row_it);
                 selected_column_it = column_it;
                 selected_grade = current_grade;
                 if (selected_grade == std::numeric_limits<int>::max()){
                     break;
                 }
             }
+        }
+        if (selected_grade == std::numeric_limits<int>::max()){
+            break;
         }
     }
     (*matrix_)[selected_row_i][selected_column_it->first].second =
@@ -96,20 +105,35 @@ coordinate PathNodeRootMatrix::CellsEvaluating_(void){
 void PathNodeRootMatrix::RowCellsReduced_(void){
     if (is_empty_) { return ; }
 
-    column_matrix_iter current_column_it;
     int selected_column_i;
     int selected_cell_value;
 
-    for (int row_i = 0; row_i != matrix_->size(); row_i++){
-        current_column_it = std::min_element(
-            (*matrix_)[row_i].begin(), (*matrix_)[row_i].end()
-        );
-        selected_cell_value = current_column_it->second;
-        selected_column_i = current_column_it - (*matrix_)[row_i].begin();
+    //  {
+    //     for (auto& row : (*matrix_)){
+    //         for (auto& elem : row){
+    //             std::cout << elem.second << "\t";
+    //         }
+    //         std::cout << std::endl;
+    //     }
+    //     std::cout << std::endl;
+    // }
+
+    for (int row_i = 0; row_i != (int)matrix_->size(); row_i++){
+        // for (auto& elem : (*matrix_)[row_i]){
+        //     std::cout << elem.second << "  ";
+        // }
+        // std::cout << std::endl;
+        selected_column_i = FindMinInRow_(row_i, -1);
+        selected_cell_value = (*matrix_)[row_i][selected_column_i].second;
+        if (selected_cell_value == std::numeric_limits<int>::max()){
+            throw std::invalid_argument(
+                "Throw from PathNodeRootMatrix::RowCellsReduced_()"
+            );
+        }
         reducing_nodes_[selected_column_i].push_back(row_i);
         if (selected_cell_value){
             for (int column_i = 0;
-                    column_i != (*matrix_)[row_i].size();
+                    column_i != (int)(*matrix_)[row_i].size();
                     column_i++){
                 if ((*matrix_)[row_i][column_i].second !=
                                             std::numeric_limits<int>::max()){
@@ -127,18 +151,34 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
     int selected_row_i;
     int selected_cell_value;
 
-    for (int column_i = 0; column_i != (*matrix_)[0].size(); column_i++){
-        selected_row_i = FindMinInColumn_(column_i);
+    for (int column_i = 0; column_i != (int)(*matrix_)[0].size(); column_i++){
+        selected_row_i = FindMinInColumn_(column_i, -1);
+        if ((*matrix_)[selected_row_i][column_i].second == 
+                std::numeric_limits<int>::max()){
+            throw std::invalid_argument(
+                "Throw from PathNodeRootMatrix::ColumnCellsReduced_()"
+            );
+        }
         selected_cell_value = (*matrix_)[selected_row_i][column_i].second;
-        if (std::find(
+            // {
+            //     std::cout << "FROM_VERTEX: " << from_vertex_ << std::endl;
+            //     std::cout << "FOR_COLUMN: " << column_i << std::endl;
+            //     for (auto& elem : reducing_nodes_.find(column_i)->second){
+            //             std::cout << elem << "\t";
+            //         }
+            //         std::cout << std::endl;
+            //     std::cout << selected_row_i << std::endl;
+            // }
+        if ((reducing_nodes_.find(column_i)) != reducing_nodes_.end() && 
+                std::find(
                 reducing_nodes_.find(column_i)->second.begin(),
                 reducing_nodes_.find(column_i)->second.end(),
                 selected_row_i
-                ) == reducing_nodes_.find(column_i)->second.end()){
+            ) == reducing_nodes_.find(column_i)->second.end()){
             reducing_nodes_[column_i].push_back(selected_row_i);
         }
         if (selected_cell_value){
-            for (int row_i = 0; row_i != matrix_->size(); row_i++){
+            for (int row_i = 0; row_i != (int)matrix_->size(); row_i++){
                 if ((*matrix_)[row_i][column_i].second !=
                         std::numeric_limits<int>::max()){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
@@ -149,13 +189,31 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
     }
 }
 
-int PathNodeRootMatrix::FindMinInColumn_(int column_i){
+int PathNodeRootMatrix::FindMinInRow_(int row_i, int column){
     int min_i;
 
     min_i = 0;
-    for (int row_i = 0; row_i != matrix_->size(); row_i++){
-        if ((*matrix_)[row_i][column_i].second <
-                (*matrix_)[min_i][column_i].second
+    for (int column_i = 0; column_i != (int)matrix_->size(); column_i++){
+        if (((*matrix_)[row_i][column_i].second <
+                (*matrix_)[row_i][min_i].second &&
+                column_i != column) ||
+                (min_i == column && column_i != column)
+            ){
+            min_i = column_i;
+        }
+    }
+    return min_i;
+}
+
+int PathNodeRootMatrix::FindMinInColumn_(int column_i, int row){
+    int min_i;
+
+    min_i = 0;
+    for (int row_i = 0; row_i != (int)matrix_->size(); row_i++){
+        if (((*matrix_)[row_i][column_i].second <
+                (*matrix_)[min_i][column_i].second &&
+                row_i != row) ||
+                (min_i == row && row_i != row)
             ){
             min_i = row_i;
         }
@@ -168,13 +226,23 @@ double PathNodeRootMatrix::CellGradeDeterminig_(int row_i, int column_i){
     int min_row_elem;
     int min_column_elem;
 
-    min_row_elem = std::min_element(
-        (*matrix_)[row_i].begin(), (*matrix_)[row_i].end()
-    )->second;
+    // {
+    //     for (auto& row : (*matrix_)){
+    //         for (auto& elem : row){
+    //             std::cout << elem.second << "\t";
+    //         }
+    //         std::cout << std::endl;
+    //     }
+    //     std::cout << std::endl;
+    // }
+
+    min_row_elem = (*matrix_)[FindMinInRow_(row_i, column_i)][column_i].second;
+    // std::cout << "\tMIN: " << min_row_elem << std::endl;
     if (min_row_elem == std::numeric_limits<int>::max()){
         result = min_row_elem;
     } else {
-        min_column_elem = FindMinInColumn_(column_i);
+        min_column_elem = 
+                    (*matrix_)[row_i][FindMinInColumn_(column_i, row_i)].second;
         if (min_column_elem == std::numeric_limits<int>::max()){
             result = min_column_elem;
         } else {
@@ -203,6 +271,15 @@ PathNodeIncludeMatrix::PathNodeIncludeMatrix(PathNodeRootMatrix& matrix_node){
         matrix_node.GetFindedEdgeColumnIter()->first[1]
     );
     RestructMatrix_(matrix_node);
+    // {
+    //     for (auto& row : (*matrix_)){
+    //         for (auto& elem : row){
+    //             std::cout << elem.second << "\t";
+    //         }
+    //         std::cout << std::endl;
+    //     }
+    //     std::cout << std::endl;
+    // }
     CostDeterminingPathNode_(matrix_node.GetWayCost());
 }
 
@@ -211,21 +288,20 @@ void PathNodeIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
     int column_i;
 
     matrix_ = matrix_node.GetMatrixCopy();
-    row_i = matrix_node.GetFindedEdgeRowIter() - matrix_->begin();
+    row_i = matrix_node.GetFindedEdgeRowIter() - matrix_node.Begin();
     column_i = matrix_node.GetFindedEdgeColumnIter() -
-                                                    (*matrix_)[row_i].begin();
+                                    matrix_node.GetFindedEdgeRowIter()->begin();
+    InfToInversePath_(column_i, row_i);
     matrix_->erase(matrix_->begin() + row_i);
-    for (auto row : (*matrix_)){
+    for (auto& row : (*matrix_)){
         row.erase(row.begin() + column_i);
     }
     if (matrix_->empty()){
         is_empty_ = true;
-    } else {
-        InfToInversePath_(column_i, row_i);
     }
 }
 
-void PathNodeIncludeMatrix::CostDeterminingPathNode_(int current_way_cost){
+void PathNodeIncludeMatrix::CostDeterminingPathNode_(double current_way_cost){
     PathNodeRootMatrix::CostDeterminingPathNode_();
     way_cost_ += current_way_cost;
 }
@@ -238,7 +314,7 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
 
     row_elem_i = 0;
     column_elem_i = 0;
-    for (;current_i < (*matrix_).size(); current_i++){
+    for (;current_i < (int)(*matrix_).size(); current_i++){
         if ((*matrix_)[current_i][0].first[0] == row_coordinate){
             row_elem_i = current_i;
             break ;
@@ -246,8 +322,8 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
             return ;
         }
     }
-    if (row_elem_i == 0 && current_i == (*matrix_).size()) { return ; }
-    for (;current_i < (*matrix_)[row_elem_i].size(); current_i++){
+    if (row_elem_i == 0 && current_i == (int)(*matrix_).size()) { return ; }
+    for (;current_i < (int)(*matrix_)[row_elem_i].size(); current_i++){
         if ((*matrix_)[row_elem_i][current_i].first[1] == column_coordinate){
             column_elem_i = current_i;
             break ;
@@ -256,7 +332,7 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
             return ;
         }
     }
-    if (column_elem_i == 0 && current_i == (*matrix_)[row_elem_i].size()) {
+    if (column_elem_i == 0 && current_i == (int)(*matrix_)[row_elem_i].size()) {
         return ;
     }
     (*matrix_)[row_elem_i][column_elem_i].second =
@@ -281,9 +357,14 @@ coordinate PathNodeNotIncludeMatrix::ReducedCellsEvaluating(void){
     return CellsEvaluating_();
 }
 
-void PathNodeNotIncludeMatrix::CostDeterminingPathNode_(int current_way_cost,
+void PathNodeNotIncludeMatrix::CostDeterminingPathNode_(double current_way_cost,
                                                     int current_cell_score){
-    way_cost_ = current_way_cost + current_cell_score;
+    if (current_cell_score == std::numeric_limits<int>::max() ||
+        current_way_cost == std::numeric_limits<int>::max()){
+        way_cost_ = current_cell_score;
+    } else {
+        way_cost_ = current_way_cost + current_cell_score;
+    }
 }
 
 void PathNodeNotIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
@@ -291,9 +372,9 @@ void PathNodeNotIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
     int column_i;
 
     matrix_ = matrix_node.GetMatrixCopy();
-    row_i = matrix_node.GetFindedEdgeRowIter() - matrix_->begin();
+    row_i = matrix_node.GetFindedEdgeRowIter() - matrix_node.Begin();
     column_i = matrix_node.GetFindedEdgeColumnIter() -
-                                                    (*matrix_)[row_i].begin();
+                                    matrix_node.GetFindedEdgeRowIter()->begin();
     (*matrix_)[row_i][column_i].second = std::numeric_limits<int>::max();
 }
 

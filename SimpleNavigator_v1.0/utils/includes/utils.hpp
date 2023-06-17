@@ -30,8 +30,16 @@ using matrix_const_reference        = typename matrix_type::const_reference;
 using matrix_iterator_type          = typename matrix_type::iterator;
 using matrix_const_iterator_type    = typename matrix_type::const_iterator;
 
+// typedefs for BranchBoundMethodAlgorithm implementation
+using coordinates_iter              = typename coordinates::iterator;
+using coorsinate_cell               = std::pair<coordinate, int>;
+using row_matrix_pair_type          = std::vector<coorsinate_cell>;
+using matrix_pair_type              = std::vector<row_matrix_pair_type>;
+using matrix_pair_unique_ptr        = std::unique_ptr<matrix_pair_type>;
 
 
+const std::string INAPPROPRIATE_GRAPH_MSG = "It is impossible to solve "
+                            "travelling salesman problem with current graph";
 const std::string DEFAULT_DOT_NAME = "graph_default.dot";
 const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
@@ -46,6 +54,14 @@ const int TSM_SAME_ROAD_LIMIT = 10;
 struct TsmResult {
     std::vector<int> vertices; // an array with the route
     double distance;  // the length of this route
+
+    void tmp_print_DELETEME(void){
+        std::cout << "TsmResult::vertices" << std::endl;
+        for (auto& elem : vertices){
+            std::cout << elem << " ";
+        }
+        std::cout << std::endl;
+    }
 };
 
 // Print error like "filename: funcname: line: msg" to std::cerr

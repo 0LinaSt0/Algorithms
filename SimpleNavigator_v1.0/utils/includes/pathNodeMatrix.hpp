@@ -13,11 +13,12 @@
 
 namespace s21{
 
+class BbmaUtils;
+
 class PathNodeRootMatrix{
 public:
-    using row_matrix_pair         = typename bbma_utils::row_matrix_pair_type;
-    using matrix_pair             = typename bbma_utils::matrix_pair_type;
-    using matrix_pair_unique_ptr  = typename bbma_utils::matrix_pair_unique_ptr;
+    using row_matrix_pair         = row_matrix_pair_type;
+    using matrix_pair             = matrix_pair_type;
     using row_matrix_iter         = typename matrix_pair::iterator;
     using column_matrix_iter      = typename row_matrix_pair::iterator;
     using matrix_pair_ref         = row_matrix_pair&;
@@ -37,6 +38,8 @@ public:
     row_matrix_iter GetFindedEdgeRowIter(void) const;
 
     column_matrix_iter GetFindedEdgeColumnIter(void) const;
+
+    row_matrix_iter Begin() const;
 
     matrix_pair_unique_ptr GetMatrixCopy(void) const;
 
@@ -67,7 +70,9 @@ protected:
 
     void ColumnCellsReduced_(void);
 
-    int FindMinInColumn_(int column_i);
+    int FindMinInRow_(int row_i, int column);
+
+    int FindMinInColumn_(int column_i, int row);
 
     double CellGradeDeterminig_(int row_i, int column_i);
 
@@ -79,7 +84,7 @@ public:
     PathNodeIncludeMatrix(PathNodeRootMatrix& matrix_node);
 
 private:
-    void CostDeterminingPathNode_(int current_way_cost);
+    void CostDeterminingPathNode_(double current_way_cost);
 
     void RestructMatrix_(PathNodeRootMatrix& matrix_node);
 
@@ -93,7 +98,7 @@ public:
     coordinate ReducedCellsEvaluating(void);
 
 private:
-    void CostDeterminingPathNode_(int current_way_cost, int current_cell_score);
+    void CostDeterminingPathNode_(double current_way_cost, int current_cell_score);
 
     void RestructMatrix_(PathNodeRootMatrix& matrix_node);
 };

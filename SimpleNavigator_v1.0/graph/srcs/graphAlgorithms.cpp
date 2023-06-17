@@ -2,6 +2,9 @@
 
 namespace s21{
 
+GraphAlgorithms::GraphAlgorithms() : ants_utils_(new aa_utils), 
+    bbmethod_utils_(new bbma_utils){}
+
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
                                                         int start_vertex){
     (void)graph; (void)start_vertex;
@@ -187,83 +190,106 @@ Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
 }
 
 TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
+    if (IsInappropriateGraph_(graph)){ return {}; }
+
+    TsmResult return_path;
     std::vector<std::vector<double>> pheromones(
         graph.Size(), std::vector<double>(graph.Size(), 0)
     );
-    std::vector<Ant> ants(std::move(ants_utils_->AntsColony(graph)));
-    TsmResult return_path;
+    std::unique_ptr<std::vector<Ant>> ants = ants_utils_->AntsColony(graph);
 
-    while (!ants.empty()){
+    while (!ants->empty()){
         Ant* ant;
-        for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
-            ant = &ants[ant_index];
+        for (size_t ant_index = 0; ant_index < ants->size(); ant_index++){
+            ant = &(*ants)[ant_index];
             ant->ChooseNextNode(
                 graph[ant->CurrentNode()],
                 pheromones[(ant->CurrentNode())]
             );
+            // if (ant->StartNode() == 1){
+            //     std::cout << "ANT NO " << ant->StartNode() << ":";
+            //     ant->CurrentWay().tmp_print_DELETEME();
+            //     std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
+            // }
         }
-        for (size_t ant_index = 0; ant_index < ants.size(); ant_index++){
-            ant = &ants[ant_index];
+        // std::cout << "HEEEEEEEEEEEEE" <<std::endl;
+        for (std::vector<Ant>::iterator ant_it = ants->begin(); 
+                ant_it < ants->end();){
+            ant = &(*ant_it);
             if (ant->BadWayCount() == 0){
-                ants_utils_->RefreshPheromones(
-                    ant->FromNode(), ant->CurrentNode(), graph, pheromones
-                );
+                if (ant->CurrentWay().vertices.size() > 1){
+                    ants_utils_->RefreshPheromones(
+                        ant->FromNode(), ant->CurrentNode(), graph, pheromones
+                    );
+                }
                 if (ant->EndCodeStatus() == 1){
                     return_path = std::move(ants_utils_->UpdateReturnedWay(
-                        ant->CurrentWay(), return_path
+                        ant->BestWay(), return_path
                     ));
-                    ants.erase(ants.begin() + ant_index);
+                    ant_it = ants->erase(ant_it);
+                } else {
+                    ++ant_it;
                 }
             } else {
                 if (ant->EndCodeStatus() == 2){
-                    ants.erase(ants.begin() + ant_index);
+                    ant_it = ants->erase(ant_it);
+                } else {
+                    ++ant_it;
                 }
             }
         }
         ants_utils_->PheromoneEvaporation(pheromones);
     }
-    // IF WAY EMPTY ADD ERROR TO TERMINAL
+    if (return_path.vertices.empty()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+    }
     return return_path;
 }
 
 TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
-    node_shared_ptr current_node(
-        new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
-    );
-    multyset_type unforked_nodes(NodesCostCompare);
-    coordinate current_edge{current_node->ReducedCellsEvaluating()};
-    coordinates way;
-    multyset_iterator_type current_included_it;
-
-    while(1){
-        current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
-            unforked_nodes, *current_node, current_edge[0], current_edge[1]
+    if (IsInappropriateGraph_(graph)){ return {}; }
+    
+    try {
+        node_shared_ptr current_node(
+            new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
         );
-        current_node = *current_included_it;
-        if (current_node->IsMatrixEmpty()){
-            way.push_back(current_edge);
-            break ;
-        }
-        if ((*current_included_it)->GetWayCost() >
-            (*unforked_nodes.begin())->GetWayCost()){
-            current_included_it = unforked_nodes.begin();
+        multyset_type unforked_nodes(NodesCostCompare);
+        coordinate current_edge{current_node->ReducedCellsEvaluating()};
+        coordinates way;
+        multyset_iterator_type current_included_it;
+
+        while(1){
+            current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
+                unforked_nodes, *current_node
+            );
             current_node = *current_included_it;
+            if (current_node->IsMatrixEmpty()){
+                way.push_back(current_edge);
+                break ;
+            }
+            if ((*current_included_it)->GetWayCost() >
+                (*unforked_nodes.begin())->GetWayCost()){
+                current_included_it = unforked_nodes.begin();
+                current_node = *current_included_it;
+            }
+            if (current_node->IsIncludedEdgeNode()){
+                way.push_back(current_edge);
+            }
+            current_edge = current_node->ReducedCellsEvaluating();
+            unforked_nodes.erase(current_included_it);
         }
-        if (current_node->IsIncludedEdgeNode()){
-            way.push_back(current_edge);
-        }
-        current_edge = current_node->ReducedCellsEvaluating();
-        unforked_nodes.erase(current_included_it);
+        return bbmethod_utils_->FinalPathFormation(
+            way, current_node->GetWayCost()
+        );
+    } catch (std::invalid_argument& e) {
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+        std::cout << std::string(e.what()) << std::endl;
+        return TsmResult();
     }
-    return bbmethod_utils_->FinalPathFormation(way, current_node->GetWayCost());
 }
 
 TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
-    if (graph.Size() == 0){
-        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
-                        std::string("It is impossible to solve travelling ") +
-                        std::string("salesman problem with current graph"));
-    }
+    if (IsInappropriateGraph_(graph)) return {};
 
     double res_row_weight = DBL_MAX;
     std::vector<int> res_row;
@@ -287,6 +313,9 @@ TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
         }
     }
 
+    if (!res_row.size()) {
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+    }
     return { res_row, res_row_weight };
 }
 
@@ -374,6 +403,14 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
     }
 
     return true;
+}
+
+bool GraphAlgorithms::IsInappropriateGraph_(const Graph& graph) const{
+    if (!graph.Size() || !graph.IsConnected()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
+        return true;
+    }
+    return false;
 }
 
 }

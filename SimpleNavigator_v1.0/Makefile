@@ -92,10 +92,15 @@ test:			$(OBJS) $(TEST_OBJS)
 				$(GCC) $(OBJS) $(TEST_OBJS) -o $(TEST_EXE)
 				./$(TEST_EXE) 2> /dev/null
 
+test1:			$(OBJS)
+				$(GCC) -c tmp_main.cpp -o tmp_main.o
+				$(GCC) $(OBJS) tmp_main.o -o $(TEST_EXE)
+				./$(TEST_EXE)
+
 clean:			
 				@rm -rf $(TMP_DIR)
 
 fclean:			clean
 				@rm -f $(TEST_EXE)
 
-.PHONY: test clean fclean
+.PHONY: test test1 clean fclean
