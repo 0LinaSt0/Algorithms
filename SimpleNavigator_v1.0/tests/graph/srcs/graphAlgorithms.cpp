@@ -559,6 +559,103 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices6){
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 2, 1), 0);
 }
 
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices1){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/1");
+    s21::Graph res_graph =
+                    graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
+
+    ASSERT_EQ(res_graph.at(0, 3), 20);
+    ASSERT_EQ(res_graph.at(6, 1), 72);
+    ASSERT_EQ(res_graph.at(3, 6), 92);
+    ASSERT_EQ(res_graph.at(4, 7), 9);
+    ASSERT_EQ(res_graph.at(1, 5), 40);
+    ASSERT_EQ(res_graph.at(3, 7), 12);
+}
+
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices2){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    s21::Graph res_graph =
+                    graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
+
+    ASSERT_EQ(res_graph.at(0, 5), 11);
+    ASSERT_EQ(res_graph.at(0, 3), 20);
+    ASSERT_EQ(res_graph.at(0, 4), 20);
+    ASSERT_EQ(res_graph.at(4, 1), 21);
+    ASSERT_EQ(res_graph.at(2, 4), 11);
+    ASSERT_EQ(res_graph.at(3, 5), 13);
+    ASSERT_EQ(res_graph.at(4, 0), 20);
+}
+
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices3){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/3");
+    s21::Graph res_graph =
+                    graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
+
+    ASSERT_EQ(res_graph.at(4, 1), 74);
+    ASSERT_EQ(res_graph.at(2, 4), 47);
+    ASSERT_EQ(res_graph.at(1, 5), 38);
+    ASSERT_EQ(res_graph.at(5, 3), 38);
+    ASSERT_EQ(res_graph.at(5, 0), 79);
+    ASSERT_EQ(res_graph.at(5, 4), 30);
+}
+
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices4){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/4");
+    s21::Graph res_graph =
+                    graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
+
+    ASSERT_EQ(res_graph.at(5, 0), 0);
+    ASSERT_EQ(res_graph.at(0, 3), 59);
+    ASSERT_EQ(res_graph.at(1, 5), 105);
+    ASSERT_EQ(res_graph.at(1, 4), 87);
+    ASSERT_EQ(res_graph.at(7, 4), 98);
+}
+
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices5){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/5");
+    s21::Graph res_graph =
+                    graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
+
+    ASSERT_EQ(res_graph.at(5, 4), 0);
+    ASSERT_EQ(res_graph.at(0, 2), 30);
+    ASSERT_EQ(res_graph.at(0, 3), 72);
+    ASSERT_EQ(res_graph.at(1, 4), 0);
+    ASSERT_EQ(res_graph.at(0, 6), 25);
+    ASSERT_EQ(res_graph.at(6, 0), 57);
+    ASSERT_EQ(res_graph.at(6, 3), 129);
+}
+
+TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices6){
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/6");
+    s21::Graph res_graph =
+                    graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
+
+    ASSERT_EQ(res_graph.at(4, 0), 0);
+    ASSERT_EQ(res_graph.at(5, 3), 0);
+    ASSERT_EQ(res_graph.at(7, 5), 26);
+    ASSERT_EQ(res_graph.at(0, 4), 32);
+    ASSERT_EQ(res_graph.at(2, 6), 20);
+    ASSERT_EQ(res_graph.at(2, 1), 0);
+}
+
 TEST(TEST_SUITE_NAME, ExhaustiveSearch){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
