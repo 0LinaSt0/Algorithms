@@ -52,6 +52,7 @@ private:
     int start_node_;
     int best_way_count_;
     int bad_way_count_;
+    int iterations_count_;
     int end_status_; // 0 -> continue; 1 -> best end; 2 -> bad end
 
     probability_pair_matrix_unique_ptr NodeSelectionProbability_(

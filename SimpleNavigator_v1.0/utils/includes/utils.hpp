@@ -45,11 +45,12 @@ const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
 const fs::path DOTS_PATH = "materials/dot_representations";
 
-const int TSM_ALPHA = 1; // parameter depending on the number of pheromones [0;2]
-const int TSM_BETA = 2; // parameter depending on the length [0;2]
+const int TSM_ALPHA = 2; // parameter depending on the number of pheromones [0;2]
+const int TSM_BETA = 4; // parameter depending on the length [0;2]
 const double TSM_PYRA = 0.1; // evaporation rate constant of pheromones [0;1]
 
 const int TSM_SAME_ROAD_LIMIT = 10;
+const int TSM_PASSES_NUMBER_LIMIT = 100;
 
 struct TsmResult {
     std::vector<int> vertices; // an array with the route

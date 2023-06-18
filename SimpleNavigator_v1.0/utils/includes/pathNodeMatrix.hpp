@@ -45,7 +45,7 @@ public:
 
     matrix_pair_unique_ptr GetMatrixCopy(void) const;
 
-    bool IsIncludedEdgeNode(void) const;
+    int IsIncludedEdgeNode(void) const;
 
     bool IsMatrixEmpty(void) const;
 
@@ -60,7 +60,7 @@ protected:
     int from_vertex_;
     int to_vertex_;
     double way_cost_;
-    bool is_included_;
+    int is_included_;
     bool is_empty_;
 
     void FieldInitialization_(PathNodeRootMatrix& matrix_node);

@@ -4,7 +4,7 @@ namespace s21{
 
 PathNodeRootMatrix::PathNodeRootMatrix(matrix_pair_unique_ptr matrix)
     : matrix_(std::move(matrix)), from_vertex_(0),
-    to_vertex_(0), is_included_(true), is_empty_(false){
+    to_vertex_(0), way_cost_(0), is_included_(-1), is_empty_(false){
     // {
     //     for (auto& row : (*matrix_)){
     //         for (auto& elem : row){
@@ -57,7 +57,7 @@ matrix_pair_unique_ptr PathNodeRootMatrix::GetMatrixCopy(void) const{
     return matrix_pair_unique_ptr(new matrix_pair(*matrix_));
 }
 
-bool PathNodeRootMatrix::IsIncludedEdgeNode(void) const{
+int PathNodeRootMatrix::IsIncludedEdgeNode(void) const{
     return is_included_;
 }
 
@@ -165,7 +165,9 @@ void PathNodeRootMatrix::RowCellsReduced_(void){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
                 }
             }
-            if (is_included_){ way_cost_ += selected_cell_value; }
+            if (is_included_ || is_included_ == -1){ 
+                way_cost_ += selected_cell_value;
+            }
         }
     }
 }
@@ -223,7 +225,9 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
                 }
             }
-            if (is_included_){ way_cost_ += selected_cell_value; }
+            if (is_included_ || is_included_ == -1){ 
+                way_cost_ += selected_cell_value;
+            }
         }
     }
     // for(auto& column : reducing_nodes_){
@@ -332,7 +336,6 @@ coordinate PathNodeRootMatrix::FindedCellCoordenates_(int row_i, int column_i){
     // std::cout << (*matrix_)[row_i][column_i].first[0] << std::endl
     //         << (*matrix_)[row_i][column_i].first[1] << std::endl << std::endl;
     // std::cout << "Is_include: " << is_included_ << "   -> " << way_cost_ << std::endl;
-    if (is_included_){ current_way_.push_back(returned); }
     return returned;
 }
 
@@ -341,6 +344,11 @@ coordinate PathNodeRootMatrix::FindedCellCoordenates_(int row_i, int column_i){
 PathNodeIncludeMatrix::PathNodeIncludeMatrix(PathNodeRootMatrix& matrix_node){
     is_included_ = true;
     FieldInitialization_(matrix_node);
+    current_way_.push_back(
+        coordinate{
+            matrix_node.GetFindedEdgeColumnIter()->first[0],
+            matrix_node.GetFindedEdgeColumnIter()->first[1]
+        });
     RestructMatrix_(matrix_node);
     // {
     //     std::cout << "INCLUDE" << std::endl;
@@ -363,17 +371,21 @@ void PathNodeIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
     row_i = matrix_node.GetFindedEdgeRowIter() - matrix_node.Begin();
     column_i = matrix_node.GetFindedEdgeColumnIter() -
                                     matrix_node.GetFindedEdgeRowIter()->begin();
+    // std::cout << (*matrix_)[row_i][column_i].first[0] << "  " << (*matrix_)[row_i][column_i].first[1] << std::endl;
     InfToInversePath_((*matrix_)[row_i][column_i].first[0], (*matrix_)[row_i][column_i].first[1]);
+        // for (auto& row : (*matrix_)){
+        //         for (auto& elem : row){
+        //             std::cout << "[" << elem.first[0] << "; " << elem.first[1] << "]" << "(" << elem.second << ")" << " ";
+        //         }
+        //         std::cout << std::endl;
+        // }
+    std::cout << "\t\tDELETED_ROW: " << (*matrix_)[row_i][column_i].first[0]
+             << "  DELETED_COLUMN: " << (*matrix_)[row_i][column_i].first[1]
+             << std::endl;
     matrix_->erase(matrix_->begin() + row_i);
     for (auto& row : (*matrix_)){
         row.erase(row.begin() + column_i);
     }
-        // for (auto& row : (*matrix_)){
-        //         for (auto& elem : row){
-        //             std::cout << elem.second << "\t";
-        //         }
-        //         std::cout << std::endl;
-        // }
     if (matrix_->empty()){
         is_empty_ = true;
     }
@@ -415,6 +427,8 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
     if (column_elem_i == 0 && current_i == (int)(*matrix_)[row_elem_i].size()) {
         return ;
     }
+    // std::cout << "INV from " << (*matrix_)[row_elem_i][column_elem_i].first[0] 
+    //          << " to " << (*matrix_)[row_elem_i][column_elem_i].first[1] << std::endl;
     (*matrix_)[row_elem_i][column_elem_i].second =
                                                 std::numeric_limits<int>::max();
 }
@@ -425,6 +439,16 @@ PathNodeNotIncludeMatrix::PathNodeNotIncludeMatrix(
                             PathNodeRootMatrix& matrix_node){
     column_matrix_iter node_it = matrix_node.GetFindedEdgeColumnIter();
     // std::cout << "NOT INCLUDE" << std::endl;
+    // {
+    //     std::cout << "NOT INCLUDE" << std::endl;
+    //     for (auto& row : (*matrix_)){
+    //         for (auto& elem : row){
+    //             std::cout << elem.second << "\t";
+    //         }
+    //         std::cout << std::endl;
+    //     }
+    //     std::cout << std::endl;
+    // }
 
     is_included_ = false;
     FieldInitialization_(matrix_node);
@@ -461,6 +485,15 @@ void PathNodeNotIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
     column_i = matrix_node.GetFindedEdgeColumnIter() -
                                     matrix_node.GetFindedEdgeRowIter()->begin();
     (*matrix_)[row_i][column_i].second = std::numeric_limits<int>::max();
+
+    std::cout << "INV from " << (*matrix_)[row_i][column_i].first[0] 
+             << " to " << (*matrix_)[row_i][column_i].first[1] << std::endl;
+    // for (auto& row : (*matrix_)){
+    //             for (auto& elem : row){
+    //                 std::cout << "[" << elem.first[0] << "; " << elem.first[1] << "]" << "(" << elem.second << ")" << " ";
+    //             }
+    //             std::cout << std::endl;
+    //     }
 }
 
 }
