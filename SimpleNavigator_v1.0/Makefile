@@ -1,5 +1,7 @@
 MAIN_EXE	=	SimpleNavigator.out
 TEST_EXE	=	test.out
+GRAPH_LIB	=	graph.a
+ALGO_LIB	=	graph_algorithms.a
 
 CC			=	g++
 GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g \
@@ -8,7 +10,8 @@ GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g \
 TEST_DIR	=	tests
 TMP_DIR		=	tmp
 
-HDRS		=	$(addprefix containers/, 									\
+### HEADERS ###
+HDRS_CONT	=	$(addprefix containers/, 									\
 					$(addprefix stack/,										\
 						$(addprefix includes/,								\
 							stack.hpp										\
@@ -19,18 +22,23 @@ HDRS		=	$(addprefix containers/, 									\
 							queue.hpp										\
 						)													\
 					)														\
-				)															\
-				$(addprefix cli/,											\
+				)
+HDRS_CLI	=	$(addprefix cli/,											\
 					$(addprefix includes/,									\
 						cli.hpp	timer.hpp									\
 					)														\
-				)															\
-				$(addprefix graph/,											\
+				)
+HDRS_GRAPH	=	$(addprefix graph/,											\
 					$(addprefix includes/,									\
-						graph.hpp graphAlgorithms.hpp						\
+						graph.hpp											\
 					)														\
-				)															\
-				$(addprefix utils/,											\
+				)
+HDRS_ALGO	=	$(addprefix graph/,											\
+					$(addprefix includes/,									\
+						graphAlgorithms.hpp									\
+					)														\
+				)
+HDRS_UTILS	=	$(addprefix utils/,											\
 					$(addprefix includes/,									\
 						ant.hpp												\
 						antAlgorithmUtils.hpp								\
@@ -39,7 +47,11 @@ HDRS		=	$(addprefix containers/, 									\
 						utils.hpp											\
 					)														\
 				)
-SRCS		=	$(addprefix utils/,											\
+HDRS		=	$(HDRS_CONT) $(HDRS_CLI) $(HDRS_GRAPH) 						\
+					$(HDRS_ALGO) $(HDRS_UTILS)
+
+### SOURCES ###
+SRCS_UTILS	=	$(addprefix utils/,											\
 					$(addprefix srcs/,										\
 						ant.cpp												\
 						antAlgorithmUtils.cpp								\
@@ -47,18 +59,36 @@ SRCS		=	$(addprefix utils/,											\
 						pathNodeMatrix.cpp									\
 						utils.cpp											\
 					)														\
-				)															\
-				$(addprefix cli/,											\
+				)															
+SRCS_CLI	=	$(addprefix cli/,											\
 					$(addprefix srcs/,										\
 						cli.cpp	timer.cpp									\
 					)														\
-				)															\
-				$(addprefix graph/,											\
-					$(addprefix srcs/,										\
-						graph.cpp graphAlgorithms.cpp						\
-					)														\
 				)															
-OBJS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.o))
+SRCS_GRAPH	=	$(addprefix graph/,											\
+					$(addprefix srcs/,										\
+						graph.cpp											\
+					)														\
+				)
+SRCS_ALGO	=	$(addprefix graph/,											\
+					$(addprefix srcs/,										\
+						graphAlgorithms.cpp									\
+					)														\
+				)
+SRCS_MAIN	=	./main.cpp										
+SRCS		=	$(SRCS_UTILS) $(SRCS_CLI) $(SRCS_GRAPH) \
+					$(SRCS_ALGO) $(SRCS_MAIN)
+
+### OBJECTS ###
+OBJS_UTILS	=	$(addprefix $(TMP_DIR)/, $(SRCS_UTILS:.cpp=.o))
+OBJS_CLI	=	$(addprefix $(TMP_DIR)/, $(SRCS_CLI:.cpp=.o))
+OBJS_GRAPH	=	$(addprefix $(TMP_DIR)/, $(SRCS_GRAPH:.cpp=.o))
+OBJS_ALGO	=	$(addprefix $(TMP_DIR)/, $(SRCS_ALGO:.cpp=.o))
+OBJS_MAIN	=	$(addprefix $(TMP_DIR)/, $(SRCS_MAIN:.cpp=.o))
+OBJS		=	$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) \
+					$(OBJS_ALGO) $(OBJS_MAIN)
+
+### DEPENDENCIES ###
 DPNDS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.d))
 
 TEST_HDRS	=	$(addprefix $(TEST_DIR)/,									\
@@ -97,22 +127,27 @@ $(TMP_DIR)/%.o:	%.cpp $(TEST_HDRS) $(HDRS)
 				@mkdir -p $(dir $@)
 				$(GCC) -c -o $@ $<
 
-all:			$(OBJS) $(TMP_DIR)/main.o
-				$(GCC) $(OBJS) $(TMP_DIR)/main.o -o $(MAIN_EXE)
+all:			algo_lib $(OBJS_CLI) $(OBJS_MAIN)
+				$(GCC) $(OBJS_MAIN) $(OBJS_CLI) $(ALGO_LIB) -o $(MAIN_EXE)
+	
+graph_lib:		$(OBJS_GRAPH) $(OBJS_UTILS)
+				@ar sr $(GRAPH_LIB) $(OBJS_GRAPH) $(OBJS_UTILS)
+
+algo_lib:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
+				@ar sr $(ALGO_LIB) $(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
 
 test:			$(OBJS) $(TEST_OBJS)
 				$(GCC) $(OBJS) $(TEST_OBJS) -o $(TEST_EXE)
-				./$(TEST_EXE) 2> /dev/null
-
-test1:			$(OBJS)
-				$(GCC) -c tmp_main.cpp -o tmp_main.o
-				$(GCC) $(OBJS) tmp_main.o -o $(TEST_EXE)
-				./$(TEST_EXE)
 
 clean:			
 				@rm -rf $(TMP_DIR)
 
 fclean:			clean
+				@rm -f $(MAIN_EXE)
 				@rm -f $(TEST_EXE)
+				@rm -f $(GRAPH_LIB)
+				@rm -f $(ALGO_LIB)
 
-.PHONY: test test1 clean fclean
+re:				fclean all
+
+.PHONY: graph_lib algo_lib test clean fclean re
