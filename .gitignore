@@ -1,6 +1,6 @@
 **/.*
-
 **/tmp*
+**/*.dSYM
 
 **/*.o
 **/*.d
@@ -12,7 +12,6 @@
 **/*.exe
 
 **/materials/dot_representations/*
-
 
 !**/materials/dot_representations/example.dot
 !**/.gitkeep
