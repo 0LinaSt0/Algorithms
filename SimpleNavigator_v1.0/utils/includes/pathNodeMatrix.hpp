@@ -33,6 +33,8 @@ public:
 
     double GetWayCost(void) const;
 
+    coordinates GetCurrentWay(void) const;
+
     coordinate GetPathNodeVertices(void) const;
 
     row_matrix_iter GetFindedEdgeRowIter(void) const;
@@ -54,13 +56,14 @@ protected:
     row_matrix_iter finded_edge_row_it_;
     column_matrix_iter finded_edge_column_it_;
     matrix_map reducing_nodes_;
+    coordinates current_way_;
     int from_vertex_;
     int to_vertex_;
     double way_cost_;
     bool is_included_;
     bool is_empty_;
 
-    void FieldInitialization_(int from_node, int to_node);
+    void FieldInitialization_(PathNodeRootMatrix& matrix_node);
 
     virtual void CostDeterminingPathNode_(void);
 

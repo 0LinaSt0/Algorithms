@@ -4,7 +4,7 @@ namespace s21{
 
 PathNodeRootMatrix::PathNodeRootMatrix(matrix_pair_unique_ptr matrix)
     : matrix_(std::move(matrix)), from_vertex_(0),
-    to_vertex_(0), is_included_(false), is_empty_(false){
+    to_vertex_(0), is_included_(true), is_empty_(false){
     // {
     //     for (auto& row : (*matrix_)){
     //         for (auto& elem : row){
@@ -29,6 +29,10 @@ PathNodeRootMatrix::matrix_const_pair_ref PathNodeRootMatrix::operator[](
 
 double PathNodeRootMatrix::GetWayCost(void) const{
     return way_cost_;
+}
+
+coordinates PathNodeRootMatrix::GetCurrentWay(void) const{
+    return current_way_;
 }
 
 coordinate PathNodeRootMatrix::GetPathNodeVertices(void) const{
@@ -65,9 +69,10 @@ coordinate PathNodeRootMatrix::ReducedCellsEvaluating(void){
     return CellsEvaluating_();
 }
 
-void PathNodeRootMatrix::FieldInitialization_(int from_node, int to_node){
-    from_vertex_ = from_node;
-    to_vertex_ = to_node;
+void PathNodeRootMatrix::FieldInitialization_(PathNodeRootMatrix& matrix_node){
+    current_way_ = matrix_node.GetCurrentWay();
+    from_vertex_ = matrix_node.GetFindedEdgeColumnIter()->first[0];
+    to_vertex_ = matrix_node.GetFindedEdgeColumnIter()->first[1];
     way_cost_ = 0;
     is_empty_ = 0;
 }
@@ -160,7 +165,7 @@ void PathNodeRootMatrix::RowCellsReduced_(void){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
                 }
             }
-            way_cost_ += selected_cell_value;
+            if (is_included_){ way_cost_ += selected_cell_value; }
         }
     }
 }
@@ -218,7 +223,7 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
                 }
             }
-            way_cost_ += selected_cell_value;
+            if (is_included_){ way_cost_ += selected_cell_value; }
         }
     }
     // for(auto& column : reducing_nodes_){
@@ -299,6 +304,10 @@ double PathNodeRootMatrix::CellGradeDeterminig_(int row_i, int column_i){
 }
 
 coordinate PathNodeRootMatrix::FindedCellCoordenates_(int row_i, int column_i){
+    coordinate returned{
+        (*matrix_)[row_i][column_i].first[0],
+        (*matrix_)[row_i][column_i].first[1]
+    };
     finded_edge_row_it_ = matrix_->begin() + row_i;
     finded_edge_column_it_ = (*matrix_)[row_i].begin() + column_i;
 
@@ -322,20 +331,16 @@ coordinate PathNodeRootMatrix::FindedCellCoordenates_(int row_i, int column_i){
 
     // std::cout << (*matrix_)[row_i][column_i].first[0] << std::endl
     //         << (*matrix_)[row_i][column_i].first[1] << std::endl << std::endl;
-    return coordinate{
-        (*matrix_)[row_i][column_i].first[0],
-        (*matrix_)[row_i][column_i].first[1]
-    };
+    // std::cout << "Is_include: " << is_included_ << "   -> " << way_cost_ << std::endl;
+    if (is_included_){ current_way_.push_back(returned); }
+    return returned;
 }
 
 
 
 PathNodeIncludeMatrix::PathNodeIncludeMatrix(PathNodeRootMatrix& matrix_node){
     is_included_ = true;
-    FieldInitialization_(
-        matrix_node.GetFindedEdgeColumnIter()->first[0],
-        matrix_node.GetFindedEdgeColumnIter()->first[1]
-    );
+    FieldInitialization_(matrix_node);
     RestructMatrix_(matrix_node);
     // {
     //     std::cout << "INCLUDE" << std::endl;
@@ -422,9 +427,11 @@ PathNodeNotIncludeMatrix::PathNodeNotIncludeMatrix(
     // std::cout << "NOT INCLUDE" << std::endl;
 
     is_included_ = false;
-    FieldInitialization_(node_it->first[0], node_it->first[1]);
+    FieldInitialization_(matrix_node);
     CostDeterminingPathNode_(matrix_node.GetWayCost(), node_it->second);
     RestructMatrix_(matrix_node);
+        // std::cout << "\tway_cost: " << way_cost_ << std::endl;
+
 }
 
 coordinate PathNodeNotIncludeMatrix::ReducedCellsEvaluating(void){
@@ -435,6 +442,8 @@ coordinate PathNodeNotIncludeMatrix::ReducedCellsEvaluating(void){
 
 void PathNodeNotIncludeMatrix::CostDeterminingPathNode_(double current_way_cost,
                                                     int current_cell_score){
+    // std::cout << current_way_cost << "  -  " << current_cell_score << std::endl;
+                                                        
     if (current_cell_score == std::numeric_limits<int>::max() ||
         current_way_cost == std::numeric_limits<int>::max()){
         way_cost_ = current_cell_score;

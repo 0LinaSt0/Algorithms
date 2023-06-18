@@ -255,37 +255,50 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         );
         multyset_type unforked_nodes(NodesCostCompare);
         coordinate current_edge{current_node->ReducedCellsEvaluating()};
-        coordinates way;
         multyset_iterator_type current_included_it;
 
         while(1){
             current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
                 unforked_nodes, *current_node
             );
+            // {
+            //     std::cout << "~~~~~~~~~" << std::endl << std::endl;
+            //     for(auto& elem : unforked_nodes){
+            //         std::cout << ": " << std::endl 
+            //                 << "\t - is included: " << elem->IsIncludedEdgeNode() << std::endl
+            //                 << "\t - way cost: " << elem->GetWayCost() << std::endl
+            //                 << "\t - current way: "; 
+            //                 for(auto& el : elem->GetCurrentWay()){
+            //                     std::cout << el[0] << "->" << el[1] << "  ";
+            //                 }
+            //                 std::cout << std::endl;
+            //     }
+            // }
             current_node = *current_included_it;
-            if (current_node->IsMatrixEmpty()){
-                way.push_back(current_edge);
-                break ;
-            }
+            if (current_node->IsMatrixEmpty()){ break ; }
             // std::cout << "\t\t~~~> include_cost: " << (*current_included_it)->GetWayCost()
             //     << "    ~~~> not_include_cost: " << (*unforked_nodes.begin())->GetWayCost()
             //     << std::endl;
+            // std::cout << std::endl 
+            //         // << "From " << current_node->GetFindedEdgeColumnIter()->first[0]
+            //         // << " to " << current_node->GetFindedEdgeColumnIter()->first[1]
+            //         << " Is_unclude: " << current_node->IsIncludedEdgeNode() 
+            //         << "  Cost: " << current_node->GetWayCost() << std::endl;
+
             if ((*current_included_it)->GetWayCost() >
                 (*unforked_nodes.begin())->GetWayCost()){
                 current_included_it = unforked_nodes.begin();
                 current_node = *current_included_it;
             }
-            if (current_node->IsIncludedEdgeNode()){
-                way.push_back(current_edge);
-            }
+            // std::cout << std::endl;
+            // std::cout << "CURRENT_NODES: from " << current_edge[0] << " to " << current_edge[1] << std::endl;
             current_edge = current_node->ReducedCellsEvaluating();
+            // std::cout << "RETURN_NODES: from " << current_edge[0] << " to " << current_edge[1] << std::endl;
             unforked_nodes.erase(current_included_it);
-        }
-        for(auto& coor : way){
-            std::cout << coor[0] << "  " << coor[1] << std::endl;
+
         }
         return bbmethod_utils_->FinalPathFormation(
-            way, current_node->GetWayCost()
+            current_node->GetCurrentWay(), current_node->GetWayCost()
         );
     } catch (std::invalid_argument& e) {
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);

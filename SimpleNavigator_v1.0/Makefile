@@ -86,7 +86,7 @@ OBJS_GRAPH	=	$(addprefix $(TMP_DIR)/, $(SRCS_GRAPH:.cpp=.o))
 OBJS_ALGO	=	$(addprefix $(TMP_DIR)/, $(SRCS_ALGO:.cpp=.o))
 OBJS_MAIN	=	$(addprefix $(TMP_DIR)/, $(SRCS_MAIN:.cpp=.o))
 OBJS		=	$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) \
-					$(OBJS_ALGO) $(OBJS_MAIN)
+					$(OBJS_ALGO) 
 
 ### DEPENDENCIES ###
 DPNDS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.d))
@@ -149,6 +149,9 @@ algo_lib:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
 test:			$(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
 				$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS) \
 																-o $(TEST_EXE)
+
+test1:			$(OBJS)
+				$(GCC) tmp_main.cpp $(OBJS) -o $(TEST_EXE)
 
 clean:			
 				@rm -rf $(TMP_DIR)
