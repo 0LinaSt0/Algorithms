@@ -205,6 +205,209 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch6){
     }
 }
 
+TEST(TEST_SUITE_NAME, DepthFirstSearch1){
+    const int size = 11;
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+    const std::string answ[size] = {
+        "1 2 3 4 5 6 7 8 9 10 11",
+        "2 1 3 4 5 6 7 8 9 10 11",
+        "3 1 2 4 5 6 7 8 9 10 11",
+        "4 1 2 3 5 6 7 8 9 10 11",
+        "5 1 2 3 4 6 7 8 9 10 11",
+        "6 1 2 3 4 5 7 8 9 10 11",
+        "7 1 2 3 4 5 6 8 9 10 11",
+        "8 1 2 3 4 5 6 7 9 10 11",
+        "9 1 2 3 4 5 6 7 8 10 11",
+        "10 1 2 3 4 5 6 7 8 9 11",
+        "11 1 2 3 4 5 6 7 8 9 10"
+    };
+
+    auto vectorToString = [](const std::vector<int>& v){
+        std::string str;
+        
+        for (size_t i = 0; i < v.size(); i++){
+            str += std::to_string(v[i] + 1);
+            if (i + 1 != v.size()) str += ' ';
+        }
+
+        return str;
+    };
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/1");
+
+    for (int i = 0; i < size; i++){
+        ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
+                   answ[i]);
+    }
+}
+
+TEST(TEST_SUITE_NAME, DepthFirstSearch2){
+    const int size = 6;
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+    const std::string answ[size] = {
+        "1 2 3 4 5 6",
+        "2 1 3 4 5 6",
+        "3 1 2 4 5 6",
+        "4 2 1 3 6 5",
+        "5 4 2 1 3 6",
+        "6 1 2 3 4 5"
+    };
+
+    auto vectorToString = [](const std::vector<int>& v){
+        std::string str;
+        
+        for (size_t i = 0; i < v.size(); i++){
+            str += std::to_string(v[i] + 1);
+            if (i + 1 != v.size()) str += ' ';
+        }
+
+        return str;
+    };
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+
+    for (int i = 0; i < size; i++){
+        ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
+                   answ[i]);
+    }
+}
+
+TEST(TEST_SUITE_NAME, DepthFirstSearch3){
+    const int size = 6;
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+    const std::string answ[size] = {
+        "1 2 3 6 5 4",
+        "2 3 1 4 5 6",
+        "3 1 2 4 5 6",
+        "4 5 3 1 2 6",
+        "5 3 1 2 4 6",
+        "6 5 3 1 2 4"
+    };
+
+    auto vectorToString = [](const std::vector<int>& v){
+        std::string str;
+        
+        for (size_t i = 0; i < v.size(); i++){
+            str += std::to_string(v[i] + 1);
+            if (i + 1 != v.size()) str += ' ';
+        }
+
+        return str;
+    };
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/3");
+
+    for (int i = 0; i < size; i++){
+        ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
+                   answ[i]);
+    }
+}
+
+TEST(TEST_SUITE_NAME, DepthFirstSearch4){
+    const int size = 8;
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+    const std::string answ[size] = {
+        "1 2 3 4 5 6 7 8",
+        "2 3 4 5 6 7 8",
+        "3 2 4 5 6 7 8",
+        "4 5 6 3 2 7 8",
+        "5 6 3 2 4 7 8",
+        "6 3 2 4 5 7 8",
+        "7 6 3 2 4 5 8",
+        "8 6 3 2 4 5 7"
+    };
+
+    auto vectorToString = [](const std::vector<int>& v){
+        std::string str;
+        
+        for (size_t i = 0; i < v.size(); i++){
+            str += std::to_string(v[i] + 1);
+            if (i + 1 != v.size()) str += ' ';
+        }
+
+        return str;
+    };
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/4");
+
+    for (int i = 0; i < size; i++){
+        ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
+                   answ[i]);
+    }
+}
+
+TEST(TEST_SUITE_NAME, DepthFirstSearch5){
+    const int size = 8;
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+    const std::string answ[size] = {
+        "1 2 3 4 5 7",
+        "2 3 4",
+        "3 2 4",
+        "4",
+        "5 1 2 3 4 7",
+        "6 4",
+        "7 5 1 2 3 4",
+        "8"
+    };
+
+    auto vectorToString = [](const std::vector<int>& v){
+        std::string str;
+        
+        for (size_t i = 0; i < v.size(); i++){
+            str += std::to_string(v[i] + 1);
+            if (i + 1 != v.size()) str += ' ';
+        }
+
+        return str;
+    };
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/5");
+
+    for (int i = 0; i < size; i++){
+        ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
+                   answ[i]);
+    }
+}
+
+TEST(TEST_SUITE_NAME, DepthFirstSearch6){
+    const int size = 8;
+    s21::Graph graph;
+    s21::GraphAlgorithms graphAlgorithms;
+    const std::string answ[size] = {
+        "1 2 3 4 5 7 6 8",
+        "2 3 4 5 7 6 8",
+        "3 4 5 7 6 8",
+        "4 5 3 6 8 7",
+        "5 3 4 6 8 7",
+        "6 8 7",
+        "7 6 8",
+        "8 7 6"
+    };
+
+    auto vectorToString = [](const std::vector<int>& v){
+        std::string str;
+        
+        for (size_t i = 0; i < v.size(); i++){
+            str += std::to_string(v[i] + 1);
+            if (i + 1 != v.size()) str += ' ';
+        }
+
+        return str;
+    };
+
+    graph.LoadGraphFromFile("./tests/materials/graph/valid/6");
+
+    for (int i = 0; i < size; i++){
+        ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
+                   answ[i]);
+    }
+}
+
 TEST(TEST_SUITE_NAME, MinimumSpanningTree1){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
