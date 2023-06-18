@@ -98,6 +98,11 @@ TEST_HDRS	=	$(addprefix $(TEST_DIR)/,									\
 								stack.hpp									\
 							)												\
 						)													\
+						$(addprefix queue/,									\
+							$(addprefix includes/,							\
+								queue.hpp									\
+							)												\
+						)													\
 					)														\
 					$(addprefix graph/,										\
 						$(addprefix includes/,								\
@@ -110,6 +115,11 @@ TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp							\
 						$(addprefix stack/,									\
 							$(addprefix srcs/,								\
 								stack.cpp									\
+							)												\
+						)													\
+						$(addprefix queue/,									\
+							$(addprefix srcs/,								\
+								queue.cpp									\
 							)												\
 						)													\
 					)														\
@@ -136,8 +146,9 @@ graph_lib:		$(OBJS_GRAPH) $(OBJS_UTILS)
 algo_lib:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
 				@ar sr $(ALGO_LIB) $(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
 
-test:			$(OBJS) $(TEST_OBJS)
-				$(GCC) $(OBJS) $(TEST_OBJS) -o $(TEST_EXE)
+test:			$(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
+				$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS) \
+																-o $(TEST_EXE)
 
 clean:			
 				@rm -rf $(TMP_DIR)
