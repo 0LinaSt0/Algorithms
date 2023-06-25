@@ -209,13 +209,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                 graph[ant->CurrentNode()],
                 pheromones[(ant->CurrentNode())]
             );
-            if (ant->StartNode() == 0){
-                std::cout << "ANT NO " << ant->StartNode() << ":";
-                ant->CurrentWay().tmp_print_DELETEME();
-                std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
-            }
         }
-        // std::cout << "HEEEEEEEEEEEEE" <<std::endl;
         for (std::vector<Ant>::iterator ant_it = ants->begin(); 
                 ant_it < ants->end();){
             ant = &(*ant_it);
@@ -258,58 +252,20 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         );
         multyset_type unforked_nodes(NodesCostCompare);
         coordinate current_edge{current_node->ReducedCellsEvaluating()};
-            // {
-            //     std::cout << "~~~~~~~~~" << std::endl << std::endl;
-            //     std::cout << ": " << std::endl 
-            //             << "\t - from " << current_node->GetPathNodeVertices()[0] << " to " << current_node->GetPathNodeVertices()[1] << std::endl
-            //             << "\t - is included: " << current_node->IsIncludedEdgeNode() << std::endl
-            //             << "\t - way cost: " << current_node->GetWayCost() << std::endl
-            //             << "\t - current way: "; 
-            //             for(auto& el : current_node->GetCurrentWay()){
-            //                 std::cout << el[0] << "->" << el[1] << "  ";
-            //             }
-            //             std::cout << std::endl;
-            // }
         multyset_iterator_type current_included_it;
 
         while(1){
             current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
                 unforked_nodes, *current_node
             );
-            // {
-            //     std::cout << "~~~~~~~~~" << std::endl << std::endl;
-            //     for(auto& elem : unforked_nodes){
-            //         std::cout << ": " << std::endl 
-            //                 << "\t - from " << elem->GetPathNodeVertices()[0] << " to " << elem->GetPathNodeVertices()[1] << std::endl
-            //                 << "\t - is included: " << elem->IsIncludedEdgeNode() << std::endl
-            //                 << "\t - way cost: " << elem->GetWayCost() << std::endl
-            //                 << "\t - current way: "; 
-            //                 for(auto& el : elem->GetCurrentWay()){
-            //                     std::cout << el[0] << "->" << el[1] << "  ";
-            //                 }
-            //                 std::cout << std::endl;
-            //     }
-            // }
             current_node = *current_included_it;
             if (current_node->IsMatrixEmpty()){ break ; }
-            // std::cout << "\t\t~~~> include_cost: " << (*current_included_it)->GetWayCost()
-            //     << "    ~~~> not_include_cost: " << (*unforked_nodes.begin())->GetWayCost()
-            //     << std::endl;
-            // std::cout << std::endl 
-            //         // << "From " << current_node->GetFindedEdgeColumnIter()->first[0]
-            //         // << " to " << current_node->GetFindedEdgeColumnIter()->first[1]
-            //         << " Is_unclude: " << current_node->IsIncludedEdgeNode() 
-            //         << "  Cost: " << current_node->GetWayCost() << std::endl;
-
             if ((*current_included_it)->GetWayCost() >
                 (*unforked_nodes.begin())->GetWayCost()){
                 current_included_it = unforked_nodes.begin();
                 current_node = *current_included_it;
             }
-            // std::cout << std::endl;
-            // std::cout << "CURRENT_NODES: " << current_node->GetWayCost() << std::endl;
             current_edge = current_node->ReducedCellsEvaluating();
-            // std::cout << "RETURN_NODES: from " << current_edge[0] << " to " << current_edge[1] << std::endl;
             unforked_nodes.erase(current_included_it);
 
         }

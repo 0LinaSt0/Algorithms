@@ -8,8 +8,6 @@
 #include <vector>
 #include <regex>
 
-#include <random> // DELETE MEEEEEE
-
 #include "../../utils/includes/utils.hpp"
 
 namespace fs = std::filesystem;
@@ -57,7 +55,6 @@ public:
 
     void ExportGraphToDot(std::string filename);
 
-    void tmp_write_to_graph_DELETEME(int elem_number);
     void tmp_print_graph_DELETEME(void);
 
 private:

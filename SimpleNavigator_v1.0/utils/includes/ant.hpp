@@ -2,6 +2,7 @@
 #define ANT
 
 #include <memory>
+#include <cmath>
 
 #include "../../graph/includes/graphAlgorithms.hpp"
 

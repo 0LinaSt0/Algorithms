@@ -157,7 +157,6 @@ bool Graph::LoadGraphFromFile(std::string filename){
 bool Graph::IsDirected_() const{
     for (size_t x = 0; x < graph_.size(); x++){
     for (size_t y = 0; y < graph_.size(); y++){
-        // std::cout << graph_[x][y] << "  " << graph_[y][x] << std::endl;
         if (graph_[x][y] != graph_[y][x]) return true;
     }
     }
@@ -242,21 +241,6 @@ std::string Graph::GraphDotRepresentation_(){
 
     graph_dot += "}";
     return graph_dot;
-}
-
-void Graph::tmp_write_to_graph_DELETEME(int elem_number){
-    auto gen = std::bind(
-        std::uniform_int_distribution<>(0,1),
-        std::default_random_engine()
-    );
-
-    for (auto i = 0; i < elem_number; i++){
-        std::vector<int> inside;
-        for (auto j = 0; j < elem_number; j++){
-            inside.push_back(bool(gen()));
-        }
-        graph_.push_back(std::move(inside));
-    }
 }
 
 void Graph::tmp_print_graph_DELETEME(void){
