@@ -61,7 +61,7 @@ public:
 
     TsmResult STSPBranchBoundMethodAlgorithm(Graph &graph);
 
-    TsmResult ExhaustiveSearch(Graph &graph) const;
+    TsmResult ExhaustiveSearch(Graph &graph);
 
 private:
     aa_utils_shared_ptr ants_utils_;

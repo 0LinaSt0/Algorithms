@@ -4,7 +4,7 @@ namespace s21::tests::graph{
 
 TEST(TEST_SUITE_NAME, LOAD_VALID_FILE_1){
     using size_type = s21::Graph::size_type;
-    const std::string file_name = "./tests/materials/graph/valid/1";
+    const std::string file_name = valid_graphs_dir + "14_default_matrix";
 
     s21::Graph graph;
     std::ifstream file_stream;
@@ -30,12 +30,12 @@ TEST(TEST_SUITE_NAME, LOAD_INVALID_FILES){
     s21::Graph graph;
 
     ASSERT_FALSE(graph.LoadGraphFromFile("bad-file-name"));
-    ASSERT_FALSE(graph.LoadGraphFromFile("./tests/materials/graph/invalid/1"));
-    ASSERT_FALSE(graph.LoadGraphFromFile("./tests/materials/graph/invalid/2"));
-    ASSERT_FALSE(graph.LoadGraphFromFile("./tests/materials/graph/invalid/3"));
-    ASSERT_FALSE(graph.LoadGraphFromFile("./tests/materials/graph/invalid/4"));
-    ASSERT_FALSE(graph.LoadGraphFromFile("./tests/materials/graph/invalid/5"));
-    ASSERT_FALSE(graph.LoadGraphFromFile("./tests/materials/graph/invalid/6"));
+    ASSERT_FALSE(graph.LoadGraphFromFile(invalid_graphs_dir + "00"));
+    ASSERT_FALSE(graph.LoadGraphFromFile(invalid_graphs_dir + "01"));
+    ASSERT_FALSE(graph.LoadGraphFromFile(invalid_graphs_dir + "02"));
+    ASSERT_FALSE(graph.LoadGraphFromFile(invalid_graphs_dir + "03"));
+    ASSERT_FALSE(graph.LoadGraphFromFile(invalid_graphs_dir + "04"));
+    ASSERT_FALSE(graph.LoadGraphFromFile(invalid_graphs_dir + "05"));
 }
 
 }

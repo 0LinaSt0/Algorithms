@@ -146,9 +146,9 @@ graph_lib:		$(OBJS_GRAPH) $(OBJS_UTILS)
 algo_lib:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
 				@ar sr $(ALGO_LIB) $(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
 
-test:			$(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
-				$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS) \
-																-o $(TEST_EXE)
+test:			$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
+				$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_CLI) \
+					$(OBJS_ALGO) $(TEST_OBJS) -o $(TEST_EXE)
 
 test1:			$(OBJS)
 				$(GCC) main_DELETEME.cpp $(OBJS) -o $(TEST_EXE)

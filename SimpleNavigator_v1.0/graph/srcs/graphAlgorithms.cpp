@@ -279,7 +279,7 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
     }
 }
 
-TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph) const{
+TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph){
     if (IsInappropriateGraph_(graph)) return {};
 
     double res_row_weight = DBL_MAX;

@@ -31,7 +31,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch1){
         return str;
     };
     
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/1");
+    graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -63,7 +63,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch2){
         return str;
     };
     
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -95,7 +95,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch3){
         return str;
     };
     
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/3");
+    graph.LoadGraphFromFile(valid_graphs_dir + "16_directed");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -129,7 +129,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch4){
         return str;
     };
     
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/4");
+    graph.LoadGraphFromFile(valid_graphs_dir + "17_directed");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -163,7 +163,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch5){
         return str;
     };
     
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/5");
+    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -197,7 +197,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch6){
         return str;
     };
     
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/6");
+    graph.LoadGraphFromFile(valid_graphs_dir + "19_directed");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -234,7 +234,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch1){
         return str;
     };
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/1");
+    graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -247,12 +247,12 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch2){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
     const std::string answ[size] = {
-        "1 2 3 4 5 6",
-        "2 1 3 4 5 6",
+        "1 2 4 5 3 6",
+        "2 1 6 5 3 4",
         "3 1 2 4 5 6",
-        "4 2 1 3 6 5",
+        "4 2 1 6 3 5",
         "5 4 2 1 3 6",
-        "6 1 2 3 4 5"
+        "6 1 2 4 3 5"
     };
 
     auto vectorToString = [](const std::vector<int>& v){
@@ -266,7 +266,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch2){
         return str;
     };
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -283,7 +283,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch3){
         "2 3 1 4 5 6",
         "3 1 2 4 5 6",
         "4 5 3 1 2 6",
-        "5 3 1 2 4 6",
+        "5 3 1 2 6 4",
         "6 5 3 1 2 4"
     };
 
@@ -298,7 +298,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch3){
         return str;
     };
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/3");
+    graph.LoadGraphFromFile(valid_graphs_dir + "16_directed");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -332,7 +332,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch4){
         return str;
     };
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/4");
+    graph.LoadGraphFromFile(valid_graphs_dir + "17_directed");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -366,7 +366,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch5){
         return str;
     };
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/5");
+    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -379,8 +379,8 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch6){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
     const std::string answ[size] = {
-        "1 2 3 4 5 7 6 8",
-        "2 3 4 5 7 6 8",
+        "1 2 3 6 4 5 7 8",
+        "2 3 6 8 7 4 5",
         "3 4 5 7 6 8",
         "4 5 3 6 8 7",
         "5 3 4 6 8 7",
@@ -400,7 +400,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch6){
         return str;
     };
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/6");
+    graph.LoadGraphFromFile(valid_graphs_dir + "19_directed");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -411,7 +411,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch6){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree1){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/1"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
     ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 150);
 }
@@ -419,7 +419,7 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree1){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree2){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/2"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "15_connected"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
     
     ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 33);
@@ -445,7 +445,7 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree2){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree3){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/3"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "16_directed"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
     ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 66);
 }
@@ -453,7 +453,7 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree3){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree4){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/4"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "17_directed"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
     ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 87);
 }
@@ -461,7 +461,7 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree4){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree5){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/5"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected"));
     try {
         graphAlgorithms.GetLeastSpanningTree(graph);
         ASSERT_TRUE(false);
@@ -473,7 +473,7 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree5){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree6){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile("./tests/materials/graph/valid/6"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "19_directed"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
     ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 70);
 }
@@ -482,7 +482,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices1){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/1");
+    graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 20);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 6, 1), 72);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 3, 6), 92);
@@ -495,7 +495,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices2){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 5), 11);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 20);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 4), 20);
@@ -510,7 +510,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices3){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/3");
+    graph.LoadGraphFromFile(valid_graphs_dir + "16_directed");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 1), 74);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 2, 4), 47);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 1, 5), 38);
@@ -523,7 +523,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices4){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/4");
+    graph.LoadGraphFromFile(valid_graphs_dir + "17_directed");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 5, 0), 0);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 59);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 1, 5), 105);
@@ -536,7 +536,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices5){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/5");
+    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 5, 4), 0);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 2), 30);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 72);
@@ -550,7 +550,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices6){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/6");
+    graph.LoadGraphFromFile(valid_graphs_dir + "19_directed");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 0), 0);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 5, 3), 0);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 7, 5), 26);
@@ -563,7 +563,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices1){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/1");
+    graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -579,7 +579,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices2){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -596,7 +596,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices3){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/3");
+    graph.LoadGraphFromFile(valid_graphs_dir + "16_directed");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -612,7 +612,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices4){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/4");
+    graph.LoadGraphFromFile(valid_graphs_dir + "17_directed");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -627,7 +627,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices5){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/5");
+    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -644,7 +644,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices6){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/6");
+    graph.LoadGraphFromFile(valid_graphs_dir + "19_directed");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -660,10 +660,55 @@ TEST(TEST_SUITE_NAME, ExhaustiveSearch){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile("./tests/materials/graph/valid/2");
+    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
     s21::TsmResult tsmResult = graphAlgorithms.ExhaustiveSearch(graph);
     ASSERT_EQ(tsmResult.distance, 48);
     std::cout << std::endl;
+}
+
+TEST(TEST_SUITE_NAME, TravelingSalesman){
+    const int algos_count = 3;
+    s21::Timer timer;
+    s21::GraphAlgorithms graph_algorithms;
+    std::vector<std::string> files = {
+        valid_graphs_dir + "15_connected"
+    };
+    
+    AlgoPtr algos_methods[algos_count] = {
+        &s21::GraphAlgorithms::SolveTravelingSalesmanProblem,
+        &s21::GraphAlgorithms::STSPBranchBoundMethodAlgorithm,
+        &s21::GraphAlgorithms::ExhaustiveSearch
+    };
+    std::string algos_names[algos_count] = {
+        "Ant algorithm",
+        "Branch bound method",
+        "Exhaustive search"
+    };
+    
+
+    for (const std::string& file : files){
+        s21::Graph graph;
+        ASSERT_TRUE(graph.LoadGraphFromFile(file));
+        
+        for (int i = 0; i < algos_count; i++){
+            timer.Start();
+            s21::TsmResult tsm_result = (graph_algorithms.*algos_methods[i])(graph);
+            timer.End();
+
+            std::cout
+                << "> "
+                << algos_names[i]
+                << std::endl
+                << tsm_result
+                << std::endl
+                << timer.GetDuration()
+                << " ms"
+                << std::endl;
+            
+            if (i + 1 != algos_count) std::cout << std::endl;
+        }
+    }
+
 }
 
 }
