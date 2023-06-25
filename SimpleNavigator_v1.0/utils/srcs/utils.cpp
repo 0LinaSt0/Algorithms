@@ -27,7 +27,6 @@ void ReadOnlyPermissions(std::string& filepath){
 
 std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result){
     out
-        << std::setprecision(4)
         << "distance: " << tsm_result.distance << std::endl
         << "vertices: " << std::endl;
     

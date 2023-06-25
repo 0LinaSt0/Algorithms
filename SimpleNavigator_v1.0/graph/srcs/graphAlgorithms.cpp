@@ -304,6 +304,7 @@ TsmResult GraphAlgorithms::ExhaustiveSearch(Graph &graph){
         }
     }
 
+    if (std::abs(res_row_weight - DBL_MAX) < 1e-6) res_row_weight = 0;
     if (!res_row.size()) {
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
     }

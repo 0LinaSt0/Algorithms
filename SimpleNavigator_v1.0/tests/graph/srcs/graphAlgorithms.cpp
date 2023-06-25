@@ -3,21 +3,20 @@
 namespace s21::tests::graph{
 
 TEST(TEST_SUITE_NAME, BreadthFirstSearch1){
-    const int size = 11;
+    const int size = 10;
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
     const std::string answ[size] = {
-        "1 2 3 4 5 6 7 8 9 10 11",
-        "2 1 3 4 5 6 7 8 9 10 11",
-        "3 1 2 4 5 6 7 8 9 10 11",
-        "4 1 2 3 5 6 7 8 9 10 11",
-        "5 1 2 3 4 6 7 8 9 10 11",
-        "6 1 2 3 4 5 7 8 9 10 11",
-        "7 1 2 3 4 5 6 8 9 10 11",
-        "8 1 2 3 4 5 6 7 9 10 11",
-        "9 1 2 3 4 5 6 7 8 10 11",
-        "10 1 2 3 4 5 6 7 8 9 11",
-        "11 1 2 3 4 5 6 7 8 9 10"
+        "1 2 3 4 5 6 7 8 9 10",
+        "2 1 3 4 5 6 7 8 9 10",
+        "3 1 2 4 5 6 7 8 9 10",
+        "4 1 2 3 5 6 7 8 9 10",
+        "5 1 2 3 4 6 7 8 9 10",
+        "6 1 2 3 4 5 7 8 9 10",
+        "7 1 2 3 4 5 6 8 9 10",
+        "8 1 2 3 4 5 6 7 9 10",
+        "9 1 2 3 4 5 6 7 8 10",
+        "10 2 3 4 5 6 7 8 9 1"
     };
 
     auto vectorToString = [](const std::vector<int>& v){
@@ -63,7 +62,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch2){
         return str;
     };
     
-    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "13_connected");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -163,7 +162,7 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch5){
         return str;
     };
     
-    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "12_disconnected");
     
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.BreadthFirstSearch(graph, i)),
@@ -206,21 +205,20 @@ TEST(TEST_SUITE_NAME, BreadthFirstSearch6){
 }
 
 TEST(TEST_SUITE_NAME, DepthFirstSearch1){
-    const int size = 11;
+    const int size = 10;
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
     const std::string answ[size] = {
-        "1 2 3 4 5 6 7 8 9 10 11",
-        "2 1 3 4 5 6 7 8 9 10 11",
-        "3 1 2 4 5 6 7 8 9 10 11",
-        "4 1 2 3 5 6 7 8 9 10 11",
-        "5 1 2 3 4 6 7 8 9 10 11",
-        "6 1 2 3 4 5 7 8 9 10 11",
-        "7 1 2 3 4 5 6 8 9 10 11",
-        "8 1 2 3 4 5 6 7 9 10 11",
-        "9 1 2 3 4 5 6 7 8 10 11",
-        "10 1 2 3 4 5 6 7 8 9 11",
-        "11 1 2 3 4 5 6 7 8 9 10"
+        "1 2 10 3 4 5 6 7 8 9",
+        "2 1 3 4 5 6 7 8 9 10",
+        "3 1 2 4 5 6 7 8 9 10",
+        "4 1 2 3 5 6 7 8 9 10",
+        "5 1 2 3 4 6 7 8 9 10",
+        "6 1 2 3 4 5 7 8 9 10",
+        "7 1 2 3 4 5 6 8 9 10",
+        "8 1 2 3 4 5 6 7 9 10",
+        "9 1 2 3 4 5 6 7 8 10",
+        "10 2 1 3 4 5 6 7 8 9"
     };
 
     auto vectorToString = [](const std::vector<int>& v){
@@ -266,7 +264,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch2){
         return str;
     };
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "13_connected");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -366,7 +364,7 @@ TEST(TEST_SUITE_NAME, DepthFirstSearch5){
         return str;
     };
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "12_disconnected");
 
     for (int i = 0; i < size; i++){
         ASSERT_EQ(vectorToString(graphAlgorithms.DepthFirstSearch(graph, i)),
@@ -413,13 +411,13 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree1){
     s21::Graph graph;
     ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
-    ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 150);
+    ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 76);
 }
 
 TEST(TEST_SUITE_NAME, MinimumSpanningTree2){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "15_connected"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "13_connected"));
     s21::Graph minSpanningTree = graphAlgorithms.GetLeastSpanningTree(graph);
     
     ASSERT_EQ(minSpanningTree.MinSpanningTreeSize(), 33);
@@ -461,7 +459,7 @@ TEST(TEST_SUITE_NAME, MinimumSpanningTree4){
 TEST(TEST_SUITE_NAME, MinimumSpanningTree5){
     s21::GraphAlgorithms graphAlgorithms;
     s21::Graph graph;
-    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected"));
+    ASSERT_TRUE(graph.LoadGraphFromFile(valid_graphs_dir + "12_disconnected"));
     try {
         graphAlgorithms.GetLeastSpanningTree(graph);
         ASSERT_TRUE(false);
@@ -484,8 +482,8 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices1){
 
     graph.LoadGraphFromFile(valid_graphs_dir + "14_default_matrix");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 20);
-    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 6, 1), 72);
-    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 3, 6), 92);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 6, 1), 24);
+    ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 3, 6), 9);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 4, 7), 9);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 1, 5), 40);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 3, 7), 12);
@@ -495,7 +493,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices2){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "13_connected");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 5), 11);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 20);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 4), 20);
@@ -536,7 +534,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenVertices5){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "12_disconnected");
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 5, 4), 0);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 2), 30);
     ASSERT_EQ(graphAlgorithms.GetShortestPathBetweenVertices(graph, 0, 3), 72);
@@ -568,8 +566,8 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices1){
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
     ASSERT_EQ(res_graph.at(0, 3), 20);
-    ASSERT_EQ(res_graph.at(6, 1), 72);
-    ASSERT_EQ(res_graph.at(3, 6), 92);
+    ASSERT_EQ(res_graph.at(6, 1), 24);
+    ASSERT_EQ(res_graph.at(3, 6), 9);
     ASSERT_EQ(res_graph.at(4, 7), 9);
     ASSERT_EQ(res_graph.at(1, 5), 40);
     ASSERT_EQ(res_graph.at(3, 7), 12);
@@ -579,7 +577,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices2){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "13_connected");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -627,7 +625,7 @@ TEST(TEST_SUITE_NAME, GetShortestPathBetweenAllVertices5){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "18_disconnected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "12_disconnected");
     s21::Graph res_graph =
                     graphAlgorithms.GetShortestPathsBetweenAllVertices(graph);
 
@@ -660,18 +658,45 @@ TEST(TEST_SUITE_NAME, ExhaustiveSearch){
     s21::Graph graph;
     s21::GraphAlgorithms graphAlgorithms;
 
-    graph.LoadGraphFromFile(valid_graphs_dir + "15_connected");
+    graph.LoadGraphFromFile(valid_graphs_dir + "13_connected");
     s21::TsmResult tsmResult = graphAlgorithms.ExhaustiveSearch(graph);
     ASSERT_EQ(tsmResult.distance, 48);
     std::cout << std::endl;
 }
 
 TEST(TEST_SUITE_NAME, TravelingSalesman){
+    const std::string BALD = "\033[1m";
+    const std::string DEFAULT = "\033[0m";
     const int algos_count = 3;
     s21::Timer timer;
-    s21::GraphAlgorithms graph_algorithms;
+    s21::GraphAlgorithms graph_algs;
     std::vector<std::string> files = {
-        valid_graphs_dir + "15_connected"
+        valid_graphs_dir + "01_with_solution",
+        valid_graphs_dir + "02_without_solution",
+        valid_graphs_dir + "03_without_solution",
+        valid_graphs_dir + "04_with_several_solutions_loop",
+        valid_graphs_dir + "05_with_solutiom_loop",
+        valid_graphs_dir + "06_with_solutiom_loop",
+        valid_graphs_dir + "07_connected_without_solution",
+        valid_graphs_dir + "08_connected_loop",
+        valid_graphs_dir + "09_with_several_soltuions",
+        valid_graphs_dir + "10_with_several_soltuions",
+        valid_graphs_dir + "11_with_several_soltuions",
+        valid_graphs_dir + "12_disconnected",
+        valid_graphs_dir + "13_connected",
+        valid_graphs_dir + "14_default_matrix",
+        valid_graphs_dir + "15_default_matrix",
+        valid_graphs_dir + "16_directed",
+        valid_graphs_dir + "17_directed",
+        valid_graphs_dir + "18_directed",
+        valid_graphs_dir + "19_directed",
+        valid_graphs_dir + "20_eight_vertices",
+        valid_graphs_dir + "21_seven_vertices",
+        valid_graphs_dir + "22_ten_vertices",
+        valid_graphs_dir + "23_thirteen_vertices",
+        valid_graphs_dir + "24_twenty_vertices",
+        valid_graphs_dir + "25_sixty_vertices",
+        valid_graphs_dir + "26_hundred_vertices"
     };
     
     AlgoPtr algos_methods[algos_count] = {
@@ -686,13 +711,26 @@ TEST(TEST_SUITE_NAME, TravelingSalesman){
     };
     
 
-    for (const std::string& file : files){
+    for (size_t i = 0; i < files.size(); i++){
+        const std::string& file = files.at(i);
         s21::Graph graph;
         ASSERT_TRUE(graph.LoadGraphFromFile(file));
         
-        for (int i = 0; i < algos_count; i++){
+        int max;
+        if (i == 24 || i == 25) max = 1;
+        else if (i == 13 || i == 14 || i == 22 || i == 23) max = 2;
+        else max = 3;
+        
+        std::cout 
+            << BALD
+            << "Filename: "
+            << file
+            << DEFAULT
+            << std::endl;
+
+        for (int i = 0; i < max; i++){
             timer.Start();
-            s21::TsmResult tsm_result = (graph_algorithms.*algos_methods[i])(graph);
+            s21::TsmResult tsm_result = (graph_algs.*algos_methods[i])(graph);
             timer.End();
 
             std::cout
@@ -707,6 +745,12 @@ TEST(TEST_SUITE_NAME, TravelingSalesman){
             
             if (i + 1 != algos_count) std::cout << std::endl;
         }
+
+        std::cout
+            << BALD
+            << "==========================================="
+            << DEFAULT
+            << std::endl;
     }
 
 }
