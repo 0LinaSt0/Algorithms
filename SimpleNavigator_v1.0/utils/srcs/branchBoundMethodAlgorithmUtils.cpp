@@ -46,9 +46,9 @@ TsmResult BbmaUtils::FinalPathFormation(coordinates way, double way_cost){
             "Throw from BbmaUtils::FinalPathFormation(): empty way"
         );
     }
-    for(auto& coor : way){
-        std::cout << coor[0] << "  " << coor[1] << std::endl;
-    }
+    // for(auto& coor : way){
+    //     std::cout << coor[0] << "  " << coor[1] << std::endl;
+    // }
 
     TsmResult hamiltonian_path;
     coordinates_iter current_edge_it;

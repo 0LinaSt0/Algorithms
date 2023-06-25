@@ -39,10 +39,11 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
 
 std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
                                     int start_vertex){
-    if(!graph.Size()) { return std::vector<int>(); }
+    if(!graph.Size() ) { return std::vector<int>(); }
 
     std::vector<int> nodes_road;
     s21::Stack<int> current_vertices;
+    std::vector<int> current_TMP;
     std::vector<int> is_in_sets(graph.Size(), 0); // -1 - in stack; 0 - not in sets; 1 - in arr
     int current_vertex;
 
@@ -56,16 +57,18 @@ std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
         ){
             if (graph[current_vertex][bind_vertex_i] > 0 &&
                 is_in_sets[bind_vertex_i] == 0
-            ){
+                ){
                 current_vertices.push(bind_vertex_i);
+                current_TMP.push_back(bind_vertex_i);
                 is_in_sets[bind_vertex_i] = -1;
             }
         }
+        if (current_vertices.empty()){ break; }
         current_vertex = current_vertices.top();
         nodes_road.push_back(current_vertex);
         current_vertices.pop();
+        current_TMP.pop_back();
         is_in_sets[current_vertex] = 1;
-        if (current_vertices.empty()){ break; }
     }
     return nodes_road;
 }
@@ -194,7 +197,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 
     TsmResult return_path;
     std::vector<std::vector<double>> pheromones(
-        graph.Size(), std::vector<double>(graph.Size(), 0)
+        graph.Size(), std::vector<double>(graph.Size(), 1)
     );
     std::unique_ptr<std::vector<Ant>> ants = ants_utils_->AntsColony(graph);
 
@@ -206,11 +209,11 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                 graph[ant->CurrentNode()],
                 pheromones[(ant->CurrentNode())]
             );
-            // if (ant->StartNode() == 2){
-            //     std::cout << "ANT NO " << ant->StartNode() << ":";
-            //     ant->CurrentWay().tmp_print_DELETEME();
-            //     std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
-            // }
+            if (ant->StartNode() == 0){
+                std::cout << "ANT NO " << ant->StartNode() << ":";
+                ant->CurrentWay().tmp_print_DELETEME();
+                std::cout << "\t end status: " << ant->EndCodeStatus() <<std::endl;
+            }
         }
         // std::cout << "HEEEEEEEEEEEEE" <<std::endl;
         for (std::vector<Ant>::iterator ant_it = ants->begin(); 
@@ -255,38 +258,38 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
         );
         multyset_type unforked_nodes(NodesCostCompare);
         coordinate current_edge{current_node->ReducedCellsEvaluating()};
-            {
-                std::cout << "~~~~~~~~~" << std::endl << std::endl;
-                std::cout << ": " << std::endl 
-                        << "\t - from " << current_node->GetPathNodeVertices()[0] << " to " << current_node->GetPathNodeVertices()[1] << std::endl
-                        << "\t - is included: " << current_node->IsIncludedEdgeNode() << std::endl
-                        << "\t - way cost: " << current_node->GetWayCost() << std::endl
-                        << "\t - current way: "; 
-                        for(auto& el : current_node->GetCurrentWay()){
-                            std::cout << el[0] << "->" << el[1] << "  ";
-                        }
-                        std::cout << std::endl;
-            }
+            // {
+            //     std::cout << "~~~~~~~~~" << std::endl << std::endl;
+            //     std::cout << ": " << std::endl 
+            //             << "\t - from " << current_node->GetPathNodeVertices()[0] << " to " << current_node->GetPathNodeVertices()[1] << std::endl
+            //             << "\t - is included: " << current_node->IsIncludedEdgeNode() << std::endl
+            //             << "\t - way cost: " << current_node->GetWayCost() << std::endl
+            //             << "\t - current way: "; 
+            //             for(auto& el : current_node->GetCurrentWay()){
+            //                 std::cout << el[0] << "->" << el[1] << "  ";
+            //             }
+            //             std::cout << std::endl;
+            // }
         multyset_iterator_type current_included_it;
 
         while(1){
             current_included_it = bbmethod_utils_->AddWayNodesToUnforkedNodes(
                 unforked_nodes, *current_node
             );
-            {
-                std::cout << "~~~~~~~~~" << std::endl << std::endl;
-                for(auto& elem : unforked_nodes){
-                    std::cout << ": " << std::endl 
-                            << "\t - from " << elem->GetPathNodeVertices()[0] << " to " << elem->GetPathNodeVertices()[1] << std::endl
-                            << "\t - is included: " << elem->IsIncludedEdgeNode() << std::endl
-                            << "\t - way cost: " << elem->GetWayCost() << std::endl
-                            << "\t - current way: "; 
-                            for(auto& el : elem->GetCurrentWay()){
-                                std::cout << el[0] << "->" << el[1] << "  ";
-                            }
-                            std::cout << std::endl;
-                }
-            }
+            // {
+            //     std::cout << "~~~~~~~~~" << std::endl << std::endl;
+            //     for(auto& elem : unforked_nodes){
+            //         std::cout << ": " << std::endl 
+            //                 << "\t - from " << elem->GetPathNodeVertices()[0] << " to " << elem->GetPathNodeVertices()[1] << std::endl
+            //                 << "\t - is included: " << elem->IsIncludedEdgeNode() << std::endl
+            //                 << "\t - way cost: " << elem->GetWayCost() << std::endl
+            //                 << "\t - current way: "; 
+            //                 for(auto& el : elem->GetCurrentWay()){
+            //                     std::cout << el[0] << "->" << el[1] << "  ";
+            //                 }
+            //                 std::cout << std::endl;
+            //     }
+            // }
             current_node = *current_included_it;
             if (current_node->IsMatrixEmpty()){ break ; }
             // std::cout << "\t\t~~~> include_cost: " << (*current_included_it)->GetWayCost()
@@ -304,7 +307,7 @@ TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
                 current_node = *current_included_it;
             }
             // std::cout << std::endl;
-            std::cout << "CURRENT_NODES: " << current_node->GetWayCost() << std::endl;
+            // std::cout << "CURRENT_NODES: " << current_node->GetWayCost() << std::endl;
             current_edge = current_node->ReducedCellsEvaluating();
             // std::cout << "RETURN_NODES: from " << current_edge[0] << " to " << current_edge[1] << std::endl;
             unforked_nodes.erase(current_included_it);

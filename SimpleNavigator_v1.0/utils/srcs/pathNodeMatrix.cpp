@@ -379,9 +379,9 @@ void PathNodeIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
         //         }
         //         std::cout << std::endl;
         // }
-    std::cout << "\t\tDELETED_ROW: " << (*matrix_)[row_i][column_i].first[0]
-             << "  DELETED_COLUMN: " << (*matrix_)[row_i][column_i].first[1]
-             << std::endl;
+    // std::cout << "\t\tDELETED_ROW: " << (*matrix_)[row_i][column_i].first[0]
+    //          << "  DELETED_COLUMN: " << (*matrix_)[row_i][column_i].first[1]
+    //          << std::endl;
     matrix_->erase(matrix_->begin() + row_i);
     for (auto& row : (*matrix_)){
         row.erase(row.begin() + column_i);
@@ -486,8 +486,8 @@ void PathNodeNotIncludeMatrix::RestructMatrix_(PathNodeRootMatrix& matrix_node){
                                     matrix_node.GetFindedEdgeRowIter()->begin();
     (*matrix_)[row_i][column_i].second = std::numeric_limits<int>::max();
 
-    std::cout << "INV from " << (*matrix_)[row_i][column_i].first[0] 
-             << " to " << (*matrix_)[row_i][column_i].first[1] << std::endl;
+    // std::cout << "INV from " << (*matrix_)[row_i][column_i].first[0] 
+    //          << " to " << (*matrix_)[row_i][column_i].first[1] << std::endl;
     // for (auto& row : (*matrix_)){
     //             for (auto& elem : row){
     //                 std::cout << "[" << elem.first[0] << "; " << elem.first[1] << "]" << "(" << elem.second << ")" << " ";

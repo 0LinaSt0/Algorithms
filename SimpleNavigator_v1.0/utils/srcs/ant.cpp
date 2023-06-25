@@ -27,6 +27,13 @@ int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
         ]
     );
 
+        // if (start_node_ == 0){
+        //     std::cout << "Way: ";
+        //     for(auto& elem : current_way_.vertices){
+        //         std::cout << elem << "  ";
+        //     }
+        //     std::cout << "\t next_node: " << next_node << std::endl;
+        // }
     if (next_node == -1){
         best_way_count_ = 0;
         ResetCurrentWay_();
@@ -36,13 +43,6 @@ int Ant::ChooseNextNode(Ant::elem_of_graph_type& available_nodes,
         current_way_.vertices.push_back(next_node);
         current_way_.distance += available_nodes[next_node];
         if (next_node == start_node_){
-        // if (start_node_ == 2){
-            // std::cout << "Way: ";
-            // for(auto& elem : current_way_.vertices){
-            //     std::cout << elem << "  ";
-            // }
-            // std::cout << std::endl;
-        // }
             UpdateBestWay_();
             ResetCurrentWay_();
         }
@@ -102,7 +102,7 @@ Ant::probability_pair_matrix_unique_ptr
         new probability_pair_matrix()
     );
 
-    // /////// TEST
+    //////// TEST
     // {
     //     if (start_node_ == 0){
     //         std::cout << "\t available_nodes: ";
@@ -115,12 +115,17 @@ Ant::probability_pair_matrix_unique_ptr
     
     for (int i = 0; i < (int)available_nodes.size(); i++){
         int node_value = available_nodes[i];
+            // if (start_node_ == 0 && node_value == 907)
+            // std::cout << available_nodes.size() << " --- " << current_way.size() << " --- " << node_value << "       " << std::endl;
         if ((node_value && is_permitted_node(i)) ||
             (node_value && i == start_node_ &&
                 current_way.size() == (available_nodes.size()))){
-            // std::cout << current_way.size() << " --- " << node_value << "       ";
             node_and_probability->first.push_back(i);
             // std::cout << node_probability(pheromones[i], ((double)1 / (double)node_value)) << std::endl;
+            if (start_node_ == 0){
+                double tmp = node_probability(pheromones[i], ((double)1 / (double)node_value));
+                std::cout << "\t\t\t" << tmp << std::endl;
+            }
             node_and_probability->second.push_back(
                 node_probability(pheromones[i], ((double)1 / (double)node_value))
             );

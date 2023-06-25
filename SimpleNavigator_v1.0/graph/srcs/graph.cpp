@@ -262,7 +262,7 @@ void Graph::tmp_write_to_graph_DELETEME(int elem_number){
 void Graph::tmp_print_graph_DELETEME(void){
     for(graph_type::size_type i = 0; i < graph_.size(); i++){
         for(graph_type::size_type j = 0; j < graph_.size(); j++){
-            std::cout << graph_[i][j] << "  ";
+            std::cout << graph_[i][j] << "\t";
         }
         std::cout << std::endl;
     }

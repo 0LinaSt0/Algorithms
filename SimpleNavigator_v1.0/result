@@ -1,0 +1,301 @@
+[0;32m~~~~~~~~~~~[0m
+~~~> GRAPH_MATRIX:
+0	0	22	922	645	207	752	0	
+347	0	0	0	0	0	275	268	
+0	124	0	976	489	449	0	0	
+0	443	0	0	0	0	0	250	
+0	0	0	404	0	0	0	622	
+0	15	934	44	0	0	10	0	
+217	0	0	0	0	271	0	0	
+907	0	893	40	0	0	0	0	
+- Is directed: 1
+- Is connected: 1
+
+			0.0454545
+			0.0010846
+			0.00155039
+			0.00483092
+			0.00132979
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			0.126205
+			0.000829918
+			0.00165644
+			0.00180401
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.00238582
+			0.0456172
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			17.4265
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			140.638
+			0.000378176
+			0.000540587
+			0.00168444
+			0.000463668
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			2.19489
+			0.000289375
+			0.000577566
+			0.00421317
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.0446227
+			0.294606
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			125.189
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			257.885
+			0.000131862
+			0.000188491
+			0.040188
+			0.000161671
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			4.08392
+			0.000100899
+			0.000201385
+			0.00146904
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.0711958
+			0.453496
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			161.985
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			319.48
+			4.59774e-05
+			6.57227e-05
+			0.121573
+			5.63712e-05
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			4.00184
+			3.51812e-05
+			7.02185e-05
+			0.00266953
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.0871246
+			0.532044
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			206.237
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			511.58
+			1.60313e-05
+			2.29161e-05
+			0.110971
+			1.96554e-05
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			7.38386
+			1.22669e-05
+			2.44837e-05
+			0.00440298
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.0921705
+			0.863198
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			341.183
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			363.671
+			5.58978e-06
+			7.99035e-06
+			0.0898606
+			6.85342e-06
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			6.25437
+			4.27721e-06
+			8.53693e-06
+			0.00153523
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.0943419
+			0.690077
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			249.616
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			341.837
+			1.94904e-06
+			2.78606e-06
+			0.0727731
+			2.38964e-06
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			6.41928
+			1.49137e-06
+			2.97664e-06
+			0.00242735
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.159858
+			0.533612
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			209.485
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			457.437
+			6.79586e-07
+			9.7144e-07
+			0.127653
+			8.33216e-07
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			6.40466
+			5.20009e-07
+			1.03789e-06
+			0.00376427
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.101879
+			0.449715
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			193.466
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			608.111
+			2.36957e-07
+			3.3872e-07
+			0.105941
+			2.90525e-07
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			6.24563
+			1.81316e-07
+			3.6189e-07
+			0.00578473
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.0921536
+			0.421515
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			198.9
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 0
+			573.51
+			8.26219e-08
+			1.18104e-07
+			0.0759972
+			1.013e-07
+ANT NO 0:TsmResult::vertices
+0 2 
+	 end status: 0
+			7.00375
+			6.3221e-08
+			1.26183e-07
+			0.00201701
+ANT NO 0:TsmResult::vertices
+0 2 1 
+	 end status: 0
+			0.151048
+			0.364987
+ANT NO 0:TsmResult::vertices
+0 2 1 7 
+	 end status: 0
+			147.781
+ANT NO 0:TsmResult::vertices
+0 2 1 7 3 
+	 end status: 0
+ANT NO 0:TsmResult::vertices
+0 
+	 end status: 2
+
+~~~> ANT RESULT: 
+	- result way:	
+	- result length:	1.4822e-323
+		 ~~~~~~~~~~~~~~~~ 
+
+Throw from BbmaUtils::FindNextNode_(): 
+
+~~~> BBM RESULT: 
+	- result way:	
+	- result length:	0
+		 ~~~~~~~~~~~~~~~~ 
+
+
+~~~> Exhaustive RESULT: 
+	- result way:	0 4 3 7 2 5 1 6 0 
+	- result length:	3148
+		 ~~~~~~~~~~~~~~~~ 

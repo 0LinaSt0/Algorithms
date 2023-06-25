@@ -151,10 +151,7 @@ test:			$(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
 																-o $(TEST_EXE)
 
 test1:			$(OBJS)
-				$(GCC) tmp_main.cpp $(OBJS) -o $(TEST_EXE)
-
-test1:			$(OBJS)
-				$(GCC) tmp_main.cpp $(OBJS) -o $(TEST_EXE)
+				$(GCC) main_DELETEME.cpp $(OBJS) -o $(TEST_EXE)
 
 clean:			
 				@rm -rf $(TMP_DIR)
