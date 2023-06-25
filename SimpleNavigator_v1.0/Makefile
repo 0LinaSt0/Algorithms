@@ -8,7 +8,7 @@ GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g \
 					-fsanitize=leak -fsanitize=undefined -fsanitize=address
 
 TEST_DIR	=	tests
-TMP_DIR		=	tmp
+TMP_DIR		=	tmp_handlers
 
 ### HEADERS ###
 HDRS_CONT	=	$(addprefix containers/, 									\
@@ -30,12 +30,12 @@ HDRS_CLI	=	$(addprefix cli/,											\
 				)
 HDRS_GRAPH	=	$(addprefix graph/,											\
 					$(addprefix includes/,									\
-						graph.hpp											\
+						s21_graph.h											\
 					)														\
 				)
 HDRS_ALGO	=	$(addprefix graph/,											\
 					$(addprefix includes/,									\
-						graphAlgorithms.hpp									\
+						s21_graph_algorithms.h								\
 					)														\
 				)
 HDRS_UTILS	=	$(addprefix utils/,											\
@@ -67,12 +67,12 @@ SRCS_CLI	=	$(addprefix cli/,											\
 				)															
 SRCS_GRAPH	=	$(addprefix graph/,											\
 					$(addprefix srcs/,										\
-						graph.cpp											\
+						s21_graph.cpp										\
 					)														\
 				)
 SRCS_ALGO	=	$(addprefix graph/,											\
 					$(addprefix srcs/,										\
-						graphAlgorithms.cpp									\
+						s21_graph_algorithms.cpp							\
 					)														\
 				)
 SRCS_MAIN	=	./main.cpp										
@@ -132,36 +132,35 @@ TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp							\
 TEST_OBJS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.o))
 TEST_DPNDS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.d))
 
-# $@			$<
-$(TMP_DIR)/%.o:	%.cpp $(TEST_HDRS) $(HDRS)
-				@mkdir -p $(dir $@)
-				$(GCC) -c -o $@ $<
+# $@						$<
+$(TMP_DIR)/%.o:				%.cpp $(TEST_HDRS) $(HDRS)
+							@mkdir -p $(dir $@)
+							$(GCC) -c -o $@ $<
 
-all:			algo_lib $(OBJS_CLI) $(OBJS_MAIN)
-				$(GCC) $(OBJS_MAIN) $(OBJS_CLI) $(ALGO_LIB) -o $(MAIN_EXE)
+all:						s21_graph_algorithms.a $(OBJS_CLI) $(OBJS_MAIN)
+							$(GCC) $(OBJS_MAIN) $(OBJS_CLI) \
+								$(ALGO_LIB) -o $(MAIN_EXE)
 	
-graph_lib:		$(OBJS_GRAPH) $(OBJS_UTILS)
-				@ar sr $(GRAPH_LIB) $(OBJS_GRAPH) $(OBJS_UTILS)
+s21_graph.a:				$(OBJS_GRAPH) $(OBJS_UTILS)
+							@ar sr $(GRAPH_LIB) $(OBJS_GRAPH) $(OBJS_UTILS)
 
-algo_lib:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
-				@ar sr $(ALGO_LIB) $(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
+s21_graph_algorithms.a:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
+							@ar sr $(ALGO_LIB) $(OBJS_GRAPH) \
+								$(OBJS_UTILS) $(OBJS_ALGO)
 
-test:			$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
-				$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_CLI) \
-					$(OBJS_ALGO) $(TEST_OBJS) -o $(TEST_EXE)
+test:						$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
+							$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_CLI) \
+								$(OBJS_ALGO) $(TEST_OBJS) -o $(TEST_EXE)
 
-test1:			$(OBJS)
-				$(GCC) main_DELETEME.cpp $(OBJS) -o test1.out
+clean:						
+							@rm -rf $(TMP_DIR)
 
-clean:			
-				@rm -rf $(TMP_DIR)
+fclean:						clean
+							@rm -f $(MAIN_EXE)
+							@rm -f $(TEST_EXE)
+							@rm -f $(GRAPH_LIB)
+							@rm -f $(ALGO_LIB)
 
-fclean:			clean
-				@rm -f $(MAIN_EXE)
-				@rm -f $(TEST_EXE)
-				@rm -f $(GRAPH_LIB)
-				@rm -f $(ALGO_LIB)
+re:							fclean all
 
-re:				fclean all
-
-.PHONY: graph_lib algo_lib test clean fclean re
+.PHONY: s21_graph.a algo_lib test clean fclean re

@@ -184,7 +184,7 @@ void CLI::SolveTravelingSalesmanProblem_(){
     timer.End();
 
     std::cout
-        << "Solving the salesman problem (branch and bound method): "
+        << "Solving the salesman problem (ant algorithm): "
         << std::endl
         << tsmResult
         << std::endl
@@ -220,7 +220,7 @@ void CLI::ExhaustiveSearch_(){
     timer.End();
 
     std::cout
-        << "Solving the salesman problem (branch and bound method): "
+        << "Solving the salesman problem (exhaustive search): "
         << std::endl
         << tsmResult
         << std::endl

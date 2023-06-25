@@ -55,8 +55,6 @@ public:
 
     void ExportGraphToDot(std::string filename);
 
-    void tmp_print_graph_DELETEME(void);
-
 private:
     graph_type graph_;
     bool is_directed_;

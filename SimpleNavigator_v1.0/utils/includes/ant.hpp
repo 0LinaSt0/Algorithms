@@ -4,7 +4,7 @@
 #include <memory>
 #include <cmath>
 
-#include "../../graph/includes/graphAlgorithms.hpp"
+#include "../../graph/includes/s21_graph_algorithms.h"
 
 namespace s21{
 

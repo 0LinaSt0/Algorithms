@@ -5,8 +5,8 @@
 #include <gtest/gtest.h>
 
 #include "../../../cli/includes/timer.hpp"
-#include "../../../graph/includes/graph.hpp"
-#include "../../../graph/includes/graphAlgorithms.hpp"
+#include "../../../graph/includes/s21_graph.h"
+#include "../../../graph/includes/s21_graph_algorithms.h"
 
 #define TEST_SUITE_NAME GRAPH_ALGORITHMS_TESTS
 

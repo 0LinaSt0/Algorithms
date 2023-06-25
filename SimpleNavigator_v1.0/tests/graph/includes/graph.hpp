@@ -3,7 +3,7 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "../../../graph/includes/graph.hpp"
+#include "../../../graph/includes/s21_graph.h"
 
 #define TEST_SUITE_NAME GRAPH_TESTS
 

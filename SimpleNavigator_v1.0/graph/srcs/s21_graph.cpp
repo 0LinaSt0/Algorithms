@@ -1,4 +1,4 @@
-#include "../includes/graph.hpp"
+#include "../includes/s21_graph.h"
 
 namespace s21{
 
@@ -241,15 +241,6 @@ std::string Graph::GraphDotRepresentation_(){
 
     graph_dot += "}";
     return graph_dot;
-}
-
-void Graph::tmp_print_graph_DELETEME(void){
-    for(graph_type::size_type i = 0; i < graph_.size(); i++){
-        for(graph_type::size_type j = 0; j < graph_.size(); j++){
-            std::cout << graph_[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
 }
 
 }

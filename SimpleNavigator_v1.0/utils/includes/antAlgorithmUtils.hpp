@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#include "../../graph/includes/graph.hpp"
+#include "../../graph/includes/s21_graph.h"
 #include "ant.hpp"
 #include "utils.hpp"
 

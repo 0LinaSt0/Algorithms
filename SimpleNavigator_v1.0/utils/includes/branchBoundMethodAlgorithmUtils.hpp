@@ -8,7 +8,7 @@
 
 #include "utils.hpp"
 #include "pathNodeMatrix.hpp"
-#include "../../graph/includes/graph.hpp"
+#include "../../graph/includes/s21_graph.h"
 
 namespace s21{
 

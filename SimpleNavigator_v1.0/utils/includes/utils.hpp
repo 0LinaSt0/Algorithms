@@ -55,14 +55,6 @@ const int TSM_PASSES_NUMBER_LIMIT = 100;
 struct TsmResult {
     std::vector<int> vertices; // an array with the route
     double distance;  // the length of this route
-
-    void tmp_print_DELETEME(void){
-        std::cout << "TsmResult::vertices" << std::endl;
-        for (auto& elem : vertices){
-            std::cout << elem << " ";
-        }
-        std::cout << std::endl;
-    }
 };
 
 // Print error like "filename: funcname: line: msg" to std::cerr

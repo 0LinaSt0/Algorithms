@@ -1,4 +1,4 @@
-#include "../includes/graphAlgorithms.hpp"
+#include "../includes/s21_graph_algorithms.h"
 
 namespace s21{
 
