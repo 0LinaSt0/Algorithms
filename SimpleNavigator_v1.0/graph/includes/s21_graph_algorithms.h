@@ -46,34 +46,92 @@ public:
     GraphAlgorithms& operator=(const GraphAlgorithms& other) = default;
     GraphAlgorithms& operator=(GraphAlgorithms&& other) = default;
 
+    /**
+     * Finding a non-recursive depth-first search in the [graph]
+     * from a given [start_vertex]
+     * @return std::vector<int> with the traversed vertices in the order
+     *         they were traversed
+     */
     std::vector<int> BreadthFirstSearch(Graph &graph, int start_vertex);
 
+    /**
+     * Finding a breadth-first search in the [graph] from a given [start_vertex]
+     * @return std::vector<int> with the traversed vertices in the order
+     *         they were traversed
+     */
     std::vector<int> DepthFirstSearch(Graph &graph, int start_vertex);
 
+    /**
+     * Searching the shortest path between two vertices [vertex1] and [vertex2]
+     * in a [graph] using Dijkstra's algorithm
+     * @return int value of the smallest distance of the shortest path
+     */
     int GetShortestPathBetweenVertices(Graph& graph, int vertex1, int vertex2);
 
+    /**
+     * Searching the shortest paths between all pairs of vertices in a [graph]
+     * using the Floyd-Warshall algorithm
+     * @return Graph with the shortest paths between all vertices
+     */
     Graph GetShortestPathsBetweenAllVertices(Graph& graph);
 
+    /**
+     * Searching the minimal spanning tree in a [graph] using Prim's algorithm
+     * @return Graph for the minimal spanning tree
+     * @throw std::invalid_argument if couldn't find the least spanning tree
+     */
     Graph GetLeastSpanningTree(Graph &graph);
 
-    // average_distance_length
+    /**
+     * Solving the traveling salesman's problem using the ant colony algorithm:
+     * to find the shortest path that goes through all vertices of the [graph]
+     * @return TsmResult structure with the row and the length of the row
+     */
     TsmResult SolveTravelingSalesmanProblem(Graph &graph);
 
+    /**
+     * Solving the traveling salesman's problem using the branch and bound
+     * method algorithm: to find the shortest path that goes through all
+     * vertices of the [graph]
+     * @return TsmResult structure with the row and the length of the row
+     */
     TsmResult STSPBranchBoundMethodAlgorithm(Graph &graph);
 
+    /**
+     * Solving the traveling salesman's problem using the brute force
+     * method algorithm: to find the shortest path that goes through all
+     * vertices of the [graph]
+     * @return TsmResult structure with the row and the length of the row
+     */
     TsmResult ExhaustiveSearch(Graph &graph);
 
 private:
     aa_utils_shared_ptr ants_utils_;
     bbma_utils_shared_ptr bbmethod_utils_;
 
+    /**
+     * Helper method of GetShortestPathsBetweenAllVertices for choosing minimum
+     * weight between direct path [row][column] and indirect path
+     * [row][throgh_node] + [through_node][column]
+     * @return int value of chooding minimum weight
+     */
     int MinWeight_(Graph &matrix, int column, int row, int throgh_node);
 
+    /**
+     * Helper method of ExhaustiveSearch for all implementation
+     * @return true ?????
+     * @return false ?????
+     */
     bool ExhaustiveSearch_(double& min_row_weight,
                             std::vector<int>& min_row,
                             const std::vector<int>& parent_row,
                             const Graph& graph) const;
 
+    /**
+     * Printing error for TSP methods if the [graph] is empty or not connected
+     * @return true if the [graph] is inappropriate
+     * @return false if the [graph] is appropriate
+     */
     bool IsInappropriateGraph_(const Graph& graph) const;
 
 };

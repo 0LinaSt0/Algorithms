@@ -5,7 +5,7 @@ namespace s21{
 Graph::Graph()
     : is_directed_(0), is_connected_(0), min_spanning_tree_size_(0){ }
 
-Graph::Graph(const graph_type& inp_graph) : graph_(inp_graph){ 
+Graph::Graph(const graph_type& inp_graph) : graph_(inp_graph){
     min_spanning_tree_size_ = 0;
     is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
@@ -31,7 +31,7 @@ Graph::Graph(graph_type&& inp_graph, size_type min_spanning_tree_size)
 }
 
 Graph& Graph::operator=(const Graph& other){
-    if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
+    if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
                                     "Graph is not empty");
     else {
         graph_ = other.graph_;
@@ -43,7 +43,7 @@ Graph& Graph::operator=(const Graph& other){
 }
 
 Graph& Graph::operator=(Graph&& other){
-    if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
+    if (graph_.size()) PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
                                     "Graph is not empty");
     else {
         graph_ = std::move(other.graph_);
@@ -66,7 +66,7 @@ Graph::elem_of_graph_type::value_type Graph::at(size_type row, size_type col){
     return graph_[row][col];
 }
 
-Graph::elem_of_graph_type::value_type Graph::at(size_type row, 
+Graph::elem_of_graph_type::value_type Graph::at(size_type row,
                                                 size_type col) const{
     return graph_[row][col];
 }
@@ -83,12 +83,12 @@ Graph::iterator_type Graph::Begin(){
     return graph_.begin();
 }
 
-Graph::iterator_type Graph::End(){
-    return graph_.end();
-}
-
 Graph::const_iterator_type Graph::Begin() const{
     return graph_.begin();
+}
+
+Graph::iterator_type Graph::End(){
+    return graph_.end();
 }
 
 Graph::const_iterator_type Graph::End() const{
@@ -133,7 +133,7 @@ bool Graph::LoadGraphFromFile(std::string filename){
         for (int j = 0; j < size; j++){
             int val;
             if (!(file_stream >> val)){
-                PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, 
+                PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
                                 "Invalid file line");
                 graph_.clear();
                 return false;
@@ -217,7 +217,7 @@ std::string Graph::DotFilename_(std::string& filename){
 }
 
 std::string Graph::GraphDotRepresentation_(){
-    std::string graph_dot = (is_directed_ ? "digraph" : "graph") + 
+    std::string graph_dot = (is_directed_ ? "digraph" : "graph") +
                             std::string(" graphname {\n");
     std::string dash = (is_directed_ ? " -> " : " -- ");
     std::string startline = "\t";
@@ -253,7 +253,7 @@ std::ostream& operator<<(std::ostream& out, const s21::Graph& graph){
         else out << std::endl;
     }
     }
-    return out 
+    return out
             << std::endl
             << "IsDirected: " << graph.IsDirected() << std::endl
             << "IsConnected: " << graph.IsConnected() << std::endl

@@ -38,21 +38,66 @@ public:
     reference operator[](size_type pos);
     const_reference operator[](size_type pos) const;
 
+    /**
+     * @return a value of the cell with [row][col] coordinates
+     */
     elem_of_graph_type::value_type at(size_type row, size_type col);
+
+    /**
+     * @return a value of the cell with [row][col] coordinates
+     */
     elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
+    /**
+     * @return the number of nodes in graph
+     */
     std::size_t Size() const;
+
+
     size_type MinSpanningTreeSize() const;
+
+    /**
+     * @return an iterator to the first row of Graph
+     */
     iterator_type Begin();
-    iterator_type End();
+
+    /**
+     * @return a const iterator to the first row of Graph
+     */
     const_iterator_type Begin() const;
+
+    /**
+     * @return iterator to the element following the last Graph's row
+     */
+    iterator_type End();
+
+    /**
+     * @return a const iterator to the element following the last Graph's row
+     */
     const_iterator_type End() const;
 
+    /**
+     * @return true if Graph is directed
+     * @return false if Graph is not directed
+     */
     bool IsDirected() const;
+
+    /**
+     * @return true if Graph is connected
+     * @return false if Graph is not connected
+     */
     bool IsConnected() const;
 
+    /**
+     * Loading a graph from a file [filename] in the adjacency matrix format
+     * @return true if successful loading
+     * @return false if not successful loading
+     */
     bool LoadGraphFromFile(std::string filename);
 
+    /**
+     * Exporting a graph to a dot file [filename]
+     */
     void ExportGraphToDot(std::string filename);
 
 private:
@@ -64,14 +109,25 @@ private:
     bool IsDirected_() const;
     bool IsConnected_() const;
 
+    /**
+     * Check [filename] on validity and generate the file name
+     * @return std::string with dot filename
+     */
     std::string DotFilename_(std::string& filename);
 
+    /**
+     * Represent Graph to one srting in dot format
+     * @return std::string with Graph's content for dot file
+     */
     std::string GraphDotRepresentation_();
 
 };
 
 }
 
+/**
+ * Overload of operator for printing all Graph's content
+ */
 std::ostream& operator<<(std::ostream& out, const s21::Graph& graph);
 
 #endif
