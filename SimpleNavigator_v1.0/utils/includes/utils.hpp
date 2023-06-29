@@ -45,7 +45,7 @@ const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
 const fs::path DOTS_PATH = "materials/dot_representations";
 
-const int TSM_ALPHA = 2; // parameter depending on the number of pheromones [0;2]
+const int TSM_ALPHA = 2; // parameter depending on the pheromones number [0;2]
 const int TSM_BETA = 1; // parameter depending on the length [0;2]
 const double TSM_PYRA = 0.6; // evaporation rate constant of pheromones [0;1]
 
@@ -57,11 +57,15 @@ struct TsmResult {
     double distance;  // the length of this route
 };
 
-// Print error like "filename: funcname: line: msg" to std::cerr
+/**
+ * Print error to std::cerr like: [filename]: [funcname]: [line]: [msg]
+ */
 void PrintError(const std::string& filename,
         const std::string& funcname, int line, const std::string& msg);
 
-// Set permissions READ-ONLY for "filepath"
+/**
+ * Set permissions READ-ONLY for [filepath]
+ */
 void ReadOnlyPermissions(std::string& filepath);
 
 }

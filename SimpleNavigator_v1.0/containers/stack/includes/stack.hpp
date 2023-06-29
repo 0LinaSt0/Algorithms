@@ -21,10 +21,14 @@ public:
     Stack& operator=(const Stack& other) = default;
     Stack& operator=(Stack&& other) = default;
 
-    // Adding an element
+    /**
+     * Adding an element
+     */
     void push(const value_type& value);
-    
-    // Adding an element
+
+    /**
+     * Adding an element
+     */
     void push(value_type&& value);
 
     /**

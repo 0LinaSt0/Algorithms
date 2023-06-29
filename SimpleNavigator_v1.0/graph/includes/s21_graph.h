@@ -39,12 +39,12 @@ public:
     const_reference operator[](size_type pos) const;
 
     /**
-     * @return a value of the cell with [row][col] coordinates
+     * @return value of the cell with [row][col] coordinates
      */
     elem_of_graph_type::value_type at(size_type row, size_type col);
 
     /**
-     * @return a value of the cell with [row][col] coordinates
+     * @return value of the cell with [row][col] coordinates
      */
     elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
@@ -57,12 +57,12 @@ public:
     size_type MinSpanningTreeSize() const;
 
     /**
-     * @return an iterator to the first row of Graph
+     * @return iterator to the first row of Graph
      */
     iterator_type Begin();
 
     /**
-     * @return a const iterator to the first row of Graph
+     * @return const iterator to the first row of Graph
      */
     const_iterator_type Begin() const;
 
@@ -72,7 +72,7 @@ public:
     iterator_type End();
 
     /**
-     * @return a const iterator to the element following the last Graph's row
+     * @return const iterator to the element following the last Graph's row
      */
     const_iterator_type End() const;
 

@@ -17,7 +17,7 @@ double AntAlgorithmUtils::AverageDistance(const Graph& graph){
             }
         }
     }
-    return (float)total_length_count / (float)edges_count;
+    return (double)total_length_count / (double)edges_count;
 }
 
 std::unique_ptr<std::vector<Ant>> AntAlgorithmUtils::AntsColony(
@@ -30,7 +30,7 @@ std::unique_ptr<std::vector<Ant>> AntAlgorithmUtils::AntsColony(
     return (ants);
 }
 
-TsmResult AntAlgorithmUtils::UpdateReturnedWay(TsmResult& new_way,
+TsmResult AntAlgorithmUtils::UpdateBestWay(TsmResult& new_way,
                                 TsmResult& best_way){
     if (best_way.vertices.empty() ||
         new_way.distance < best_way.distance){

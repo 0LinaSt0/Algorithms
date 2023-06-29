@@ -22,10 +22,14 @@ public:
     Queue& operator=(const Queue& other);
     Queue& operator=(Queue&& other);
 
-    // Adding an element by reference
+    /**
+     * Adding an element by reference
+     */
     void push(const value_type& value);
 
-    // Adding an element by r-value reference
+    /**
+     * Adding an element by r-value reference
+     */
     void push(value_type&& value);
 
     /**

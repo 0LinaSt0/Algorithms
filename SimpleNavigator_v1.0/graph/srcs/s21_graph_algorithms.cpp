@@ -2,7 +2,7 @@
 
 namespace s21{
 
-GraphAlgorithms::GraphAlgorithms() : ants_utils_(new aa_utils), 
+GraphAlgorithms::GraphAlgorithms() : ants_utils_(new aa_utils),
     bbmethod_utils_(new bbma_utils){}
 
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
@@ -134,7 +134,7 @@ Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
         size_t visited_count = 1;
         size_t spanning_tree_size = 0;
 
-        // new matrix with min spanning tree only 
+        // new matrix with min spanning tree only
         std::vector<std::vector<int>> mtrx(graph.Size(),
                                             std::vector<int>(graph.Size(), 0));
 
@@ -166,14 +166,14 @@ Graph GraphAlgorithms::GetLeastSpanningTree(Graph& graph){
                 break;
             }
 
-            mtrx[min_edge.first][min_edge.second] = 
+            mtrx[min_edge.first][min_edge.second] =
                 graph.at(min_edge.first, min_edge.second);
-            if (graph.at(min_edge.first, min_edge.second) == 
+            if (graph.at(min_edge.first, min_edge.second) ==
                     graph.at(min_edge.second, min_edge.first)){
-                mtrx[min_edge.second][min_edge.first] = 
+                mtrx[min_edge.second][min_edge.first] =
                     graph.at(min_edge.second, min_edge.first);
             }
-                    
+
             visited_count++;
             visited[min_edge.first] = visited[min_edge.second] = true;
             spanning_tree_size += graph.at(min_edge.first, min_edge.second);
@@ -210,7 +210,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
                 pheromones[(ant->CurrentNode())]
             );
         }
-        for (std::vector<Ant>::iterator ant_it = ants->begin(); 
+        for (std::vector<Ant>::iterator ant_it = ants->begin();
                 ant_it < ants->end();){
             ant = &(*ant_it);
             if (ant->CurrentWay().vertices.size() > 1){
@@ -220,7 +220,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
             }
             if (ant->BadWayCount() == 0){
                 if (ant->EndCodeStatus() == 1){
-                    return_path = std::move(ants_utils_->UpdateReturnedWay(
+                    return_path = std::move(ants_utils_->UpdateBestWay(
                         ant->BestWay(), return_path
                     ));
                     ant_it = ants->erase(ant_it);
@@ -245,7 +245,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
 
 TsmResult GraphAlgorithms::STSPBranchBoundMethodAlgorithm(Graph &graph){
     if (IsInappropriateGraph_(graph)){ return {}; }
-    
+
     try {
         node_shared_ptr current_node(
             new PathNodeRootMatrix(bbmethod_utils_->InitialMatrix(graph))
@@ -352,7 +352,7 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
         return row.front() == 0 && row.back() == 0 &&
                 unique_values.size() == graph.Size();
     };
-    
+
     for (size_t y = 0; y < graph.Size(); y++){
         // check if edge exists
         if (graph.at(parent_row.back(), y) == 0) continue;
@@ -363,7 +363,7 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
             parent_row.end(),
             y
         );
-            
+
         if (parent_row.size() == graph.Size()) {
             if (y != static_cast<size_t>(parent_row.front())){
                 continue;
@@ -371,7 +371,7 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
         } else if (iter != parent_row.end()) {
             continue;
         }
-        
+
         // parent's copy to be appended
         std::vector<int> new_row(parent_row);
         new_row.push_back(y);
