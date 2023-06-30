@@ -85,8 +85,8 @@ coordinate PathNodeRootMatrix::CellsEvaluating_(void){
     for (matrix_map::iterator column_it = reducing_nodes_.begin();
             column_it != reducing_nodes_.end();
             ++column_it){
-        for (auto row_it = column_it->second.begin(); 
-                row_it < column_it->second.end(); 
+        for (auto row_it = column_it->second.begin();
+                row_it < column_it->second.end();
                 ++row_it){
             current_grade = CellGradeDeterminig_((*row_it), column_it->first);
             if (current_grade > selected_grade){
@@ -130,7 +130,7 @@ void PathNodeRootMatrix::RowCellsReduced_(void){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
                 }
             }
-            if (is_included_ || is_included_ == -1){ 
+            if (is_included_ || is_included_ == -1){
                 way_cost_ += selected_cell_value;
             }
         }
@@ -145,14 +145,14 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
 
     for (int column_i = 0; column_i != (int)(*matrix_)[0].size(); column_i++){
         selected_row_i = FindMinInColumn_(column_i, -1);
-        if ((*matrix_)[selected_row_i][column_i].second == 
+        if ((*matrix_)[selected_row_i][column_i].second ==
                 std::numeric_limits<int>::max()){
             throw std::invalid_argument(
                 "Throw from PathNodeRootMatrix::ColumnCellsReduced_()"
             );
         }
         selected_cell_value = (*matrix_)[selected_row_i][column_i].second;
-        if ((reducing_nodes_.find(column_i)) == reducing_nodes_.end() || 
+        if ((reducing_nodes_.find(column_i)) == reducing_nodes_.end() ||
                 std::find(
                 reducing_nodes_.find(column_i)->second.begin(),
                 reducing_nodes_.find(column_i)->second.end(),
@@ -167,7 +167,7 @@ void PathNodeRootMatrix::ColumnCellsReduced_(void){
                     (*matrix_)[row_i][column_i].second -= selected_cell_value;
                 }
             }
-            if (is_included_ || is_included_ == -1){ 
+            if (is_included_ || is_included_ == -1){
                 way_cost_ += selected_cell_value;
             }
         }
@@ -215,7 +215,7 @@ double PathNodeRootMatrix::CellGradeDeterminig_(int row_i, int column_i){
     if (min_row_elem == std::numeric_limits<int>::max()){
         result = min_row_elem;
     } else {
-        min_column_elem = 
+        min_column_elem =
                     (*matrix_)[FindMinInColumn_(column_i, row_i)][column_i].second;
         if (min_column_elem == std::numeric_limits<int>::max()){
             result = min_column_elem;
@@ -290,8 +290,8 @@ void PathNodeIncludeMatrix::InfToInversePath_(int row_coordinate,
         }
     }
     if (row_elem_i == 0 && current_i == (int)(*matrix_).size()) { return ; }
-    for (current_i = 0; 
-            current_i < (int)(*matrix_)[row_elem_i].size(); 
+    for (current_i = 0;
+            current_i < (int)(*matrix_)[row_elem_i].size();
             current_i++){
         if ((*matrix_)[row_elem_i][current_i].first[1] == row_coordinate){
             column_elem_i = current_i;
@@ -326,7 +326,7 @@ coordinate PathNodeNotIncludeMatrix::ReducedCellsEvaluating(void){
 }
 
 void PathNodeNotIncludeMatrix::CostDeterminingPathNode_(double current_way_cost,
-                                                    int current_cell_score){                                                        
+                                                    int current_cell_score){
     if (current_cell_score == std::numeric_limits<int>::max() ||
         current_way_cost == std::numeric_limits<int>::max()){
         way_cost_ = current_cell_score;

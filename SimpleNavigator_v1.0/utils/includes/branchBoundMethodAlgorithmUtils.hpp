@@ -23,8 +23,8 @@ bool NodesCostCompare(const node_shared_ptr& a, const node_shared_ptr& b);
 class BbmaUtils{
 public:
 
-    using multiset_type             = std::multiset<node_shared_ptr,
-                                            decltype(NodesCostCompare)*>;
+    using multiset_type = std::multiset<node_shared_ptr,
+                            decltype(NodesCostCompare)*>;
 
     matrix_pair_unique_ptr InitialMatrix(const Graph& graph);
 
