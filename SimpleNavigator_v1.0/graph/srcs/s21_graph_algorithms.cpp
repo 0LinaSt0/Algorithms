@@ -332,7 +332,7 @@ int GraphAlgorithms::MinWeight_(Graph &matrix, int column, int row,
     return result_weight;
 }
 
-bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
+void GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
                                             std::vector<int>& min_row,
                                             const std::vector<int>& parent_row,
                                             const Graph& graph) const{
@@ -393,8 +393,6 @@ bool GraphAlgorithms::ExhaustiveSearch_(double& min_row_weight,
             );
         }
     }
-
-    return true;
 }
 
 bool GraphAlgorithms::IsInappropriateGraph_(const Graph& graph) const{

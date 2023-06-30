@@ -27,6 +27,7 @@ public:
 
 private:
     typedef void (CLI::*FuncPtr)(void);
+    typedef TsmResult (GraphAlgorithms::*AlgoPtr)(Graph&);
 
     const static std::string GREEN_COLOR_;
     const static std::string CYAN_COLOR_;
@@ -39,7 +40,7 @@ private:
     const static std::string SN_PROMT_;
     const static std::string USER_PROMT_;
     const static std::string SEPARATOR_;
-    const static int MENU_OPTIONS_COUNT_ = 8;
+    const static int MENU_OPTIONS_COUNT_ = 9;
     const static int EXIT_INPUT_VALUE_ = -1;
     const static int CLS_INPUT_VALUE_ = -2;
     const static int BAD_INPUT_VALUE_ = -100;
@@ -53,7 +54,8 @@ private:
         "searching for the minimal spanning tree",
         "solving the salesman problem (ant algorithm)",
         "solving the salesman problem (branch and bound method)",
-        "solving the salesman problem (exhaustive search)"
+        "solving the salesman problem (exhaustive search)",
+        "solving the salesman problem with time comparasion"
     };
     const FuncPtr methods_[MENU_OPTIONS_COUNT_] = {
         &CLI::BreadthFirstSearch_,
@@ -63,11 +65,28 @@ private:
         &CLI::GetLeastSpanningTree_,
         &CLI::SolveTravelingSalesmanProblem_,
         &CLI::STSPBranchBoundMethodAlgorithm_,
-        &CLI::ExhaustiveSearch_
+        &CLI::ExhaustiveSearch_,
+        &CLI::SolveTravelingSalesmanProblemWithTimeComparasion_
+    };
+    const AlgoPtr tsp_methods_[3] = {
+        &GraphAlgorithms::SolveTravelingSalesmanProblem,
+        &GraphAlgorithms::STSPBranchBoundMethodAlgorithm,
+        &GraphAlgorithms::ExhaustiveSearch
     };
 
+    /**
+     * Print list of available methods.
+    */
     void PrintMenu_() const;
+    /**
+     * Print message with awesome promt.
+    */
     void PrintMsg_(const std::string& msg) const;
+    /**
+     * Return int value entered by user.
+     * May return EXIT_INPUT_VALUE_, CLS_INPUT_VALUE_ or BAD_INPUT_VALUE_
+     * if input value is not number.
+    */
     int ReadInput_() const;
 
     /**
@@ -86,6 +105,12 @@ private:
     void STSPBranchBoundMethodAlgorithm_();
     void ExhaustiveSearch_();
 
+    void SolveTravelingSalesmanProblemWithTimeComparasion_();
+
+    /**
+     * Remove white spaces from the start and end
+     * of input line.
+    */
     void TrimLine_(std::string& line) const;
 
 };

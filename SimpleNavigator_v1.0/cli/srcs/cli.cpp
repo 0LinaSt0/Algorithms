@@ -230,6 +230,40 @@ void CLI::ExhaustiveSearch_(){
         << std::endl;
 }
 
+void CLI::SolveTravelingSalesmanProblemWithTimeComparasion_(){
+    Timer timer;
+
+    PrintMsg_("Enter count of iterations: ");
+    int N = ReadInput_();
+    if (N == BAD_INPUT_VALUE_) {
+        PRINT_ERROR(
+            __FILE__,
+            __FUNCTION__,
+            __LINE__,
+            "Invalid input value"
+        );
+        return;
+    }
+
+    for (int i = 0; i < 3; i++){
+        long time_sum = 0;
+
+        for (int iter = 0; iter < N; iter++){
+            timer.Start();
+            (graph_algorithms_.*tsp_methods_[i])(*graph_);
+            timer.End();
+            time_sum += timer.GetDuration();
+        }
+
+        std::cout
+            << menu_msg_[i + 5]
+            << ": "
+            << std::to_string(time_sum)
+            << " ms"
+            << std::endl;
+    }
+}
+
 void CLI::TrimLine_(std::string& line) const{
     auto lambda = [](char c){ return !std::isspace(c); };
     std::string::const_iterator iter = std::find_if(

@@ -119,10 +119,8 @@ private:
 
     /**
      * Helper method of ExhaustiveSearch for all implementation
-     * @return true ?????
-     * @return false ?????
      */
-    bool ExhaustiveSearch_(double& min_row_weight,
+    void ExhaustiveSearch_(double& min_row_weight,
                             std::vector<int>& min_row,
                             const std::vector<int>& parent_row,
                             const Graph& graph) const;

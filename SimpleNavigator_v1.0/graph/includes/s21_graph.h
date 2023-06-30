@@ -53,7 +53,9 @@ public:
      */
     std::size_t Size() const;
 
-
+    /**
+     * @return return sum of weights of all edges in least spanning tree.
+    */
     size_type MinSpanningTreeSize() const;
 
     /**
