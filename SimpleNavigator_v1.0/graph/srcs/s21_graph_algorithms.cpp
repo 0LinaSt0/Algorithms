@@ -238,6 +238,7 @@ TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &graph){
         ants_utils_->PheromoneEvaporation(pheromones);
     }
     if (return_path.vertices.empty()){
+        return_path.distance = 0;
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, INAPPROPRIATE_GRAPH_MSG);
     }
     return return_path;
