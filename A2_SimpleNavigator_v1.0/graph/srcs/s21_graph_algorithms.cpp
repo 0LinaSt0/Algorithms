@@ -7,8 +7,6 @@ GraphAlgorithms::GraphAlgorithms() : ants_utils_(new aa_utils),
 
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph,
                                                         int start_vertex){
-    (void)graph; (void)start_vertex;
-
     if (start_vertex < 0 || start_vertex > static_cast<int>(graph.Size())){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,  "Invalid vertex number");
         return {};
@@ -75,6 +73,12 @@ std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph,
 
 int GraphAlgorithms::GetShortestPathBetweenVertices(Graph& graph, int vertex1,
                                                         int vertex2){
+    if (vertex1 < 0 || vertex1 > static_cast<int>(graph.Size()) ||
+            vertex2 < 0 || vertex2 > static_cast<int>(graph.Size())){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,  "Invalid vertex number");
+        return 0;
+    }
+    
     Queue<int> q;
     std::vector<bool> visited(graph.Size(), false);
     std::vector<int> values(graph.Size(), INT_MAX);
