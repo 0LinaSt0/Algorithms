@@ -25,7 +25,7 @@ HDRS_CONT	=	$(addprefix containers/, 									\
 				)
 HDRS_CLI	=	$(addprefix cli/,											\
 					$(addprefix includes/,									\
-						cli.hpp	timer.hpp									\
+						cli.h	timer.hpp									\
 					)														\
 				)
 HDRS_GRAPH	=	$(addprefix graph/,											\
@@ -44,7 +44,7 @@ HDRS_UTILS	=	$(addprefix utils/,											\
 						antAlgorithmUtils.hpp								\
 						branchBoundMethodAlgorithmUtils.hpp					\
 						pathNodeMatrix.hpp									\
-						utils.hpp											\
+						utils.h											\
 					)														\
 				)
 HDRS		=	$(HDRS_CONT) $(HDRS_CLI) $(HDRS_GRAPH) 						\
@@ -57,12 +57,12 @@ SRCS_UTILS	=	$(addprefix utils/,											\
 						antAlgorithmUtils.cpp								\
 						branchBoundMethodAlgorithmUtils.cpp					\
 						pathNodeMatrix.cpp									\
-						utils.cpp											\
+						utils.cc											\
 					)														\
 				)															
 SRCS_CLI	=	$(addprefix cli/,											\
 					$(addprefix srcs/,										\
-						cli.cpp	timer.cpp									\
+						cli.cc	timer.cpp									\
 					)														\
 				)															
 SRCS_GRAPH	=	$(addprefix graph/,											\

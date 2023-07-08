@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "timer.hpp"
+#include "timer.h"
 #include "../../graph/includes/s21_graph.h"
 #include "../../graph/includes/s21_graph_algorithms.h"
 

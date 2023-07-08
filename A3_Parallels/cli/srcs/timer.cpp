@@ -1,4 +1,4 @@
-#include "../includes/timer.hpp"
+#include "../includes/timer.h"
 
 namespace s21{
 

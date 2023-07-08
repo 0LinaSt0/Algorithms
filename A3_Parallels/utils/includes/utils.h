@@ -41,6 +41,10 @@ struct TsmResult {
     double distance;  // the length of this route
 };
 
+struct SleResult {
+    std::vector<double> equation_roots;
+};
+
 /**
  * Print error to std::cerr like: [filename]: [funcname]: [line]: [msg]
  */
