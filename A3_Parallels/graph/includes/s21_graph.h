@@ -16,13 +16,16 @@ namespace s21{
 
 class Graph{
 public:
-    using elem_of_graph_type        = row_matrix_type;
-    using graph_type                = matrix_type;
-    using size_type                 = typename graph_type::size_type;
-    using reference                 = typename graph_type::reference;
-    using const_reference           = typename graph_type::const_reference;
-    using iterator_type             = typename graph_type::iterator;
-    using const_iterator_type       = typename graph_type::const_iterator;
+    using elem_of_graph_type            = row_matrix_type;
+    using graph_type                    = matrix_type;
+    using size_type                     = typename graph_type::size_type;
+    using reference                     = typename graph_type::reference;
+    using const_reference               = typename graph_type::const_reference;
+    using iterator_type                 = typename graph_type::iterator;
+    using const_iterator_type           = typename graph_type::const_iterator;
+    using reverse_iterator_type         = typename graph_type::reverse_iterator;
+    using reverse_const_iterator_type   
+                                = typename graph_type::const_reverse_iterator;
 
     Graph();
     Graph(const Graph& other) = default;
@@ -77,6 +80,26 @@ public:
      * @return const iterator to the element following the last Graph's row
      */
     const_iterator_type End() const;
+
+    /**
+     * @return reverse iterator to the beginning
+     */
+    reverse_iterator_type Rbegin();
+
+    /**
+     * @return const reverse iterator to the beginning
+     */
+    reverse_const_iterator_type Rbegin() const;
+
+    /**
+     * @return reverse iterator to the end
+     */
+    reverse_iterator_type Rend();
+
+    /**
+     * @return const reverse iterator to the end
+     */
+    reverse_const_iterator_type Rend() const;
 
     /**
      * @return true if Graph is directed

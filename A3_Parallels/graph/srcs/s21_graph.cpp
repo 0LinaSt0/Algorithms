@@ -95,6 +95,22 @@ Graph::const_iterator_type Graph::End() const{
     return graph_.end();
 }
 
+Graph::reverse_iterator_type Graph::Rbegin(){
+    return graph_.rbegin();
+}
+
+Graph::reverse_const_iterator_type Graph::Rbegin() const{
+    return graph_.rbegin();
+}
+
+Graph::reverse_iterator_type Graph::Rend(){
+    return graph_.rend();
+}
+
+Graph::reverse_const_iterator_type Graph::Rend() const{
+    return graph_.rend();
+}
+
 bool Graph::IsDirected() const{
     return is_directed_;
 }

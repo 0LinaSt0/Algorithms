@@ -31,6 +31,8 @@ using matrix_const_iterator_type    = typename matrix_type::const_iterator; // D
 
 const std::string INAPPROPRIATE_GRAPH_MSG = "It is impossible to solve "
                             "travelling salesman problem with current graph";
+const std::string UNSOLVABLE_MATRIX_MSG = "It is impossible to solve "
+                            "systems of linear equations with current matrix";
 const std::string DEFAULT_DOT_NAME = "graph_default.dot";
 const fs::path ROOT_DIR = fs::current_path();
 const fs::path GRAPHS_PATH = "materials/graphs";
