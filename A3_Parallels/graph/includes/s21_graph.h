@@ -5,27 +5,20 @@
 #include <iostream>
 #include <fstream>
 #include <utility>
-#include <vector>
 #include <regex>
 
+#include "matrix.h"
 #include "../../utils/includes/utils.h"
 
 namespace fs = std::filesystem;
 
 namespace s21{
 
-class Graph{
+template< class T >
+class Graph : public Matrix<T>{
 public:
-    using elem_of_graph_type            = row_matrix_type;
-    using graph_type                    = matrix_type;
-    using size_type                     = typename graph_type::size_type;
-    using reference                     = typename graph_type::reference;
-    using const_reference               = typename graph_type::const_reference;
-    using iterator_type                 = typename graph_type::iterator;
-    using const_iterator_type           = typename graph_type::const_iterator;
-    using reverse_iterator_type         = typename graph_type::reverse_iterator;
-    using reverse_const_iterator_type   
-                                = typename graph_type::const_reverse_iterator;
+    using parent_type       = Matrix<T>;
+    using grath_type        = typename parent_type::matrix_type;
 
     Graph();
     Graph(const Graph& other) = default;
@@ -36,70 +29,16 @@ public:
     Graph(graph_type&& inp_graph, size_type min_spanning_tree_size);
     ~Graph() = default;
 
-    Graph& operator=(const Graph& other);
-    Graph& operator=(Graph&& other);
-    reference operator[](size_type pos);
-    const_reference operator[](size_type pos) const;
-
-    /**
-     * @return value of the cell with [row][col] coordinates
-     */
-    elem_of_graph_type::value_type at(size_type row, size_type col);
-
-    /**
-     * @return value of the cell with [row][col] coordinates
-     */
-    elem_of_graph_type::value_type at(size_type row, size_type col) const;
 
     /**
      * @return the number of nodes in graph
      */
-    std::size_t Size() const;
+    size_type NodesSize() const;
 
     /**
      * @return return sum of weights of all edges in least spanning tree.
     */
     size_type MinSpanningTreeSize() const;
-
-    /**
-     * @return iterator to the first row of Graph
-     */
-    iterator_type Begin();
-
-    /**
-     * @return const iterator to the first row of Graph
-     */
-    const_iterator_type Begin() const;
-
-    /**
-     * @return iterator to the element following the last Graph's row
-     */
-    iterator_type End();
-
-    /**
-     * @return const iterator to the element following the last Graph's row
-     */
-    const_iterator_type End() const;
-
-    /**
-     * @return reverse iterator to the beginning
-     */
-    reverse_iterator_type Rbegin();
-
-    /**
-     * @return const reverse iterator to the beginning
-     */
-    reverse_const_iterator_type Rbegin() const;
-
-    /**
-     * @return reverse iterator to the end
-     */
-    reverse_iterator_type Rend();
-
-    /**
-     * @return const reverse iterator to the end
-     */
-    reverse_const_iterator_type Rend() const;
 
     /**
      * @return true if Graph is directed
@@ -126,7 +65,6 @@ public:
     void ExportGraphToDot(std::string filename);
 
 private:
-    graph_type graph_;
     bool is_directed_;
     bool is_connected_;
     size_type min_spanning_tree_size_;
@@ -153,6 +91,9 @@ private:
 /**
  * Overload of operator for printing all Graph's content
  */
-std::ostream& operator<<(std::ostream& out, const s21::Graph& graph);
+template <class type>
+std::ostream& operator<<(std::ostream& out, const s21::Graph<type>& graph);
+
+#include "../srcs/s21_graph.cc"
 
 #endif
