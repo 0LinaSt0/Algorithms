@@ -29,7 +29,7 @@ std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result){
     out
         << "distance: " << tsm_result.distance << std::endl
         << "vertices: " << std::endl;
-    
+
     for (size_t i = 0; i < tsm_result.vertices.size(); i++){
         out << tsm_result.vertices[i];
         if (i + 1 != tsm_result.vertices.size()) out << "->";

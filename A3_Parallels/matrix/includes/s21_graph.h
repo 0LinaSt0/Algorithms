@@ -1,5 +1,5 @@
-#ifndef GRAPH_HPP
-#define GRAPH_HPP
+#ifndef S21_GRAPH_H
+#define S21_GRAPH_H
 
 #include <stdexcept>
 #include <iostream>
@@ -18,7 +18,9 @@ template< class T >
 class Graph : public Matrix<T>{
 public:
     using parent_type       = Matrix<T>;
-    using grath_type        = typename parent_type::matrix_type;
+    using graph_type        = typename parent_type::matrix_type;
+    using size_type         = typename parent_type::size_type;
+    using row_matrix_type   = typename parent_type::row_matrix_type;
 
     Graph();
     Graph(const Graph& other) = default;
@@ -29,6 +31,8 @@ public:
     Graph(graph_type&& inp_graph, size_type min_spanning_tree_size);
     ~Graph() = default;
 
+    Graph& operator=(const Graph& other);
+    Graph& operator=(Graph&& other);
 
     /**
      * @return the number of nodes in graph
@@ -57,7 +61,7 @@ public:
      * @return true if successful loading
      * @return false if not successful loading
      */
-    bool LoadGraphFromFile(std::string filename);
+    bool LoadFromFile(std::string filename);
 
     /**
      * Exporting a graph to a dot file [filename]
@@ -94,6 +98,6 @@ private:
 template <class type>
 std::ostream& operator<<(std::ostream& out, const s21::Graph<type>& graph);
 
-#include "../srcs/s21_graph.cc"
+#include "../srcs/s21_graph_impl.h"
 
 #endif

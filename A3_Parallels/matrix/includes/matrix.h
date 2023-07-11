@@ -1,5 +1,5 @@
-#ifndef MATRIX
-#define MATRIX
+#ifndef MATRIX_H
+#define MATRIX_H
 
 #include <stdexcept>
 #include <iostream>
@@ -26,7 +26,7 @@ public:
     using reverse_const_iterator_type
                                 = typename matrix_type::const_reverse_iterator;
 
-    Matrix();
+    Matrix() = default;
     Matrix(const Matrix& other) = default;
     Matrix(Matrix&& other) = default;
     Matrix(const matrix_type& inp_matrix);
@@ -37,6 +37,10 @@ public:
     Matrix& operator=(Matrix&& other);
     reference operator[](size_type pos);
     const_reference operator[](size_type pos) const;
+
+    // matrix_type& DELETEME(){
+    //     return matrix_;
+    // }
 
     /**
      * @return value of the cell with [row][col] coordinates
@@ -103,14 +107,36 @@ public:
      * @return true if successful loading
      * @return false if not successful loading
      */
-    bool LoadMatrixFromFile(std::string filename);
+    virtual bool LoadFromFile(std::string filename);
 
 protected:
     matrix_type matrix_;
+
+    /**
+     * Checking general validity of matrix from a file [filename]
+     * @return positive number of reserved matrix_ capacity if successful
+     * @return zero if not successful
+     */
+    int GeneralFromFileValidation_(std::string filename,
+                                std::ifstream& file_stream);
+
+    /**
+     * Checking validity of matrix_
+     * @return true if matrix_ is valid
+     * @return false if matrix_ is not valid
+     * @attention the method frees the matrix_ if it's not validity
+     */
+    bool IsMatrixValid_();
 };
 
 }
 
-#include "../srcs/matrix.cc"
+/**
+ * Overload of operator for printing Matrix's content
+ */
+template <class type>
+std::ostream& operator<<(std::ostream& out, const s21::Matrix<type>& matrix);
+
+#include "../srcs/matrix_impl.h"
 
 #endif
