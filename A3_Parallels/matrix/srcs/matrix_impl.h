@@ -63,7 +63,7 @@ typename Matrix<T>::size_type Matrix<T>::RowsSize() const{
 
 template< class T >
 typename Matrix<T>::size_type Matrix<T>::ColumnsSize() const{
-    return matrix_.begin()->size();
+    return matrix_.size() ? matrix_.begin()->size() : 0;
 }
 
 template< class T >

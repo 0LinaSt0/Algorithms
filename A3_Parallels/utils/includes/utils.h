@@ -35,7 +35,9 @@ struct TsmResult {
 };
 
 struct SleResult {
-    std::vector<double> equation_roots;
+    using sle_type  = std::vector<double>;
+
+    sle_type equation_roots;
 };
 
 /**

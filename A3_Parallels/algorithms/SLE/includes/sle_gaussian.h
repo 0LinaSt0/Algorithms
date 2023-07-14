@@ -5,23 +5,25 @@
 #include <memory>
 
 #include "../../utils/includes/utils.h"
-#include "../../graph/includes/s21_graph.h"
+#include "../../matrix/includes/matrix.h"
 
 namespace s21{
 
 class SleGaussianParent{
 public:
-    using result_roots_type         = SleResult;
-    using matrix_type               = Graph;
+    using matrix_type               = Matrix<double>;
     using matrix_type_reference     = matrix_type&;
+    using matrix_type_unique_ptr    = std::unique_ptr<matrix_type>;
+    using result_roots_type         = SleResult;
     using matrix_size_type          = typename matrix_type::size_type;
     using iterator_type             = typename matrix_type::iterator_type;
     using const_iterator_type       = typename matrix_type::const_iterator_type;
-    using reverse_iterator_type      
-                                = typename matrix_type::reverse_iterator_type;
-    using matrix_type_unique_ptr    = std::unique_ptr<matrix_type>;
+    using reverse_iterator_type
+                            = typename matrix_type::reverse_iterator_type;
+    using reverse_const_iterator_type
+                            = typename matrix_type::reverse_const_iterator_type;
 
-    SleGaussianParent(matrix_type_reference graph);
+    SleGaussianParent(matrix_type_reference matrix);
     ~SleGaussianParent() = default;
 
     result_roots_type GaussianElimination();
@@ -42,6 +44,8 @@ protected:
 
     virtual void ReduceRows_(matrix_size_type current_i) = 0;
 
+    void DetermineResult_();
+
     /**
      * Printing error message if system is inconsistent or has many solutions
      * @return true if system is inconsistent or has many solutions
@@ -49,30 +53,25 @@ protected:
      */
     bool DetermineSingular_();
 
-    void DetermineResult_();
+    void DetermineRoots_();
 
-    virtual void DetermineRoots_() = 0; 
-
+    double DetermineRoot_(reverse_const_iterator_type& row_rev_it);
 };
 
 class SleGaussianUsual : public SleGaussianParent{
 public:
-    SleGaussianUsual(matrix_type_reference graph);
+    SleGaussianUsual(matrix_type_reference matrix);
 
 private:
     void ReduceRows_(matrix_size_type current_i);
-
-    void DetermineRoots_();
 };
 
 class SleGaussianParellel : public SleGaussianParent{
 public:
-    SleGaussianParellel(matrix_type_reference graph);
+    SleGaussianParellel(matrix_type_reference matrix);
 
 private:
     void ReduceRows_(matrix_size_type current_i);
-
-    void DetermineRoots_();
 };
 
 }
