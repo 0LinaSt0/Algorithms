@@ -61,12 +61,12 @@ Graph<T>& Graph<T>::operator=(Graph<T>&& other){
 }
 
 template< class T >
-typename Graph<T>::size_type Graph<T>::NodesSize() const{
+typename Graph<T>::parent_type::size_type Graph<T>::NodesSize() const{
     return parent_type::RowsSize();
 }
 
 template< class T >
-typename Graph<T>::size_type Graph<T>::MinSpanningTreeSize() const{
+typename Graph<T>::parent_type::ize_type Graph<T>::MinSpanningTreeSize() const{
     return min_spanning_tree_size_;
 }
 
@@ -214,14 +214,16 @@ std::string Graph<T>::GraphDotRepresentation_(){
 
 template< class type >
 std::ostream& operator<<(std::ostream& out, const s21::Graph<type>& graph){
-    for (size_t x = 0; x < graph.NodesSize(); x++){
-    for (size_t y = 0; y < graph.NodesSize(); y++){
-        out << graph.at(x, y);
-        if (y + 1 != graph.NodesSize()) out << "\t";
-        else out << std::endl;
-    }
-    }
+    // for (size_t x = 0; x < graph.NodesSize(); x++){
+    // for (size_t y = 0; y < graph.NodesSize(); y++){
+    //     out << graph.at(x, y);
+    //     if (y + 1 != graph.NodesSize()) out << "\t";
+    //     else out << std::endl;
+    // }
+    // }
+    out << 
     return out
+            << dynamic_cast<s21::Matrix<type>>(graph)
             << std::endl
             << "IsDirected: " << graph.IsDirected() << std::endl
             << "IsConnected: " << graph.IsConnected() << std::endl

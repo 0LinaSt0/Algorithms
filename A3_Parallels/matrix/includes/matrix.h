@@ -45,12 +45,12 @@ public:
     /**
      * @return value of the cell with [row][col] coordinates
      */
-    value_type at(size_type row, size_type col);
+    value_type At(size_type row, size_type col);
 
     /**
      * @return value of the cell with [row][col] coordinates
      */
-    value_type at(size_type row, size_type col) const;
+    value_type At(size_type row, size_type col) const;
 
     /**
      * @return the number of rows in Matrix

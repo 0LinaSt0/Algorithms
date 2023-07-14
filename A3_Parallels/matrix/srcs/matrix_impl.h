@@ -47,12 +47,12 @@ typename Matrix<T>::const_reference Matrix<T>::operator[](size_type pos) const{
 }
 
 template< class T >
-typename Matrix<T>::value_type Matrix<T>::at(size_type row, size_type col){
+typename Matrix<T>::value_type Matrix<T>::At(size_type row, size_type col){
     return matrix_[row][col];
 }
 
 template< class T >
-typename Matrix<T>::value_type Matrix<T>::at(size_type row, size_type col) const{
+typename Matrix<T>::value_type Matrix<T>::At(size_type row, size_type col) const{
     return matrix_[row][col];
 }
 
@@ -138,7 +138,7 @@ int Matrix<T>::GeneralFromFileValidation_(std::string filename,
                                         std::ifstream& file_stream){
     if (matrix_.size()){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
-                    "Current 1 is not emtpy");
+                    "Current matrix is not emtpy");
         return 0;
     }
 

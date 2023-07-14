@@ -19,8 +19,8 @@ class Graph : public Matrix<T>{
 public:
     using parent_type       = Matrix<T>;
     using graph_type        = typename parent_type::matrix_type;
-    using size_type         = typename parent_type::size_type;
-    using row_matrix_type   = typename parent_type::row_matrix_type;
+    // using size_type         = typename parent_type::size_type; DELETEME
+    // using row_matrix_type   = typename parent_type::row_matrix_type; DELETEME
 
     Graph();
     Graph(const Graph& other) = default;
