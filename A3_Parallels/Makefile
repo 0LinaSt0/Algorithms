@@ -1,156 +1,155 @@
-MAIN_EXE	=	SimpleNavigator.out
-TEST_EXE	=	test.out
-GRAPH_LIB	=	graph.a
-ALGO_LIB	=	graph_algorithms.a
+##############################
+### ~~ Common variables ~~ ###
+##############################
 
-CC			=	g++
-GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g \
-					-fsanitize=leak -fsanitize=undefined -fsanitize=address
+MAIN_EXE	=	Parallels.out
+TEST_EXE	=	test.out
 
 TEST_DIR	=	tests
 TMP_DIR		=	tmp_handlers
 
+CC			=	g++
+GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g		\
+					-fsanitize=leak -fsanitize=undefined -fsanitize=address
+
+###########################
+### ~~ Project files ~~ ###
+###########################
+
 ### HEADERS ###
-HDRS_CONT	=	$(addprefix containers/, 									\
-					$(addprefix stack/,										\
-						$(addprefix includes/,								\
-							stack.hpp										\
+PRJ_HDRS_ALGO	=	$(addprefix algorithms/,								\
+						$(addprefix ACO/,									\
+							$(addprefix includes/,							\
+								aco.h										\
+							)												\
 						)													\
-					)														\
-					$(addprefix queue/,										\
-						$(addprefix includes/,								\
-							queue.hpp										\
+						$(addprefix SLE/,									\
+							$(addprefix includes/,							\
+								sle_gaussian.h								\
+							)												\
 						)													\
-					)														\
-				)
-HDRS_CLI	=	$(addprefix cli/,											\
-					$(addprefix includes/,									\
-						cli.h	timer.hpp									\
-					)														\
-				)
-HDRS_GRAPH	=	$(addprefix graph/,											\
-					$(addprefix includes/,									\
-						s21_graph.h											\
-					)														\
-				)
-HDRS_ALGO	=	$(addprefix graph/,											\
-					$(addprefix includes/,									\
-						s21_graph_algorithms.h								\
-					)														\
-				)
-HDRS_UTILS	=	$(addprefix utils/,											\
-					$(addprefix includes/,									\
-						ant.hpp												\
-						antAlgorithmUtils.hpp								\
-						branchBoundMethodAlgorithmUtils.hpp					\
-						pathNodeMatrix.hpp									\
-						utils.h											\
-					)														\
-				)
-HDRS		=	$(HDRS_CONT) $(HDRS_CLI) $(HDRS_GRAPH) 						\
-					$(HDRS_ALGO) $(HDRS_UTILS)
+						$(addprefix Winograd/,								\
+							$(addprefix includes/,							\
+								winograd.h									\
+							)												\
+						)													\
+					)
+PRJ_HDRS_CLI	=	$(addprefix cli/,										\
+						$(addprefix includes/,								\
+							cli.h  cli_aco.h  cli_sle.h						\
+								cli_winograd.h  timer.h						\
+						)													\
+					)
+PRJ_HDRS_MTRX	=	$(addprefix matrix/,									\
+						$(addprefix includes/,								\
+							matrix.h s21_graph.h							\
+						)													\
+					)
+PRJ_HDRS_UTIL	=	$(addprefix utils/,										\
+						$(addprefix includes/,								\
+							exception.h utils.h								\
+						)													\
+					)
+PRJ_HDRS		=	$(PRJ_HDRS_ALGO) $(PRJ_HDRS_CLI) $(PRJ_HDRS_MTRX)		\
+						$(PRJ_HDRS_UTIL)
 
 ### SOURCES ###
-SRCS_UTILS	=	$(addprefix utils/,											\
-					$(addprefix srcs/,										\
-						ant.cpp												\
-						antAlgorithmUtils.cpp								\
-						branchBoundMethodAlgorithmUtils.cpp					\
-						pathNodeMatrix.cpp									\
-						utils.cc											\
-					)														\
-				)															
-SRCS_CLI	=	$(addprefix cli/,											\
-					$(addprefix srcs/,										\
-						cli.cc	timer.cpp									\
-					)														\
-				)															
-SRCS_GRAPH	=	$(addprefix graph/,											\
-					$(addprefix srcs/,										\
-						s21_graph.cpp										\
-					)														\
-				)
-SRCS_ALGO	=	$(addprefix graph/,											\
-					$(addprefix srcs/,										\
-						s21_graph_algorithms.cpp							\
-					)														\
-				)
-SRCS_MAIN	=	./main.cpp										
-SRCS		=	$(SRCS_UTILS) $(SRCS_CLI) $(SRCS_GRAPH) \
-					$(SRCS_ALGO) $(SRCS_MAIN)
+PRJ_SRCS_ALGO	=	$(addprefix algorithms/,								\
+						$(addprefix ACO/,									\
+							$(addprefix srcs/,								\
+								aco.cc										\
+							)												\
+						)													\
+						$(addprefix SLE/,									\
+							$(addprefix srcs/,								\
+								sle_gaussian.cc								\
+							)												\
+						)													\
+						$(addprefix Winograd/,								\
+							$(addprefix srcs/,								\
+								winograd.cc									\
+							)												\
+						)													\
+					)
+PRJ_SRCS_CLI	=	$(addprefix cli/,										\
+						$(addprefix srcs/,									\
+							cli.cc cli_aco.cc cli_sle.cc					\
+								cli_winograd.cc timer.cc					\
+						)													\
+					)
+PRJ_SRCS_MTRX	=	
+PRJ_SRCS_UTIL	=	$(addprefix utils/,										\
+						$(addprefix srcs/,									\
+							exception.cc utils.cc							\
+						)													\
+					)
+PRJ_SRCS_MAIN	=	main.cc
+PRJ_SRCS		=	$(PRJ_SRCS_ALGO) $(PRJ_SRCS_CLI) $(PRJ_SRCS_MTRX)		\
+						$(PRJ_SRCS_UTIL) $(PRJ_SRCS_MAIN)
 
 ### OBJECTS ###
-OBJS_UTILS	=	$(addprefix $(TMP_DIR)/, $(SRCS_UTILS:.cpp=.o))
-OBJS_CLI	=	$(addprefix $(TMP_DIR)/, $(SRCS_CLI:.cpp=.o))
-OBJS_GRAPH	=	$(addprefix $(TMP_DIR)/, $(SRCS_GRAPH:.cpp=.o))
-OBJS_ALGO	=	$(addprefix $(TMP_DIR)/, $(SRCS_ALGO:.cpp=.o))
-OBJS_MAIN	=	$(addprefix $(TMP_DIR)/, $(SRCS_MAIN:.cpp=.o))
-OBJS		=	$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) \
-					$(OBJS_ALGO) 
+PRJ_OBJS_ALGO	=	$(addprefix $(TMP_DIR)/, $(PRJ_SRCS_ALGO:.cc=.o))
+PRJ_OBJS_CLI	=	$(addprefix $(TMP_DIR)/, $(PRJ_SRCS_CLI:.cc=.o))
+PRJ_OBJS_MTRX	=	$(addprefix $(TMP_DIR)/, $(PRJ_SRCS_MTRX:.cc=.o))
+PRJ_OBJS_UTIL	=	$(addprefix $(TMP_DIR)/, $(PRJ_SRCS_UTIL:.cc=.o))
+PRJ_OBJS_MAIN	=	$(addprefix $(TMP_DIR)/, $(PRJ_SRCS_MAIN:.cc=.o))
+PRJ_OBJS		=	$(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX)		\
+						$(PRJ_OBJS_UTIL) $(PRJ_OBJS_MAIN)
 
 ### DEPENDENCIES ###
-DPNDS		=	$(addprefix $(TMP_DIR)/, $(SRCS:.cpp=.d))
+DPNDS		=	$(PRJ_OBJS:.o=.d)
 
-TEST_HDRS	=	$(addprefix $(TEST_DIR)/,									\
-					$(addprefix containers/,								\
-						$(addprefix stack/,									\
+
+########################
+### ~~ Test files ~~ ###
+########################
+
+### HEADERS ###
+TEST_HDRS_GRAPH	=	$(addprefix $(TEST_DIR)/,								\
+						$(addprefix graph/,									\
 							$(addprefix includes/,							\
-								stack.hpp									\
+								graph.h										\
 							)												\
 						)													\
-						$(addprefix queue/,									\
-							$(addprefix includes/,							\
-								queue.hpp									\
-							)												\
-						)													\
-					)														\
-					$(addprefix graph/,										\
-						$(addprefix includes/,								\
-							graph.hpp graphAlgorithms.hpp					\
-						)													\
-					)														\
-				)
-TEST_SRCS	=	$(addprefix $(TEST_DIR)/, main.cpp							\
-					$(addprefix containers/,								\
-						$(addprefix stack/,									\
+					)
+TEST_HDRS		=	$(TEST_HDRS_GRAPH)
+
+### SOURCES ###
+TEST_SRCS_GRAPH	=	$(addprefix $(TEST_DIR)/,								\
+						$(addprefix graph/,									\
 							$(addprefix srcs/,								\
-								stack.cpp									\
+								graph.cc									\
 							)												\
 						)													\
-						$(addprefix queue/,									\
-							$(addprefix srcs/,								\
-								queue.cpp									\
-							)												\
-						)													\
-					)														\
-					$(addprefix graph/,										\
-						$(addprefix srcs/,									\
-							graph.cpp graphAlgorithms.cpp					\
-						)													\
-					)														\
-				)
-TEST_OBJS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.o))
-TEST_DPNDS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS:.cpp=.d))
+					)
+TEST_SRCS_MAIN	=	$(addprefix $(TEST_DIR)/, 								\
+						main.cc												\
+					)
+TEST_SRCS		=	$(TEST_SRCS_GRAPH) $(TEST_SRCS_MAIN)
+
+### OBJECTS ###
+TEST_OBJS_GRAPH	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_GRAPH:.cc=.o))
+TEST_OBJS_MAIN	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_MAIN:.cc=.o))
+TEST_OBJS		=	$(TEST_OBJS_GRAPH) $(TEST_OBJS_MAIN)
+
+### DEPENDENCIES ###
+TEST_DPNDS		=	$(TEST_OBJS:.o=.d)
+
+
+###################
+### ~~ Rules ~~ ###
+###################
 
 # $@						$<
-$(TMP_DIR)/%.o:				%.cpp $(TEST_HDRS) $(HDRS)
+$(TMP_DIR)/%.o:				%.cc $(TEST_HDRS) $(HDRS)
 							@mkdir -p $(dir $@)
 							$(GCC) -c -o $@ $<
 
-all:						s21_graph_algorithms.a $(OBJS_CLI) $(OBJS_MAIN)
-							$(GCC) $(OBJS_MAIN) $(OBJS_CLI) \
-								$(ALGO_LIB) -o $(MAIN_EXE)
-	
-s21_graph.a:				$(OBJS_GRAPH) $(OBJS_UTILS)
-							@ar sr $(GRAPH_LIB) $(OBJS_GRAPH) $(OBJS_UTILS)
+all:						$(PRJ_OBJS)
+							$(GCC) $(PRJ_OBJS) -o $(MAIN_EXE)
 
-s21_graph_algorithms.a:		$(OBJS_GRAPH) $(OBJS_UTILS) $(OBJS_ALGO)
-							@ar sr $(ALGO_LIB) $(OBJS_GRAPH) \
-								$(OBJS_UTILS) $(OBJS_ALGO)
-
-test:						$(OBJS_UTILS) $(OBJS_CLI) $(OBJS_GRAPH) $(OBJS_ALGO) $(TEST_OBJS)
-							$(GCC) $(OBJS_UTILS) $(OBJS_GRAPH) $(OBJS_CLI) \
-								$(OBJS_ALGO) $(TEST_OBJS) -o $(TEST_EXE)
+test:						$(PRJ_OBJS) $(TEST_OBJS)
+							$(GCC) $(PRJ_OBJS) $(TEST_OBJS) -o $(TEST_EXE)
 
 clean:						
 							@rm -rf $(TMP_DIR)
@@ -158,9 +157,9 @@ clean:
 fclean:						clean
 							@rm -f $(MAIN_EXE)
 							@rm -f $(TEST_EXE)
-							@rm -f $(GRAPH_LIB)
-							@rm -f $(ALGO_LIB)
 
 re:							fclean all
 
-.PHONY: s21_graph.a algo_lib test clean fclean re
+-include $(DPNDS) $(TEST_DPNDS)
+
+.PHONY: test clean fclean re

@@ -1,4 +1,4 @@
-#include "../includes/s21_graph.h"
+#include "../includes/graph.h"
 
 namespace s21::tests::graph{
 
