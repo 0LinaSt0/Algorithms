@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <memory>
+#include <thread>
+#include <mutex>
 
 #include "../../utils/includes/utils.h"
 #include "../../matrix/includes/matrix.h"
@@ -66,11 +68,16 @@ private:
     void ReduceRows_(matrix_size_type current_i);
 };
 
+// https://habr.com/ru/articles/182610/
 class SleGaussianParellel : public SleGaussianParent{
 public:
+    using mutex_type    = std::recursive_mutex;
+
     SleGaussianParellel(matrix_type_reference matrix);
 
 private:
+    mutex_type lock_;
+
     void ReduceRows_(matrix_size_type current_i);
 };
 

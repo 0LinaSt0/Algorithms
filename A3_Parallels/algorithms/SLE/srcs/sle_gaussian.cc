@@ -137,4 +137,30 @@ void SleGaussianUsual::ReduceRows_(matrix_size_type current_i){
     }
 }
 
+
+SleGaussianParellel::SleGaussianParellel(matrix_type_reference matrix)
+    : SleGaussianParent(matrix){}
+
+void SleGaussianParellel::ReduceRows_(matrix_size_type current_i){
+    // double current_multiplier;
+
+    // current_multiplier = 0;
+    // for(matrix_size_type row_i = current_i + 1;
+    //     row_i < equations_count_;
+    //     row_i++
+    // ){
+    //     // HERE MATRIX ELEMENTS SHOULD BE DOUBLE TYPE
+    //     current_multiplier = (*matrix_)[row_i][current_i] /
+    //                             (*matrix_)[current_i][current_i];
+    //     for(matrix_size_type column_i = current_i;
+    //         column_i <= roots_count_; // <= because we need to reduse and the right hand side of equation
+    //         column_i++
+    //     ){
+    //         // HERE ALL IT SHOULD BE SAVED TO DOUBLE ARRAY
+    //         (*matrix_)[row_i][column_i] -=
+    //                     (*matrix_)[current_i][column_i] * current_multiplier;
+    //     }
+    // }
+}
+
 }
