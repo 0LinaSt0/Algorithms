@@ -8,12 +8,20 @@
 #include <vector>
 
 #include "../../utils/includes/utils.h"
+#include "../../utils/includes/exception.h"
 
 namespace s21{
 
 template < class T >
 class Matrix{
 public:
+    friend std::ostream& operator<<(
+        std::ostream& out, 
+        const s21::Matrix<T>& matrix
+    ){
+        return out << matrix.matrix_;
+    }
+
     using value_type                = T;
     using row_matrix_type           = std::vector<value_type>;
     using matrix_type               = std::vector<row_matrix_type>;
@@ -26,21 +34,17 @@ public:
     using reverse_const_iterator_type
                                 = typename matrix_type::const_reverse_iterator;
 
-    Matrix() = default;
+    Matrix() = delete;
     Matrix(const Matrix& other) = default;
     Matrix(Matrix&& other) = default;
     Matrix(const matrix_type& inp_matrix);
     Matrix(matrix_type&& inp_matrix);
-    ~Matrix() = default;
+    virtual ~Matrix() = default;
 
     Matrix& operator=(const Matrix& other);
     Matrix& operator=(Matrix&& other);
     reference operator[](size_type pos);
     const_reference operator[](size_type pos) const;
-
-    // matrix_type& DELETEME(){
-    //     return matrix_;
-    // }
 
     /**
      * @return value of the cell with [row][col] coordinates
@@ -103,22 +107,20 @@ public:
     reverse_const_iterator_type Rend() const;
 
     /**
-     * Loading a matrix from a file [filename] in the adjacency matrix format
-     * @return true if successful loading
-     * @return false if not successful loading
+     * Load matrix from a file [filename] in the adjacency matrix format
+     * @return new Matrix<T> object
+     * @throw MatrixException on invalid file
      */
-    virtual bool LoadFromFile(std::string filename);
+    static Matrix<T> LoadFromFile(const std::string& filename);
 
 protected:
     matrix_type matrix_;
 
-    /**
-     * Checking general validity of matrix from a file [filename]
-     * @return positive number of reserved matrix_ capacity if successful
-     * @return zero if not successful
-     */
-    int GeneralFromFileValidation_(std::string filename,
-                                std::ifstream& file_stream);
+    static Matrix<T> LoadMatrixFromFile_(
+        std::ifstream& input_file_stream,
+        int rows_count,
+        int columns_count
+    );
 
     /**
      * Checking validity of matrix_
@@ -127,15 +129,28 @@ protected:
      * @attention the method frees the matrix_ if it's not validity
      */
     bool IsMatrixValid_();
+
+private:
+    class MatrixException : public ::s21::Exception{
+    public:
+        MatrixException() = delete;
+        MatrixException(const std::string& msg);
+        MatrixException(MatrixException&&) = delete;
+        ~MatrixException() = default;
+
+        MatrixException& operator=(const MatrixException&) = delete;
+        MatrixException& operator=(MatrixException&&) = delete;
+
+        std::string GetMessage() const;
+    };
+
+    /**
+     * @throw MatrixException if current matrix is not empty
+    */
+    void ThrowOnNonEmptyMatrix_() const;
 };
 
 }
-
-/**
- * Overload of operator for printing Matrix's content
- */
-template <class type>
-std::ostream& operator<<(std::ostream& out, const s21::Matrix<type>& matrix);
 
 #include "../srcs/matrix_impl.h"
 

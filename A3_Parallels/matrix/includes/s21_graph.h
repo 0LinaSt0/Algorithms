@@ -9,6 +9,7 @@
 
 #include "matrix.h"
 #include "../../utils/includes/utils.h"
+#include "../../utils/includes/exception.h"
 
 namespace fs = std::filesystem;
 
@@ -17,18 +18,31 @@ namespace s21{
 template< class T >
 class Graph : public Matrix<T>{
 public:
-    using parent_type       = Matrix<T>;
-    using graph_type        = typename parent_type::matrix_type;
-    // using size_type         = typename parent_type::size_type; DELETEME
-    // using row_matrix_type   = typename parent_type::row_matrix_type; DELETEME
+    template <typename Type>
+    friend std::ostream& operator<<(
+        std::ostream& out,
+        const Graph<Type>& graph
+    ){
+        return out 
+            << dynamic_cast<const ::s21::Matrix<Type>&>(graph) << std::endl
+            << "is directed:\t" << graph.is_directed_ << std::endl
+            << "is connected:\t" << graph.is_connected_;
+    }
 
-    Graph();
+    using parent_type       = Matrix<T>;
+    using matrix_type       = typename parent_type::matrix_type;
+    using size_type         = typename parent_type::size_type;
+    using row_matrix_type   = typename parent_type::row_matrix_type;
+
+    Graph() = delete;
+    Graph(const Matrix<T>& inp_mtrx);
+    Graph(Matrix<T>&& inp_mtrx);
     Graph(const Graph& other) = default;
     Graph(Graph&& other) = default;
-    Graph(const graph_type& inp_graph);
-    Graph(graph_type&& inp_graph);
-    Graph(const graph_type& inp_graph, size_type min_spanning_tree_size);
-    Graph(graph_type&& inp_graph, size_type min_spanning_tree_size);
+    Graph(const matrix_type& inp_graph);
+    Graph(matrix_type&& inp_graph);
+    Graph(const matrix_type& inp_graph, size_type min_spanning_tree_size);
+    Graph(matrix_type&& inp_graph, size_type min_spanning_tree_size);
     ~Graph() = default;
 
     Graph& operator=(const Graph& other);
@@ -57,16 +71,19 @@ public:
     bool IsConnected() const;
 
     /**
-     * Loading a graph from a file [filename] in the adjacency matrix format
-     * @return true if successful loading
-     * @return false if not successful loading
+     * Load graph from a file [filename] in the adjacency matrix format
+     * @return new Graph<T> object
+     * @throw GraphException on invalid file
      */
-    bool LoadFromFile(std::string filename);
+    static Graph<T> LoadFromFile(const std::string& filename);
 
     /**
      * Exporting a graph to a dot file [filename]
      */
-    void ExportGraphToDot(std::string filename);
+    static void ExportGraphToDot(
+                    const Graph<T> graph,
+                    const std::string& filename
+    );
 
 private:
     bool is_directed_;
@@ -80,23 +97,30 @@ private:
      * Check [filename] on validity and generate the file name
      * @return std::string with dot filename
      */
-    std::string DotFilename_(std::string& filename);
+    static std::string DotFilename_(const std::string& filename);
 
     /**
      * Represent Graph to one srting in dot format
      * @return std::string with Graph's content for dot file
      */
-    std::string GraphDotRepresentation_();
+    static std::string GraphDotRepresentation_(const Graph<T> graph);
+
+    class GraphException : public ::s21::Exception{
+    public:
+        GraphException() = delete;
+        GraphException(const std::string& msg);
+        GraphException(GraphException&&) = delete;
+        ~GraphException() = default;
+
+        GraphException& operator=(const GraphException&) = delete;
+        GraphException& operator=(GraphException&&) = delete;
+
+        std::string GetMessage() const;
+    };
 
 };
 
 }
-
-/**
- * Overload of operator for printing all Graph's content
- */
-template <class type>
-std::ostream& operator<<(std::ostream& out, const s21::Graph<type>& graph);
 
 #include "../srcs/s21_graph_impl.h"
 

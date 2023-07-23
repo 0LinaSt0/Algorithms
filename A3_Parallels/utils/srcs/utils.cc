@@ -37,14 +37,14 @@ bool DoubleCompare(double a, double b){
 }
 
 std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result){
-    out
+    return out
         << "distance: " << tsm_result.distance << std::endl
-        << "vertices: " << std::endl;
+        << "vertices: " << std::endl
+        << tsm_result.vertices;
+}
 
-    for (size_t i = 0; i < tsm_result.vertices.size(); i++){
-        out << tsm_result.vertices[i];
-        if (i + 1 != tsm_result.vertices.size()) out << "->";
-    }
-
-    return out;
+std::ostream& operator<<(std::ostream& out, const s21::SleResult& sle_result){
+    return out
+        << "vertices: " << std::endl
+        << sle_result.equation_roots;
 }

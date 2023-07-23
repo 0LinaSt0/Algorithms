@@ -70,3 +70,26 @@ bool DoubleCompare(double a, double b);
 }
 
 std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result);
+std::ostream& operator<<(std::ostream& out, const s21::SleResult& sle_result);
+
+template <typename T>
+std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){
+    for (size_t i = 0; i < v.size(); i++){
+        out << v[i] << " ";
+    }
+
+    return out;
+}
+
+template <typename T>
+std::ostream& operator<<(
+    std::ostream& out, 
+    const std::vector<std::vector<T>>& v
+){
+    for (size_t i = 0; i < v.size(); i++){
+        out << v[i];
+        if (i + 1 != v.size()) out << std::endl;
+    }
+
+    return out;
+}

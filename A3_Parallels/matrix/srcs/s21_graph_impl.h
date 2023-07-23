@@ -6,32 +6,42 @@
 namespace s21{
 
 template< class T >
-Graph<T>::Graph()
-    : is_directed_(0), is_connected_(0), min_spanning_tree_size_(0){ }
-
-template< class T >
-Graph<T>::Graph(const graph_type& inp_graph) : parent_type(inp_graph){
+Graph<T>::Graph(const Matrix<T>& inp_mtrx) : parent_type(inp_mtrx) {
     min_spanning_tree_size_ = 0;
     is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
 }
 
 template< class T >
-Graph<T>::Graph(graph_type&& inp_graph) : parent_type(std::move(inp_graph)){
+Graph<T>::Graph(Matrix<T>&& inp_mtrx) : parent_type(std::move(inp_mtrx)) {
     min_spanning_tree_size_ = 0;
     is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
 }
 
 template< class T >
-Graph<T>::Graph(const graph_type& inp_graph, size_type min_spanning_tree_size)
+Graph<T>::Graph(const matrix_type& inp_graph) : parent_type(inp_graph){
+    min_spanning_tree_size_ = 0;
+    is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
+}
+
+template< class T >
+Graph<T>::Graph(matrix_type&& inp_graph) : parent_type(std::move(inp_graph)){
+    min_spanning_tree_size_ = 0;
+    is_directed_ = IsDirected_();
+    is_connected_ = IsConnected_();
+}
+
+template< class T >
+Graph<T>::Graph(const matrix_type& inp_graph, size_type min_spanning_tree_size)
     : parent_type(inp_graph), min_spanning_tree_size_(min_spanning_tree_size) {
     is_directed_ = IsDirected_();
     is_connected_ = IsConnected_();
 }
 
 template< class T >
-Graph<T>::Graph(graph_type&& inp_graph, size_type min_spanning_tree_size)
+Graph<T>::Graph(matrix_type&& inp_graph, size_type min_spanning_tree_size)
     : parent_type(std::move(inp_graph)),
         min_spanning_tree_size_(min_spanning_tree_size) {
     is_directed_ = IsDirected_();
@@ -40,6 +50,7 @@ Graph<T>::Graph(graph_type&& inp_graph, size_type min_spanning_tree_size)
 
 template< class T >
 Graph<T>& Graph<T>::operator=(const Graph<T>& other){
+    if (this == &other) return *this;
     parent_type::operator=(other);
     if (!parent_type::matrix_.size()){
         min_spanning_tree_size_ = other.min_spanning_tree_size_;
@@ -51,6 +62,7 @@ Graph<T>& Graph<T>::operator=(const Graph<T>& other){
 
 template< class T >
 Graph<T>& Graph<T>::operator=(Graph<T>&& other){
+    if (this == &other) return *this;
     parent_type::operator=(other);
     if (!parent_type::matrix_.size()){
         min_spanning_tree_size_ = other.min_spanning_tree_size_;
@@ -66,7 +78,7 @@ typename Graph<T>::parent_type::size_type Graph<T>::NodesSize() const{
 }
 
 template< class T >
-typename Graph<T>::parent_type::ize_type Graph<T>::MinSpanningTreeSize() const{
+typename Graph<T>::parent_type::size_type Graph<T>::MinSpanningTreeSize() const{
     return min_spanning_tree_size_;
 }
 
@@ -81,42 +93,36 @@ bool Graph<T>::IsConnected() const{
 }
 
 template< class T >
-bool Graph<T>::LoadFromFile(std::string filename){
+Graph<T> Graph<T>::LoadFromFile(const std::string& filename){
     std::ifstream file_stream;
-    int size;
+    int rows_count, columns_count;
 
-    size = parent_type::GeneralFromFileValidation_(filename, file_stream);
-    if (size){
-        for (int i = 0; i < size; i++){
-            row_matrix_type row;
-            row.reserve(size);
-            for (int j = 0; j < size; j++){
-                int val;
-                if (!(file_stream >> val)){
-                    PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
-                                    "Invalid file line");
-                    parent_type::matrix_.clear();
-                    return false;
-                }
-                if (val < 0){
-                    PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
-                                    "Vertex value must be non-negative");
-                    parent_type::matrix_.clear();
-                    return false;
-                }
-                row.push_back(val);
-            }
-            parent_type::matrix_.push_back(std::move(row));
-        }
-        is_directed_ = IsDirected_();
-        is_connected_ = IsConnected_();
-        return true;
+    // Open file
+    std::ifstream input_file_stream;
+    input_file_stream.open(filename);
+    if (!input_file_stream.is_open()){
+        throw GraphException("Cannot open file: " + filename);
     }
-    return false;
+
+    // Read rows and columns count
+    input_file_stream >> rows_count;
+    input_file_stream >> columns_count;
+    if (rows_count < 1 || columns_count < 1 || rows_count != columns_count){
+        throw GraphException("Columns or rows count cannot be non-positive");
+    }
+
+    return Graph<T>(Matrix<T>::LoadMatrixFromFile_(
+                        input_file_stream,
+                        rows_count,
+                        columns_count
+                    ));
 }
 
 template< class T >
-void Graph<T>::ExportGraphToDot(std::string filename){
+void Graph<T>::ExportGraphToDot(
+    const Graph<T> graph,
+    const std::string& filename
+){
     try{
         std::string&& file = DotFilename_(filename);
         fs::path result_path = ROOT_DIR / DOTS_PATH / file;
@@ -166,7 +172,7 @@ bool Graph<T>::IsConnected_() const{
 }
 
 template< class T >
-std::string Graph<T>::DotFilename_(std::string& filename){
+std::string Graph<T>::DotFilename_(const std::string& filename){
     if (filename.empty()){
         return DEFAULT_DOT_NAME;
     }
@@ -181,20 +187,20 @@ std::string Graph<T>::DotFilename_(std::string& filename){
 }
 
 template< class T >
-std::string Graph<T>::GraphDotRepresentation_(){
-    std::string graph_dot = (is_directed_ ? "digraph" : "graph") +
+std::string Graph<T>::GraphDotRepresentation_(const Graph<T> graph){
+    std::string graph_dot = (graph.is_directed_ ? "digraph" : "graph") +
                             std::string(" graphname {\n");
-    std::string dash = (is_directed_ ? " -> " : " -- ");
+    std::string dash = (graph.is_directed_ ? " -> " : " -- ");
     std::string startline = "\t";
     std::string endline = ";\n";
 
-    for(size_type i = 0; i < graph_.size(); i++){
+    for(size_type i = 0; i < ::s21::Matrix<T>::matrix_.size(); i++){
         graph_dot += startline + std::to_string(i) + endline;
     }
 
-    for(size_type row = 0; row < graph_.size(); row++){
-        for(size_type col = 0; col < graph_.size(); col++){
-            if (graph_[row][col] > 0){
+    for(size_type row = 0; row < ::s21::Matrix<T>::matrix_.size(); row++){
+        for(size_type col = 0; col < ::s21::Matrix<T>::matrix_.size(); col++){
+            if (::s21::Matrix<T>::matrix_[row][col] > 0){
                 graph_dot += startline +
                             std::to_string(row) +
                             dash +
@@ -208,14 +214,15 @@ std::string Graph<T>::GraphDotRepresentation_(){
     return graph_dot;
 }
 
+template< class T >
+Graph<T>::GraphException::GraphException(const std::string& msg)
+    : ::s21::Exception(msg) {
+
 }
 
-template< class type >
-std::ostream& operator<<(std::ostream& out, const s21::Graph<type>& graph){
-    return out
-            << dynamic_cast<s21::Matrix<type>>(graph)
-            << std::endl
-            << "IsDirected: " << graph.IsDirected() << std::endl
-            << "IsConnected: " << graph.IsConnected() << std::endl
-            << "Min spanning tree size: " << graph.MinSpanningTreeSize();
+template< class T >
+std::string Graph<T>::GraphException::GetMessage() const{
+    return ::s21::Exception::msg_;
 }
+
+} // namespace s21

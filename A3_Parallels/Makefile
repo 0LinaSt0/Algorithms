@@ -2,6 +2,8 @@
 ### ~~ Common variables ~~ ###
 ##############################
 
+GTEST		=	false
+
 MAIN_EXE	=	Parallels.out
 TEST_EXE	=	test.out
 
@@ -9,8 +11,13 @@ TEST_DIR	=	tests
 TMP_DIR		=	tmp_handlers
 
 CC			=	g++
-GCC			=	$(CC) -std=c++17 -Wall -Wextra -Werror -lgtest -MMD -g		\
+ifeq ($(GTEST), true)
+	GCC		=	$(CC) -std=c++17 -lgtest -Wall -Wextra -Werror -MMD -g		\
 					-fsanitize=leak -fsanitize=undefined -fsanitize=address
+else
+	GCC		=	$(CC) -std=c++17 -Wall -Wextra -Werror -MMD -g				\
+					-fsanitize=leak -fsanitize=undefined -fsanitize=address
+endif
 
 ###########################
 ### ~~ Project files ~~ ###
@@ -42,7 +49,10 @@ PRJ_HDRS_CLI	=	$(addprefix cli/,										\
 					)
 PRJ_HDRS_MTRX	=	$(addprefix matrix/,									\
 						$(addprefix includes/,								\
-							matrix.h s21_graph.h							\
+							matrix.h s21_graph.h sle.h						\
+						)													\
+						$(addprefix srcs/,									\
+							matrix.h s21_graph.h sle_impl.h					\
 						)													\
 					)
 PRJ_HDRS_UTIL	=	$(addprefix utils/,										\
@@ -77,7 +87,11 @@ PRJ_SRCS_CLI	=	$(addprefix cli/,										\
 								cli_winograd.cc timer.cc					\
 						)													\
 					)
-PRJ_SRCS_MTRX	=	
+PRJ_SRCS_MTRX	=	$(addprefix matrix/,									\
+						$(addprefix srcs/,									\
+																			\
+						)													\
+					)
 PRJ_SRCS_UTIL	=	$(addprefix utils/,										\
 						$(addprefix srcs/,									\
 							exception.cc utils.cc							\
@@ -105,32 +119,47 @@ DPNDS		=	$(PRJ_OBJS:.o=.d)
 ########################
 
 ### HEADERS ###
-TEST_HDRS_GRAPH	=	$(addprefix $(TEST_DIR)/,								\
-						$(addprefix graph/,									\
+TEST_HDRS_MTRX	=	$(addprefix $(TEST_DIR)/,								\
+						$(addprefix matrix/,								\
 							$(addprefix includes/,							\
-								graph.h										\
+								matrix.h graph.h							\
 							)												\
 						)													\
 					)
-TEST_HDRS		=	$(TEST_HDRS_GRAPH)
+TEST_HDRS_UTILS	=	$(addprefix $(TEST_DIR)/,								\
+						$(addprefix test_utils/,							\
+							$(addprefix includes/,							\
+								assert.h									\
+							)												\
+						)													\
+					)
+TEST_HDRS		=	$(TEST_HDRS_MTRX) $(TEST_HDRS_UTILS)
 
 ### SOURCES ###
-TEST_SRCS_GRAPH	=	$(addprefix $(TEST_DIR)/,								\
-						$(addprefix graph/,									\
+TEST_SRCS_MTRX	=	$(addprefix $(TEST_DIR)/,								\
+						$(addprefix matrix/,								\
 							$(addprefix srcs/,								\
-								graph.cc									\
+								matrix.cc graph.cc							\
 							)												\
 						)													\
 					)
+TEST_SRCS_UTILS	=	$(addprefix $(TEST_DIR)/,								\
+						$(addprefix test_utils/,							\
+							$(addprefix srcs/,								\
+								assert.cc									\
+							)												\
+						)													\
+					)					
 TEST_SRCS_MAIN	=	$(addprefix $(TEST_DIR)/, 								\
 						main.cc												\
 					)
-TEST_SRCS		=	$(TEST_SRCS_GRAPH) $(TEST_SRCS_MAIN)
+TEST_SRCS		=	$(TEST_SRCS_MTRX) $(TEST_SRCS_UTILS) $(TEST_SRCS_MAIN)
 
 ### OBJECTS ###
-TEST_OBJS_GRAPH	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_GRAPH:.cc=.o))
+TEST_OBJS_MTRX	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_MTRX:.cc=.o))
+TEST_OBJS_UTILS	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_UTILS:.cc=.o))
 TEST_OBJS_MAIN	=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_MAIN:.cc=.o))
-TEST_OBJS		=	$(TEST_OBJS_GRAPH) $(TEST_OBJS_MAIN)
+TEST_OBJS		=	$(TEST_OBJS_MTRX) $(TEST_OBJS_MAIN) $(TEST_OBJS_UTILS)
 
 ### DEPENDENCIES ###
 TEST_DPNDS		=	$(TEST_OBJS:.o=.d)
@@ -148,8 +177,11 @@ $(TMP_DIR)/%.o:				%.cc $(TEST_HDRS) $(HDRS)
 all:						$(PRJ_OBJS)
 							$(GCC) $(PRJ_OBJS) -o $(MAIN_EXE)
 
-test:						$(PRJ_OBJS) $(TEST_OBJS)
-							$(GCC) $(PRJ_OBJS) $(TEST_OBJS) -o $(TEST_EXE)
+test:						$(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
+								$(PRJ_OBJS_UTIL) $(TEST_OBJS)
+							$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
+								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) $(TEST_OBJS) \
+								-o $(TEST_EXE)
 
 clean:						
 							@rm -rf $(TMP_DIR)
