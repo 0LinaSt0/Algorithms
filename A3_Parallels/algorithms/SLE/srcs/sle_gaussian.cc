@@ -15,9 +15,10 @@ SleGaussianParent::result_roots_type SleGaussianParent::GaussianElimination(){
     }
 
     for(matrix_size_type current_i = 0;
-        current_i < equations_count_ - 1; // => Not sure about -1 but (as i understood) we don't need to check the last equation
+        current_i < matrix_->ColumnsSize() - 1;
         current_i++
     ){
+        // std::cout << (*matrix_)[current_i] << std::endl;
         if(DoubleCompare((*matrix_)[current_i][current_i], 0) && 
             SwapRow_(current_i)
         ){
@@ -114,6 +115,7 @@ bool SleGaussianParent::DetermineSingular_(){
     }
 
     if(is_singular){
+        // std::cout << "HRR: " << DoubleCompare(*(last_equation_it->rbegin()),0) << std::endl;
         // If the right hand side equal zero value the SLE has many solutions
         if(DoubleCompare(*(last_equation_it->rbegin()),0)){
             PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
