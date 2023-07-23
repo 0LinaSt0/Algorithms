@@ -23,6 +23,12 @@ void ReadOnlyPermissions(std::string& filepath){
     );
 }
 
+void JoinThreads(threads_array_type threads_array){
+    for(auto &thread : threads_array){
+        thread.join();
+    }
+}
+
 }
 
 std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result){

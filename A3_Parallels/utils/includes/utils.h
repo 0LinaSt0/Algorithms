@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <thread>
 
 #define PRINT_ERROR(file, func, line, msg)( \
     (s21::PrintError((file), (func), (line), (msg))), \
@@ -19,6 +20,9 @@
 namespace fs = std::filesystem;
 
 namespace s21{
+
+using threads_array_type    = std::vector<std::thread>;
+
 
 const std::string INAPPROPRIATE_GRAPH_MSG = "It is impossible to solve "
                             "travelling salesman problem with current graph";
@@ -50,6 +54,11 @@ void PrintError(const std::string& filename,
  * Set permissions READ-ONLY for [filepath]
  */
 void ReadOnlyPermissions(std::string& filepath);
+
+/**
+ * Join threads from [threads_array]
+ */
+void JoinThreads(threads_array_type threads_array);
 
 }
 

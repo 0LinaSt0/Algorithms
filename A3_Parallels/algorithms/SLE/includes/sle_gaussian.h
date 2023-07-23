@@ -11,6 +11,8 @@
 
 namespace s21{
 
+struct Multiplier;
+
 class SleGaussianParent{
 public:
     using matrix_type               = Matrix<double>;
@@ -68,10 +70,9 @@ private:
     void ReduceRows_(matrix_size_type current_i);
 };
 
-// https://habr.com/ru/articles/182610/
 class SleGaussianParellel : public SleGaussianParent{
 public:
-    using mutex_type    = std::recursive_mutex;
+    using mutex_type            = std::recursive_mutex;
 
     SleGaussianParellel(matrix_type_reference matrix);
 
@@ -79,7 +80,21 @@ private:
     mutex_type lock_;
 
     void ReduceRows_(matrix_size_type current_i);
+
+    void ParallelReducing_(matrix_size_type row_i, matrix_size_type current_i);
+
+    void ParallelReduceRow_(matrix_size_type row_i, 
+                        matrix_size_type column_i, 
+                        matrix_size_type current_i, 
+                        double multiplier);
 };
+
+// struct Multiplier {
+//     using matrix_size_type = typename SleGaussianParent::matrix_size_type;
+
+//     double multiplier;
+//     matrix_size_type linked_row_i;
+// };
 
 }
 

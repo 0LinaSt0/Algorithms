@@ -129,12 +129,10 @@ void Graph<T>::ExportGraphToDot(std::string filename){
         std::string dot_graph = GraphDotRepresentation_();
 
         dot_file << dot_graph << std::endl;
-    }
-    catch(const std::invalid_argument& e){
+    } catch(const std::invalid_argument& e){
         std::string error = "Permission denied (filename is reserved): ";
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, error + e.what());
-    }
-    catch(...){
+    } catch(...){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, "Invalid file");
     }
 }
@@ -214,14 +212,6 @@ std::string Graph<T>::GraphDotRepresentation_(){
 
 template< class type >
 std::ostream& operator<<(std::ostream& out, const s21::Graph<type>& graph){
-    // for (size_t x = 0; x < graph.NodesSize(); x++){
-    // for (size_t y = 0; y < graph.NodesSize(); y++){
-    //     out << graph.at(x, y);
-    //     if (y + 1 != graph.NodesSize()) out << "\t";
-    //     else out << std::endl;
-    // }
-    // }
-    out << 
     return out
             << dynamic_cast<s21::Matrix<type>>(graph)
             << std::endl
