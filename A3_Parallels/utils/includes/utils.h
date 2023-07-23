@@ -60,6 +60,13 @@ void ReadOnlyPermissions(std::string& filepath);
  */
 void JoinThreads(threads_array_type& threads_array);
 
+/**
+ * Compare two doubles [a] and [b] with allowable error(precision) 1e-10
+ * @return true if [a] and [b] are equal
+ * @return false otherwise
+ */
+bool DoubleCompare(double a, double b);
+
 }
 
 std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result);

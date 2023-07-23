@@ -18,16 +18,29 @@ SleGaussianParent::result_roots_type SleGaussianParent::GaussianElimination(){
         current_i < equations_count_ - 1; // => Not sure about -1 but (as i understood) we don't need to check the last equation
         current_i++
     ){
-        if((*matrix_)[current_i][current_i] == 0 && SwapRow_(current_i)){
+        if(DoubleCompare((*matrix_)[current_i][current_i], 0) && 
+            SwapRow_(current_i)
+        ){
             continue ;
         }
         ReduceRows_(current_i);
+            // {
+            //     for(const_iterator_type row_it = matrix_->Begin();
+            //         row_it != matrix_->End();
+            //         ++row_it){
+            //         for(auto& elem : *row_it){
+            //             std::cout << elem << "  ";
+            //         }
+            //         std::cout << std::endl;
+            //     }
+            //     std::cout << std::endl << std::endl;
+            // }
     }
     DetermineResult_();
     return roots_;
 }
 
-bool SleGaussianParent::CheckCalculatedFactors(matrix_type_reference matrix){
+bool SleGaussianParent::CheckCalculatedFactors(matrix_type matrix){
     if(!roots_.equation_roots.size()){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, "Roots array is empty");
         return false;
@@ -35,6 +48,7 @@ bool SleGaussianParent::CheckCalculatedFactors(matrix_type_reference matrix){
     double current_left_side;
     
     current_left_side = 0;
+    if (matrix.RowsSize() == 1) { DeleteZeroFactorInOneEquation_(matrix); }
     for(const_iterator_type row_it = matrix.Begin();
         row_it != matrix.End();
         ++row_it, current_left_side = 0
@@ -46,7 +60,12 @@ bool SleGaussianParent::CheckCalculatedFactors(matrix_type_reference matrix){
             current_left_side += 
                             row_it->at(elem_i) * roots_.equation_roots[elem_i];
         }
-        if(current_left_side != (*row_it->rbegin())){
+        // std::cout
+        //         << current_left_side
+        //         << "   " << (*row_it->rbegin())
+        //         << "   " << DoubleCompare(current_left_side, (*row_it->rbegin()))
+        //         << std::endl;
+        if(!DoubleCompare(current_left_side, (*row_it->rbegin()))){
             return false;
         }
     }
@@ -76,21 +95,27 @@ void SleGaussianParent::DetermineResult_(){
 }
 
 bool SleGaussianParent::DetermineSingular_(){
+    bool is_singular;
     reverse_iterator_type last_equation_it = matrix_->Rbegin();
     auto is_all_roots_zero = [&last_equation_it](void) -> bool {
-        if(last_equation_it->at(0) == 0){
+        if(DoubleCompare(last_equation_it->at(0), 0)){
             return std::equal(
                 last_equation_it->begin(),
-                last_equation_it->end() - 1,
+                last_equation_it->end() - 2,
                 last_equation_it->begin() + 1
             );
         }
         return false;
     };
 
-    if(is_all_roots_zero()){
+    is_singular = is_all_roots_zero();
+    if (!is_singular && matrix_->RowsSize() == 1){
+        is_singular = IsOneEquationSingular_();
+    }
+
+    if(is_singular){
         // If the right hand side equal zero value the SLE has many solutions
-        if(*(last_equation_it->rbegin()) == 0){
+        if(DoubleCompare(*(last_equation_it->rbegin()),0)){
             PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,
                 UNSOLVABLE_MATRIX_MSG + ": SLE has infinitely many solutions");
         } else {
@@ -137,6 +162,31 @@ double SleGaussianParent::DetermineRoot_(
     return root_value;
 }
 
+bool SleGaussianParent::IsOneEquationSingular_(){
+    bool is_singular;
+
+    if (matrix_->Begin()->size() == 2) {
+        is_singular = false;
+    }
+    else if (matrix_->Begin()->size() == 3) {
+        is_singular = !DeleteZeroFactorInOneEquation_(*matrix_);
+    } else {
+        is_singular = true;
+    }
+    return is_singular;
+}
+
+bool SleGaussianParent::DeleteZeroFactorInOneEquation_(
+                                                matrix_type_reference matrix){
+    if (DoubleCompare(matrix.Begin()->at(0), 0)) {
+        matrix.Begin()->erase(matrix.Begin()->begin());
+        return true;
+    } else if (DoubleCompare(matrix.Begin()->at(1), 0)) {
+        matrix.Begin()->erase(matrix.Begin()->begin() + 1);
+        return true;
+    }
+    return false;
+}
 
 SleGaussianUsual::SleGaussianUsual(matrix_type_reference matrix)
     : SleGaussianParent(matrix){}

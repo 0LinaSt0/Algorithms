@@ -32,7 +32,7 @@ public:
 
     result_roots_type GaussianElimination();
 
-    bool CheckCalculatedFactors(matrix_type_reference matrix);
+    bool CheckCalculatedFactors(matrix_type matrix);
 
 protected:
     matrix_type_unique_ptr matrix_;
@@ -62,6 +62,10 @@ protected:
     void DetermineRoots_();
 
     double DetermineRoot_(reverse_const_iterator_type& row_rev_it);
+
+    bool IsOneEquationSingular_();
+
+    bool DeleteZeroFactorInOneEquation_(matrix_type_reference matrix);
 };
 
 class SleGaussianUsual : public SleGaussianParent{

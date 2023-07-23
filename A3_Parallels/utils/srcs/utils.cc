@@ -29,6 +29,11 @@ void JoinThreads(threads_array_type& threads_array){
     }
 }
 
+bool DoubleCompare(double a, double b){
+    const double val = 1e-10;
+    return std::abs(a - b) < val;
+}
+
 }
 
 std::ostream& operator<<(std::ostream& out, const s21::TsmResult& tsm_result){
