@@ -199,7 +199,7 @@ template <class type>
 std::ostream& operator<<(std::ostream& out, const s21::Matrix<type>& matrix){
     for (size_t x = 0; x < matrix.RowsSize(); x++){
     for (size_t y = 0; y < matrix.ColumnsSize(); y++){
-        out << matrix.at(x, y);
+        out << matrix.At(x, y);
         if (y + 1 != matrix.ColumnsSize()) out << "\t";
         else out << std::endl;
     }

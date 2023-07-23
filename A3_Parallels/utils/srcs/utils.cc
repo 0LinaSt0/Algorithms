@@ -23,7 +23,7 @@ void ReadOnlyPermissions(std::string& filepath){
     );
 }
 
-void JoinThreads(threads_array_type threads_array){
+void JoinThreads(threads_array_type& threads_array){
     for(auto &thread : threads_array){
         thread.join();
     }

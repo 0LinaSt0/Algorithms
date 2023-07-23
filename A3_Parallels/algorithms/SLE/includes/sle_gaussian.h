@@ -6,8 +6,8 @@
 #include <thread>
 #include <mutex>
 
-#include "../../utils/includes/utils.h"
-#include "../../matrix/includes/matrix.h"
+#include "../../../utils/includes/utils.h"
+#include "../../../matrix/includes/matrix.h"
 
 namespace s21{
 
@@ -31,6 +31,8 @@ public:
     ~SleGaussianParent() = default;
 
     result_roots_type GaussianElimination();
+
+    bool CheckCalculatedFactors(matrix_type_reference matrix);
 
 protected:
     matrix_type_unique_ptr matrix_;
@@ -88,13 +90,6 @@ private:
                         matrix_size_type current_i, 
                         double multiplier);
 };
-
-// struct Multiplier {
-//     using matrix_size_type = typename SleGaussianParent::matrix_size_type;
-
-//     double multiplier;
-//     matrix_size_type linked_row_i;
-// };
 
 }
 

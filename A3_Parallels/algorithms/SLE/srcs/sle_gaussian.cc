@@ -11,6 +11,7 @@ SleGaussianParent::SleGaussianParent(matrix_type_reference matrix)
 SleGaussianParent::result_roots_type SleGaussianParent::GaussianElimination(){
     if(!matrix_->RowsSize()){
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__,  "Matrix is empty");
+        return roots_;
     }
 
     for(matrix_size_type current_i = 0;
@@ -24,6 +25,32 @@ SleGaussianParent::result_roots_type SleGaussianParent::GaussianElimination(){
     }
     DetermineResult_();
     return roots_;
+}
+
+bool SleGaussianParent::CheckCalculatedFactors(matrix_type_reference matrix){
+    if(!roots_.equation_roots.size()){
+        PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, "Roots array is empty");
+        return false;
+    }
+    double current_left_side;
+    
+    current_left_side = 0;
+    for(const_iterator_type row_it = matrix.Begin();
+        row_it != matrix.End();
+        ++row_it, current_left_side = 0
+    ){
+        for(matrix_size_type elem_i = 0;
+            elem_i < (row_it->size() - 1);
+            elem_i++
+        ){
+            current_left_side += 
+                            row_it->at(elem_i) * roots_.equation_roots[elem_i];
+        }
+        if(current_left_side != (*row_it->rbegin())){
+            return false;
+        }
+    }
+    return true;
 }
 
 bool SleGaussianParent::SwapRow_(matrix_size_type swapped_i){
@@ -94,20 +121,19 @@ double SleGaussianParent::DetermineRoot_(
     using column_rev_it = matrix_type::row_matrix_type::const_reverse_iterator;
     using root_rev_it   = result_roots_type::sle_type::const_reverse_iterator;
 
-    double left_side;
+    double right_side;
     double root_value;
     column_rev_it root_factor_rev_it;
 
-    left_side = 0;
-    root_value = 0;
+    right_side = *row_rev_it->rbegin();
     root_factor_rev_it = row_rev_it->rbegin() + 1;
     for(root_rev_it root_rev_it = roots_.equation_roots.rbegin();
         root_rev_it != roots_.equation_roots.rend();
         ++root_rev_it, ++root_factor_rev_it
     ){
-        left_side -= (*root_rev_it) * (*root_factor_rev_it);
+        right_side -= (*root_rev_it) * (*root_factor_rev_it);
     }
-    root_value = ((*row_rev_it->rbegin()) - root_value) / (*root_factor_rev_it);
+    root_value = right_side / (*root_factor_rev_it);
     return root_value;
 }
 
@@ -149,14 +175,15 @@ void SleGaussianParellel::ReduceRows_(matrix_size_type current_i){
                 row_i++
             ){
                 threads_array.push_back(std::thread(
-                    ParallelReducing_, 
+                    &SleGaussianParellel::ParallelReducing_,
+                    this,
                     row_i, 
                     current_i
                 ));
             }
 
         JoinThreads(threads_array);
-    } catch(const const std::exception &e) {
+    } catch(const std::exception &e) {
         std::string error = "Threads problems: ";
         PRINT_ERROR(__FILE__, __FUNCTION__, __LINE__, error + e.what());
     }
@@ -176,7 +203,8 @@ void SleGaussianParellel::ParallelReducing_(matrix_size_type row_i,
             column_i++
     ){
         threads_array.push_back(std::thread(
-            ParallelReduceRow_, 
+            &SleGaussianParellel::ParallelReduceRow_,
+            this,
             row_i,
             column_i, 
             current_i,

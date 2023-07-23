@@ -58,7 +58,7 @@ void ReadOnlyPermissions(std::string& filepath);
 /**
  * Join threads from [threads_array]
  */
-void JoinThreads(threads_array_type threads_array);
+void JoinThreads(threads_array_type& threads_array);
 
 }
 
