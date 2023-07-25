@@ -89,9 +89,9 @@ private:
 
     void ParallelReducing_(matrix_size_type row_i, matrix_size_type current_i);
 
-    void ParallelReduceRow_(matrix_size_type row_i, 
-                        matrix_size_type column_i, 
-                        matrix_size_type current_i, 
+    void ParallelReduceRow_(matrix_size_type row_i,
+                        matrix_size_type column_i,
+                        matrix_size_type current_i,
                         double multiplier);
 };
 

@@ -83,7 +83,7 @@ std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){
 
 template <typename T>
 std::ostream& operator<<(
-    std::ostream& out, 
+    std::ostream& out,
     const std::vector<std::vector<T>>& v
 ){
     for (size_t i = 0; i < v.size(); i++){
