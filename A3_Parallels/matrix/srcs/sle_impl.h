@@ -1,12 +1,12 @@
 #ifndef __SLE_H__
 #error 'sle_impl.h' is not supposed to be included directly. \
-        Include 'sle.h' instead.'
+        Include 'sle.h' instead.
 #endif
 
 namespace s21{
 
 template< class T >
-Sle<T>::Sle(const Matrix<T>& inp_mtrx) : parent_type(inp_graph) {
+Sle<T>::Sle(const Matrix<T>& inp_mtrx) : parent_type(inp_mtrx) {
     ThrowOnInvalidInputMatrix_();
 }
 
@@ -16,12 +16,12 @@ Sle<T>::Sle(Matrix<T>&& inp_mtrx) : parent_type(std::move(inp_mtrx)) {
 }
 
 template< class T >
-Sle<T>::Sle(const matrix_type& inp_graph) : parent_type(inp_graph) {
+Sle<T>::Sle(const matrix_type& inp_mtrx) : parent_type(inp_mtrx) {
     ThrowOnInvalidInputMatrix_();
 }
 
 template< class T >
-Sle<T>::Sle(matrix_type&& inp_graph) : parent_type(std::move(inp_mtrx)) {
+Sle<T>::Sle(matrix_type&& inp_mtrx) : parent_type(std::move(inp_mtrx)) {
     ThrowOnInvalidInputMatrix_();
 }
 
@@ -49,7 +49,7 @@ template< class T >
 std::string Sle<T>::SleException::GetMessage() const{
     return ::s21::Exception::msg_;
 }
-    
+
 template< class T >
 Sle<T> Sle<T>::LoadFromFile(const std::string& filename){
     std::ifstream file_stream;
@@ -80,7 +80,7 @@ Sle<T> Sle<T>::LoadFromFile(const std::string& filename){
 
 template< class T >
 void Sle<T>::ThrowOnInvalidInputMatrix_() const{
-    if (inp_mtrx.RowsSize() == 1 && inp_mtrx.ColumnsSize() == 1){
+    if (Matrix<T>::RowsSize() == 1 && Matrix<T>::ColumnsSize() == 1){
         throw SleException("Invalid matrix size");
     }
 }

@@ -11,8 +11,8 @@
 **/*.gch
 **/*.java
 
-**/*.out
-**/*.exe
+**/*.out*
+**/*.exe*
 
 **/materials/dot_representations/*
 

@@ -30,8 +30,8 @@ public:
     Sle(Matrix<T>&& inp_mtrx);
     Sle(const Sle& other) = default;
     Sle(Sle&& other) = default;
-    Sle(const matrix_type& inp_graph);
-    Sle(matrix_type&& inp_graph);
+    Sle(const matrix_type& inp_mtrx);
+    Sle(matrix_type&& inp_mtrx);
     ~Sle() = default;
 
     Sle& operator=(const Sle& other);

@@ -7,7 +7,7 @@
 #include <mutex>
 
 #include "../../../utils/includes/utils.h"
-#include "../../../matrix/includes/matrix.h"
+#include "../../../matrix/includes/sle.h"
 
 namespace s21{
 
@@ -15,7 +15,7 @@ struct Multiplier;
 
 class SleGaussianParent{
 public:
-    using matrix_type               = Matrix<double>;
+    using matrix_type               = Sle<double>;
     using matrix_type_reference     = matrix_type&;
     using matrix_type_unique_ptr    = std::unique_ptr<matrix_type>;
     using result_roots_type         = SleResult;
