@@ -103,7 +103,6 @@ Graph<T> Graph<T>::LoadFromFile(const std::string& filename){
     if (!input_file_stream.is_open()){
         throw GraphException("Cannot open file: " + filename);
     }
-
     // Read rows and columns count
     input_file_stream >> rows_count;
     input_file_stream >> columns_count;
