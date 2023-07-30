@@ -19,7 +19,8 @@ public:
     using matrix_type_reference     = matrix_type&;
     using matrix_type_unique_ptr    = std::unique_ptr<matrix_type>;
     using result_roots_type         = SleResult;
-    using matrix_size_type          = typename matrix_type::size_type;
+    using row_size_type             = typename matrix_type::row_size_type;
+    using column_size_type          = typename matrix_type::column_size_type;
     using iterator_type             = typename matrix_type::iterator_type;
     using const_iterator_type       = typename matrix_type::const_iterator_type;
     using reverse_iterator_type
@@ -37,8 +38,8 @@ public:
 protected:
     matrix_type_unique_ptr matrix_;
     result_roots_type roots_;
-    matrix_size_type equations_count_;
-    matrix_size_type roots_count_;
+    column_size_type equations_count_;
+    column_size_type roots_count_;
 
     /**
      * Swapping [swapped_i] row with next row which doesn't have a value
@@ -46,9 +47,9 @@ protected:
      * @return true if all next rows have zero value on [swapped_i] position
      * @return false otherwise
      */
-    bool SwapRow_(matrix_size_type swapped_i);
+    bool SwapRow_(row_size_type swapped_i);
 
-    virtual void ReduceRows_(matrix_size_type current_i) = 0;
+    virtual void ReduceRows_(row_size_type current_i) = 0;
 
     void DetermineResult_();
 
@@ -73,7 +74,7 @@ public:
     SleGaussianUsual(matrix_type_reference matrix);
 
 private:
-    void ReduceRows_(matrix_size_type current_i);
+    void ReduceRows_(row_size_type current_i);
 };
 
 class SleGaussianParellel : public SleGaussianParent{
@@ -85,13 +86,13 @@ public:
 private:
     mutex_type lock_;
 
-    void ReduceRows_(matrix_size_type current_i);
+    void ReduceRows_(row_size_type current_i);
 
-    void ParallelReducing_(matrix_size_type row_i, matrix_size_type current_i);
+    void ParallelReducing_(row_size_type row_i, row_size_type current_i);
 
-    void ParallelReduceRow_(matrix_size_type row_i,
-                        matrix_size_type column_i,
-                        matrix_size_type current_i,
+    void ParallelReduceRow_(row_size_type row_i,
+                        column_size_type column_i,
+                        row_size_type current_i,
                         double multiplier);
 };
 

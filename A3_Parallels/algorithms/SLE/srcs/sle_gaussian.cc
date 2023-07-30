@@ -14,7 +14,7 @@ SleGaussianParent::result_roots_type SleGaussianParent::GaussianElimination(){
         return roots_;
     }
 
-    for(matrix_size_type current_i = 0;
+    for(row_size_type current_i = 0;
         current_i < matrix_->RowsSize() - 1 &&
         current_i < matrix_->ColumnsSize() - 1;
         current_i++
@@ -56,7 +56,7 @@ bool SleGaussianParent::CheckCalculatedFactors(matrix_type matrix){
         row_it != matrix.End();
         ++row_it, current_left_side = 0
     ){
-        for(matrix_size_type elem_i = 0;
+        for(column_size_type elem_i = 0;
             elem_i < (row_it->size() - 1);
             elem_i++
         ){
@@ -75,8 +75,8 @@ bool SleGaussianParent::CheckCalculatedFactors(matrix_type matrix){
     return true;
 }
 
-bool SleGaussianParent::SwapRow_(matrix_size_type swapped_i){
-    for(matrix_size_type row_i = (swapped_i + 1);
+bool SleGaussianParent::SwapRow_(row_size_type swapped_i){
+    for(row_size_type row_i = (swapped_i + 1);
         row_i < equations_count_;
         row_i++
     ){
@@ -196,17 +196,17 @@ bool SleGaussianParent::DeleteZeroFactorInOneEquation_(
 SleGaussianUsual::SleGaussianUsual(matrix_type_reference matrix)
     : SleGaussianParent(matrix){}
 
-void SleGaussianUsual::ReduceRows_(matrix_size_type current_i){
+void SleGaussianUsual::ReduceRows_(row_size_type current_i){
     double current_multiplier;
 
     current_multiplier = 0;
-    for(matrix_size_type row_i = current_i + 1;
+    for(row_size_type row_i = current_i + 1;
         row_i < equations_count_;
         row_i++
     ){
         current_multiplier = (*matrix_)[row_i][current_i] /
                                 (*matrix_)[current_i][current_i];
-        for(matrix_size_type column_i = current_i;
+        for(column_size_type column_i = current_i;
             column_i <= roots_count_; // <= because we need to reduse and the right hand side of equation
             column_i++
         ){
@@ -220,12 +220,12 @@ void SleGaussianUsual::ReduceRows_(matrix_size_type current_i){
 SleGaussianParellel::SleGaussianParellel(matrix_type_reference matrix)
     : SleGaussianParent(matrix){}
 
-void SleGaussianParellel::ReduceRows_(matrix_size_type current_i){
+void SleGaussianParellel::ReduceRows_(row_size_type current_i){
 
     try{
         threads_array_type threads_array;
 
-        for(matrix_size_type row_i = current_i + 1;
+        for(row_size_type row_i = current_i + 1;
                 row_i < equations_count_;
                 row_i++
             ){
@@ -245,8 +245,8 @@ void SleGaussianParellel::ReduceRows_(matrix_size_type current_i){
 
 }
 
-void SleGaussianParellel::ParallelReducing_(matrix_size_type row_i,
-                                        matrix_size_type current_i){
+void SleGaussianParellel::ParallelReducing_(row_size_type row_i,
+                                        row_size_type current_i){
     threads_array_type threads_array;
     double current_multiplier;
 
@@ -254,7 +254,7 @@ void SleGaussianParellel::ParallelReducing_(matrix_size_type row_i,
     current_multiplier = (*matrix_)[row_i][current_i] /
                                             (*matrix_)[current_i][current_i];
 
-    for(matrix_size_type column_i = current_i;
+    for(column_size_type column_i = current_i;
             column_i <= roots_count_; // <= because we need to reduse and the right hand side of equation
             column_i++
     ){
@@ -270,8 +270,8 @@ void SleGaussianParellel::ParallelReducing_(matrix_size_type row_i,
     JoinThreads(threads_array);
 }
 
-void SleGaussianParellel::ParallelReduceRow_(matrix_size_type row_i,
-                    matrix_size_type column_i, matrix_size_type current_i,
+void SleGaussianParellel::ParallelReduceRow_(row_size_type row_i,
+                    column_size_type column_i, row_size_type current_i,
                     double multiplier){
     std::lock_guard<mutex_type> locker(lock_);
     // std::cout << "Row for " << current_i << std::endl;

@@ -22,7 +22,8 @@ public:
 
     using parent_type       = Matrix<T>;
     using matrix_type       = typename parent_type::matrix_type;
-    using size_type         = typename parent_type::size_type;
+    using row_size_type     = typename parent_type::row_size_type;
+    using column_size_type  = typename parent_type::column_size_type;
     using row_matrix_type   = typename parent_type::row_matrix_type;
 
     Sle() = delete;
