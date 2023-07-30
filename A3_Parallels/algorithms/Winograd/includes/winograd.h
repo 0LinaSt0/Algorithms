@@ -25,14 +25,15 @@ public:
     using iterator_type             = typename matrix_type::iterator_type;
     using const_iterator_type       = typename matrix_type::const_iterator_type;
 
-    WinogradParent() = default;
+    WinogradParent();
     ~WinogradParent() = default;
 
     result_matrix_type WinogradMultiplication(
                             matrix_type_reference matrix_first, 
                             matrix_type_reference matrix_second);
 
-protected:
+protected: 
+    bool is_calculate_all_factors;
     result_matrix_type result_matrix_;
     factors_arrray_type first_matrix_common_factor_;
     std::vector<factors_arrray_type> second_matrix_common_factors_;
@@ -46,7 +47,7 @@ protected:
                             matrix_type_reference matrix_first, 
                             matrix_type_reference matrix_second) = 0;
 
-    virtual void RowFactorsDefine_(row_matrix_type& matrix_row) = 0;
+    virtual void OfFirstFactorsDefine_(row_matrix_type& matrix_row) = 0;
 
     virtual void RowColumnMultiplication_(row_matrix_type_reference matrix_row,
                                     matrix_type_reference matrix_second) = 0;
@@ -61,7 +62,7 @@ private:
                             matrix_type_reference matrix_first, 
                             matrix_type_reference matrix_second);
 
-    void RowFactorsDefine_(row_matrix_type_reference matrix_row);
+    void OfFirstFactorsDefine_(row_matrix_type_reference matrix_row);
 
     void RowColumnMultiplication_(row_matrix_type_reference matrix_row,
                             matrix_type_reference matrix_second);
