@@ -25,7 +25,8 @@ public:
     using value_type                = T;
     using row_matrix_type           = std::vector<value_type>;
     using matrix_type               = std::vector<row_matrix_type>;
-    using size_type                 = typename matrix_type::size_type;
+    using column_size_type          = typename row_matrix_type::size_type;
+    using row_size_type             = typename matrix_type::size_type;
     using reference                 = typename matrix_type::reference;
     using const_reference           = typename matrix_type::const_reference;
     using iterator_type             = typename matrix_type::iterator;
@@ -43,28 +44,28 @@ public:
 
     Matrix& operator=(const Matrix& other);
     Matrix& operator=(Matrix&& other);
-    reference operator[](size_type pos);
-    const_reference operator[](size_type pos) const;
+    reference operator[](row_size_type pos);
+    const_reference operator[](row_size_type pos) const;
 
     /**
      * @return value of the cell with [row][col] coordinates
      */
-    value_type At(size_type row, size_type col);
+    value_type At(row_size_type row, column_size_type col);
 
     /**
      * @return value of the cell with [row][col] coordinates
      */
-    value_type At(size_type row, size_type col) const;
+    value_type At(row_size_type row, column_size_type col) const;
 
     /**
      * @return the number of rows in Matrix
      */
-    size_type RowsSize() const;
+    row_size_type RowsSize() const;
 
     /**
      * @return the number of columns in Matrix
      */
-    size_type ColumnsSize() const;
+    column_size_type ColumnsSize() const;
 
     /**
      * @return iterator to the first row of Matrix

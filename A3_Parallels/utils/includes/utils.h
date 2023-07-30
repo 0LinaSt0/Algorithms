@@ -44,6 +44,14 @@ struct SleResult {
     sle_type equation_roots;
 };
 
+template < class T >
+struct MatrixResult {
+    using elements_type = T;
+    using matrix_type   = std::vector<std::vector<elements_type>>;
+
+    matrix_type matrix_array;
+};
+
 /**
  * Print error to std::cerr like: [filename]: [funcname]: [line]: [msg]
  */

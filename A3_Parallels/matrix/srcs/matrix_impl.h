@@ -32,32 +32,35 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& other){
 }
 
 template< class T >
-typename Matrix<T>::reference Matrix<T>::operator[](size_type pos){
+typename Matrix<T>::reference Matrix<T>::operator[](row_size_type pos){
     return matrix_.operator[](pos);
 }
 
 template< class T >
-typename Matrix<T>::const_reference Matrix<T>::operator[](size_type pos) const{
+typename Matrix<T>::const_reference Matrix<T>::operator[](
+                                                    row_size_type pos) const{
     return matrix_.operator[](pos);
 }
 
 template< class T >
-typename Matrix<T>::value_type Matrix<T>::At(size_type row, size_type col){
+typename Matrix<T>::value_type Matrix<T>::At(row_size_type row, 
+                                            column_size_type col){
     return matrix_[row][col];
 }
 
 template< class T >
-typename Matrix<T>::value_type Matrix<T>::At(size_type row, size_type col) const{
+typename Matrix<T>::value_type Matrix<T>::At(row_size_type row, 
+                                            column_size_type col) const{
     return matrix_[row][col];
 }
 
 template< class T >
-typename Matrix<T>::size_type Matrix<T>::RowsSize() const{
+typename Matrix<T>::row_size_type Matrix<T>::RowsSize() const{
     return matrix_.size();
 }
 
 template< class T >
-typename Matrix<T>::size_type Matrix<T>::ColumnsSize() const{
+typename Matrix<T>::column_size_type Matrix<T>::ColumnsSize() const{
     return matrix_.size() ? matrix_.begin()->size() : 0;
 }
 
