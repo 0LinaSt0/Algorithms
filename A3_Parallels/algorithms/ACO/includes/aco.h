@@ -4,6 +4,7 @@
 #include <map>
 #include <cmath>
 #include <string>
+#include <random>
 #include <numeric>
 
 #include "ant.h"
@@ -13,6 +14,12 @@ namespace s21{
 
 class Aco{
 public:
+    template <typename T>
+    Aco(const Graph<T>& graph)
+    : graph_(Graph<Edge>::ConvertFromGraph(graph)) {
+
+}
+
     Aco(const std::string& filename);
     Aco(const Aco& other) = delete;
     Aco(Aco&& other) = delete;
@@ -21,7 +28,7 @@ public:
     Aco& operator=(const Aco& other) = delete;
     Aco& operator=(Aco&& other) = delete;
 
-    std::vector<int> run(int iters_count = 5, int ants_count = 10);
+    ::s21::TsmResult run(int iters_count = 5, int ants_count = 10);
 
     const Graph<Edge>& GetGraph() const;
 
@@ -33,10 +40,14 @@ private:
     Graph<Edge> graph_;
     std::map<int, Edge const *> id_to_edge;
     std::map<int, std::vector<std::vector<int> const *>> id_to_solutions;
-    std::pair<double, std::vector<int>> best_solution {
-        std::numeric_limits<double>::max(), 
-        {}
+    ::s21::TsmResult best_solution {
+        {},
+        std::numeric_limits<double>::max()
     };
+
+    // Convert input graph to ::s21::Edge Graph
+    // template<typename T>
+    // Graph<Edge> templateToEdge_(const Graph<T>& graph);
 
     // Update pheromone values in graph
     void UpdatePheromones_();

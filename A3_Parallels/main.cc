@@ -8,12 +8,18 @@ int main(){
 
 
     try {
-        s21::Aco aco(filename);
-        std::cout
-            << aco.GetGraph()
-            << std::endl
-            << aco.run()
-            << std::endl;
+        {
+            s21::Aco aco(filename);
+            std::cout
+                << aco.run()
+                << std::endl;
+        }
+        {
+            ::s21::Aco aco(::s21::Graph<int>::LoadFromFile(filename));
+            std::cout
+                << aco.run()
+                << std::endl;
+        }
     } catch (std::exception& e){
         std::cout << e.what() << std::endl;
     }

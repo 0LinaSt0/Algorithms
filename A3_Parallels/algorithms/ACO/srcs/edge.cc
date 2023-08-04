@@ -9,6 +9,16 @@ Edge::Edge(){
     pheromone = PHEROMONE_INIT_VALUE;
 }
 
+Edge::Edge(int value){
+    this->value = value;
+    this->pheromone = PHEROMONE_INIT_VALUE;
+}
+
+Edge::Edge(double value){
+    this->value = value;
+    this->pheromone = PHEROMONE_INIT_VALUE;
+}
+
 Edge::Edge(double value, double pheromone){
     this->value = value;
     this->pheromone = pheromone;

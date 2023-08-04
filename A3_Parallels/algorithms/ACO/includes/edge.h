@@ -11,6 +11,8 @@ const double PHEROMONE_INIT_VALUE = 0.5;
 class Edge{
 public:
     Edge();
+    Edge(int value);
+    Edge(double value);
     Edge(double value, double pheromone);
     Edge(const Edge& other) = default;
     Edge(Edge&& other) = default;

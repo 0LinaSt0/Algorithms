@@ -15,12 +15,11 @@ namespace s21{
 template < class T >
 class Matrix{
 public:
+    template < class Type >
     friend std::ostream& operator<<(
         std::ostream& out, 
-        const s21::Matrix<T>& matrix
-    ){
-        return out << matrix.matrix_;
-    }
+        const s21::Matrix<Type>& matrix
+    );
 
     using value_type                = T;
     using row_matrix_type           = std::vector<value_type>;
@@ -151,6 +150,11 @@ private:
     void ThrowOnNonEmptyMatrix_() const;
 };
 
+}
+
+template <typename Type>
+std::ostream& operator<<(std::ostream& out, const ::s21::Matrix<Type>& matrix){
+    return out << matrix.matrix_;
 }
 
 #include "../srcs/matrix_impl.h"

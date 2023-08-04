@@ -16,9 +16,7 @@ public:
     friend std::ostream& operator<<(
         std::ostream& out,
         const Sle<Type>& sle
-    ){
-        return out << dynamic_cast<const ::s21::Matrix<Type>&>(sle);
-    }
+    );
 
     using parent_type       = Matrix<T>;
     using matrix_type       = typename parent_type::matrix_type;
@@ -63,6 +61,11 @@ private:
 
 };
 
+}
+
+template <typename Type>
+std::ostream& operator<<(std::ostream& out, const ::s21::Sle<Type>& sle){
+    return out << dynamic_cast<const ::s21::Matrix<Type>&>(sle);
 }
 
 #include "../srcs/sle_impl.h"

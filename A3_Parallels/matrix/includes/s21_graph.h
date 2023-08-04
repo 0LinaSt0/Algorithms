@@ -22,12 +22,7 @@ public:
     friend std::ostream& operator<<(
         std::ostream& out,
         const Graph<Type>& graph
-    ){
-        return out 
-            << dynamic_cast<const ::s21::Matrix<Type>&>(graph) << std::endl
-            << "is directed:\t" << graph.is_directed_ << std::endl
-            << "is connected:\t" << graph.is_connected_;
-    }
+    );
 
     using parent_type       = Matrix<T>;
     using matrix_type       = typename parent_type::matrix_type;
@@ -70,6 +65,24 @@ public:
      */
     bool IsConnected() const;
 
+    template <typename Type>
+    static Graph<T> ConvertFromGraph(const Graph<Type>& graph){
+        std::vector<std::vector<T>> mtrx;
+        
+        size_type nodes_count = graph.NodesSize();
+        mtrx.reserve(nodes_count);
+        for (size_type i = 0; i < nodes_count; i++){
+            std::vector<T> row;
+            row.reserve(nodes_count);
+            for (size_type j = 0; j < nodes_count; j++){
+                row.push_back(graph[i][j]);
+            }
+            mtrx.push_back(std::move(row));
+        }
+
+        return Graph<T>(std::move(mtrx));
+    }
+    
     /**
      * Load graph from a file [filename] in the adjacency matrix format
      * @return new Graph<T> object
@@ -120,6 +133,14 @@ private:
 
 };
 
+}
+
+template <typename Type>
+std::ostream& operator<<(std::ostream& out,const ::s21::Graph<Type>& graph){
+    return out 
+        << dynamic_cast<const ::s21::Matrix<Type>&>(graph) << std::endl
+        << "is directed:\t" << graph.is_directed_ << std::endl
+        << "is connected:\t" << graph.is_connected_;
 }
 
 #include "../srcs/s21_graph_impl.h"
