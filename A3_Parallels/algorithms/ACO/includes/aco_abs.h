@@ -12,27 +12,26 @@
 
 namespace s21{
 
-class Aco{
+class AcoAbs{
 public:
     template <typename T>
-    Aco(const Graph<T>& graph)
-    : graph_(Graph<Edge>::ConvertFromGraph(graph)) {
+    AcoAbs(const Graph<T>& graph)
+        : graph_(Graph<Edge>::ConvertFromGraph(graph)) {
 
-}
+    }
+    AcoAbs(const AcoAbs& other) = delete;
+    AcoAbs(AcoAbs&& other) = delete;
+    virtual ~AcoAbs() = default;
 
-    Aco(const std::string& filename);
-    Aco(const Aco& other) = delete;
-    Aco(Aco&& other) = delete;
-    ~Aco() = default;
+    AcoAbs& operator=(const AcoAbs& other) = delete;
+    AcoAbs& operator=(AcoAbs&& other) = delete;
 
-    Aco& operator=(const Aco& other) = delete;
-    Aco& operator=(Aco&& other) = delete;
+    ::s21::TsmResult run(
+        int iters_count = 10,
+        int ants_count = 10
+    );
 
-    ::s21::TsmResult run(int iters_count = 5, int ants_count = 10);
-
-    const Graph<Edge>& GetGraph() const;
-
-private:
+protected: 
     const double ALPHA = 1.0;
     const double BETA = 1.0;
     const double EVAPOR = 0.5;
@@ -40,14 +39,18 @@ private:
     Graph<Edge> graph_;
     std::map<int, Edge const *> id_to_edge;
     std::map<int, std::vector<std::vector<int> const *>> id_to_solutions;
+
     ::s21::TsmResult best_solution {
         {},
         std::numeric_limits<double>::max()
     };
 
-    // Convert input graph to ::s21::Edge Graph
-    // template<typename T>
-    // Graph<Edge> templateToEdge_(const Graph<T>& graph);
+    // Main algorithm logic
+    virtual void AlgoBody_(std::vector<Ant>& ants) = 0;
+    // Update finished ants count
+    virtual void UpdateAntsCount_() = 0;
+    // Update pointers to solutions
+    virtual void SuccessfullSolutions_(Ant& ant) = 0;
 
     // Update pheromone values in graph
     void UpdatePheromones_();

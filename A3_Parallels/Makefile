@@ -27,7 +27,8 @@ endif
 PRJ_HDRS_ALGO	=	$(addprefix algorithms/,								\
 						$(addprefix ACO/,									\
 							$(addprefix includes/,							\
-								aco.h ant.h edge.h							\
+								aco_abs.h aco_single.h aco_multi.h			\
+								ant.h edge.h								\
 							)												\
 						)													\
 						$(addprefix SLE/,									\
@@ -67,7 +68,8 @@ PRJ_HDRS		=	$(PRJ_HDRS_ALGO) $(PRJ_HDRS_CLI) $(PRJ_HDRS_MTRX)		\
 PRJ_SRCS_ALGO	=	$(addprefix algorithms/,								\
 						$(addprefix ACO/,									\
 							$(addprefix srcs/,								\
-								aco.cc ant.cc edge.cc						\
+								aco_abs.cc aco_single.cc aco_multi.cc		\
+								ant.cc edge.cc								\
 							)												\
 						)													\
 						$(addprefix SLE/,									\

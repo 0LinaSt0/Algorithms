@@ -11,7 +11,7 @@ void Timer::End(){
 }
 
 long long Timer::GetDuration(){
-    return std::chrono::duration_cast<std::chrono::milliseconds>(end_ -
+    return std::chrono::duration_cast<std::chrono::microseconds>(end_ -
                                                                 start_).count();
 }
 

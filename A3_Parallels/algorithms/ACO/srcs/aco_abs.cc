@@ -1,19 +1,16 @@
-#include "../includes/aco.h"
+#include "../includes/aco_abs.h"
+#include "../../../cli/includes/timer.h"
 
 namespace s21{
-    
-Aco::Aco(const std::string& filename)
-    : graph_(::s21::Graph<Edge>::LoadFromFile(filename)) {
 
-}
-
-::s21::TsmResult Aco::run(int iters_count, int ants_count){
+::s21::TsmResult AcoAbs::run(int iters_count, int ants_count){    
     // Algorithm iterations
-    for (int current_inter = 0; current_inter < iters_count; current_inter++){
-    for (int start_vertex; 
-        start_vertex < static_cast<int>(graph_.NodesSize()); 
-        start_vertex++){
-        
+    for (int current_iter = 0; current_iter < iters_count; current_iter++){
+    for (
+            int start_vertex = 0;
+            start_vertex < static_cast<int>(graph_.NodesSize()); 
+            start_vertex++
+        ){
         // Refresh values
         finished_ants_ = 0;
         id_to_edge.clear();
@@ -23,29 +20,16 @@ Aco::Aco(const std::string& filename)
         init_ant.AddVertex(start_vertex);
         std::vector<Ant> ants(ants_count, init_ant);
         
-        // Algo body
-        while (true){
-            // Each ant makes a step
-            for (Ant& ant : ants){
-                MakeStep_(ant);
-            }
-            // Check if all ants are in the end
-            if (finished_ants_ == static_cast<int>(ants.size())) break;
-        }
-
+        AlgoBody_(ants);
         UpdatePheromones_();
     }
     }
-
+    
     return best_solution;
 }
 
-// const Graph<Edge>& Aco::GetGraph() const{
-//     return graph_;
-// }
-
 // Implementation of formula from the Internet
-void Aco::UpdatePheromones_(){
+void AcoAbs::UpdatePheromones_(){
     for (size_t from = 0; from < graph_.NodesSize(); from++){
     for (size_t to = 0; to < graph_.NodesSize(); to++){
         Edge& edge = graph_[from][to];
@@ -72,12 +56,11 @@ void Aco::UpdatePheromones_(){
     }
 }
 
-void Aco::MakeStep_(Ant& ant){
+void AcoAbs::MakeStep_(Ant& ant){
     int current_node_num = ant.GetPath().back();
     std::vector<int> available_nodes = GetAllAvailableNodes_(ant);
     if (available_nodes.size() == 0) {
-        // Update ants counter
-        finished_ants_++;
+        UpdateAntsCount_();
         // Ant finished it's route
         ant.SetEnd(true);
         // Is route complete
@@ -87,13 +70,7 @@ void Aco::MakeStep_(Ant& ant){
         );
         // Save pointers to solution
         if (ant.IsSuccess()){
-            ant.AddVertex(ant.GetPath().front());
-            const std::vector<int>& path = ant.GetPath();
-            for (size_t i = 0; i + 1 < path.size(); i++){
-                Edge& edge = graph_[path[i]][path[i + 1]];
-                id_to_edge[edge.id] = &edge;
-                id_to_solutions[edge.id].push_back(&ant.GetPath());
-            }
+            SuccessfullSolutions_(ant);
         }
     } else {
         // Random numbers generator
@@ -129,7 +106,7 @@ void Aco::MakeStep_(Ant& ant){
     }
 }
 
-std::vector<int> Aco::GetAllAvailableNodes_(const Ant& ant) const{
+std::vector<int> AcoAbs::GetAllAvailableNodes_(const Ant& ant) const{
     // Position where ant is now
     int from = ant.GetPath().back();
 
@@ -137,14 +114,14 @@ std::vector<int> Aco::GetAllAvailableNodes_(const Ant& ant) const{
     std::vector<int> available_nodes;
     for (int to = 0; to < static_cast<int>(graph_.NodesSize()); to++){
         if (ant.IsInPath(to)) continue;
-        if (graph_.At(from, to) == 0) continue;
+        if (::s21::DoubleCompare(graph_.At(from, to).value, 0)) continue;
         available_nodes.push_back(to);
     }
 
     return available_nodes;
 }
 
-double Aco::GetEdgeAttractiveness_(const Edge& edge) const{
+double AcoAbs::GetEdgeAttractiveness_(const Edge& edge) const{
     return std::pow(edge.pheromone, ALPHA) *
             std::pow(1.0 / edge.value, BETA);
 }
