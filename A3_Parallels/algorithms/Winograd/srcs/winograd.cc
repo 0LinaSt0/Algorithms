@@ -2,7 +2,7 @@
 
 namespace s21{
 
-WinogradParent::WinogradParent() : is_calculate_all_factors(false) { }
+WinogradParent::WinogradParent() { }
 
 WinogradParent::result_matrix_type WinogradParent::WinogradMultiplication(
                                         matrix_type_reference matrix_first, 
@@ -48,34 +48,73 @@ void WinogradParent::ResultMatrixReserveRowsStorage_(row_size_type row_count){
 
 WinogradUsual::WinogradUsual() : WinogradParent() { }
 
-WinogradUsual::result_matrix_type WinogradUsual::MatrixMultiplication_(
-                            matrix_type_reference matrix_first, 
+void WinogradUsual::MatrixMultiplication_(matrix_type_reference matrix_first, 
                             matrix_type_reference matrix_second){
-    for(row_size_type of_first_row_i = matrix_first.RowsSize();
-        of_first_row_i < matrix_first.ColumnsSize();
+    multiply_func_signature element_calculation;
+    
+    if (matrix_first.RowsSize() % 2){
+        element_calculation = 
+            [&matrix_first, matrix_second]
+            (row_size_type of_first_row_i, column_size_type of_second_column_i)
+            -> elements_type {
+                elements_type returned_multiplicator;
+
+                returned_multiplicator = 
+                    matrix_first[of_first_row_i].back() * 
+                    matrix_second.Back()[of_second_column_i];
+                return returned_multiplicator;
+            };
+    } else {
+        element_calculation = 
+            [](row_size_type, column_size_type) -> elements_type { return 0; };
+    }
+    RowsMultiplication_(
+        matrix_first, 
+        matrix_second, 
+        element_calculation
+    );
+}
+
+void WinogradUsual::RowsMultiplication_(matrix_type_reference matrix_first, 
+                                matrix_type_reference matrix_second,
+                                multiply_func_signature element_calculation){
+    result_matrix_rows_unique_ptr current_result_row;
+    
+    for(row_size_type of_first_row_i = 0;
+        of_first_row_i < matrix_first.RowsSize();
         of_first_row_i++
     ){
-        OfFirstFactorsDefine_(matrix_first[of_first_row_i]);
-        RowColumnMultiplication_(matrix_first[of_first_row_i], matrix_second);
-        is_calculate_all_factors = true;
-    }
-}
-
-void WinogradUsual::OfFirstFactorsDefine_(row_matrix_type_reference matrix_row){
-    for(column_size_type column_i = 0;
-        column_i < matrix_row.size() - 1;
-        column_i += column_i + 2
-    ){
-        first_matrix_common_factor_.push_back(
-            matrix_row[column_i] * matrix_row[column_i + 1]
+        current_result_row = RowCalculation_(
+            matrix_first, 
+            matrix_second,
+            of_first_row_i,
+            element_calculation
         );
+        result_matrix_.matrix_array.push_back(current_result_row);
     }
 }
 
-void WinogradUsual::RowColumnMultiplication_(
-                            row_matrix_type_reference matrix_row,
-                            matrix_type_reference matrix_second){
-    
+WinogradUsual::result_matrix_rows_unique_ptr
+    WinogradUsual::RowCalculation_(matrix_type_reference matrix_first, 
+                                matrix_type_reference matrix_second,
+                                row_size_type of_first_row_i,
+                                multiply_func_signature element_calculation){
+    result_matrix_rows_unique_ptr result_row(new result_matrix_rows_type());
+    elements_type current_first_matrix_multiplicator;
+
+    current_first_matrix_multiplicator = 0;
+    for(column_size_type of_second_column_i = 0;
+        of_second_column_i < matrix_second.ColumnsSize();
+        of_second_column_i++
+    ){
+        for(column_size_type of_first_column_i = 0;
+            of_first_column_i < matrix_first.ColumnsSize() - 1;
+            of_first_column_i += 2
+        ){
+            OfFirstFactorsDefine_(matrix_first[of_first_row_i]);
+        }
+    }
+    return result_row;
 }
 
 }

@@ -67,6 +67,16 @@ public:
     column_size_type ColumnsSize() const;
 
     /**
+     * @return the reference to the last row in Matrix
+     */
+    reference Back() const;
+
+    /**
+     * @return the const reference to the last row in Matrix
+     */
+    const_reference Back() const;
+
+    /**
      * @return iterator to the first row of Matrix
      */
     iterator_type Begin();

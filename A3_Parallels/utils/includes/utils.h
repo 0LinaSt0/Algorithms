@@ -48,7 +48,8 @@ struct SleResult {
 template < class T >
 struct MatrixResult {
     using elements_type = T;
-    using matrix_type   = std::vector<std::vector<elements_type>>;
+    using rows_type     = std::vector<elements_type>
+    using matrix_type   = std::vector<rows_type>;
 
     matrix_type matrix_array;
 };
@@ -102,6 +103,5 @@ std::ostream& operator<<(
 
     return out;
 }
-
 
 #endif

@@ -60,6 +60,16 @@ typename Matrix<T>::row_size_type Matrix<T>::RowsSize() const{
 }
 
 template< class T >
+typename Matrix<T>::reference Matrix<T>::Back() const{
+    return matrix_.back();
+}
+
+template< class T >
+typename Matrix<T>::reference Matrix<T>::Back() const{
+    return matrix_.back();
+}
+
+template< class T >
 typename Matrix<T>::column_size_type Matrix<T>::ColumnsSize() const{
     return matrix_.size() ? matrix_.begin()->size() : 0;
 }
