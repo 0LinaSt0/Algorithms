@@ -73,12 +73,12 @@ Graph<T>& Graph<T>::operator=(Graph<T>&& other){
 }
 
 template< class T >
-typename Graph<T>::parent_type::size_type Graph<T>::NodesSize() const{
+typename Graph<T>::size_type Graph<T>::NodesSize() const{
     return parent_type::RowsSize();
 }
 
 template< class T >
-typename Graph<T>::parent_type::size_type Graph<T>::MinSpanningTreeSize() const{
+typename Graph<T>::size_type Graph<T>::MinSpanningTreeSize() const{
     return min_spanning_tree_size_;
 }
 
