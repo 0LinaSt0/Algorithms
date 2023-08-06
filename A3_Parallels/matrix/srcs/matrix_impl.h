@@ -60,12 +60,12 @@ typename Matrix<T>::row_size_type Matrix<T>::RowsSize() const{
 }
 
 template< class T >
-typename Matrix<T>::reference Matrix<T>::Back() const{
+typename Matrix<T>::reference Matrix<T>::Back(){
     return matrix_.back();
 }
 
 template< class T >
-typename Matrix<T>::reference Matrix<T>::Back() const{
+typename Matrix<T>::const_reference Matrix<T>::Back() const{
     return matrix_.back();
 }
 
@@ -171,7 +171,7 @@ bool Matrix<T>::IsMatrixValid_(){
         return false;
     }
 
-    size_type columns_count;
+    column_size_type columns_count;
 
     columns_count = matrix_.begin()->size();
     if (!columns_count){

@@ -1,7 +1,8 @@
 #ifndef WINOGRAD
 #define WINOGRAD
 
-// #include <functional>
+#include <functional>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <thread>
@@ -12,6 +13,18 @@
 
 namespace s21{
 
+enum class WhitchMultiplicatorsCalculate {
+    FIRST = 0,
+    FIRST_SECOND = 1,
+    SECOND = 2,
+    NO_ONE = 3
+};
+
+enum class WhichMultiplicationCalculationSolution{
+    FOR_FIRST_ELEM = 0,
+    FOR_NEXT_ELEMS = 1
+};
+
 class WinogradParent{
 public:
     using elements_type             = double;
@@ -19,20 +32,33 @@ public:
     using matrix_type_reference     = matrix_type&;
     using result_matrix_type        = MatrixResult<elements_type>;
     using result_matrix_rows_type   = typename result_matrix_type::rows_type;
-    using row_matrix_type           = typename matrix_type::row_matrix_type;
-    using row_matrix_type_reference = row_matrix_type&;
     using row_size_type             = typename matrix_type::row_size_type;
     using column_size_type          = typename matrix_type::column_size_type;
-    using iterator_type             = typename matrix_type::iterator_type;
-    using const_iterator_type       = typename matrix_type::const_iterator_type;
+    // using iterator_type             = typename matrix_type::iterator_type;
+    // using const_iterator_type       = typename matrix_type::const_iterator_type;
     using multiplicators_arrray     = std::map<row_size_type, elements_type>;
-    using matrix_type_unique_ptr    = std::unique_ptr<matrix_type>;
+    using multiplicators_arrray_reference
+                                    = multiplicators_arrray&;
+    using matrices_pair             = std::pair<
+                                        matrix_type_reference, 
+                                        matrix_type_reference>;
+    using matrices_pair_reference   = matrices_pair&;
+
     //IN CHILD USUAL
-    using result_matrix_rows_unique_ptr 
-                                    = std::unique_ptr<result_matrix_rows_type>;
-    using multiply_func_signature   = std::function<elements_type(
+    using matrix_rows_unique_ptr    = std::unique_ptr<result_matrix_rows_type>;
+    using multiplications_calculate_pair
+                                    = std::pair<
+                                        WhitchMultiplicatorsCalculate, 
+                                        WhitchMultiplicatorsCalculate>;
+    using extra_multiplier_func     = std::function<elements_type(
                                             row_size_type,
                                             column_size_type)>;
+    using multiplicators_func       = std::function<void(
+                                        elements_type&,
+                                        multiplicators_arrray_reference,
+                                        row_size_type,
+                                        column_size_type,
+                                        column_size_type)>;
 
     WinogradParent();
     ~WinogradParent() = default;
@@ -43,6 +69,7 @@ public:
 
 protected:
     result_matrix_type result_matrix_;
+    elements_type first_matrix_multiplicator_;
     multiplicators_arrray second_matrix_multiplicators_;
 
     bool IsMatricesInvalid_(column_size_type matrix_first_column_count, 
@@ -50,13 +77,8 @@ protected:
 
     void ResultMatrixReserveRowsStorage_(row_size_type row_count);
 
-    virtual void MatrixMultiplication_(matrix_type_reference matrix_first, 
-                            matrix_type_reference matrix_second) = 0;
-
-    virtual void OfFirstFactorsDefine_(row_matrix_type& matrix_row) = 0;
-
-    virtual void RowColumnMultiplication_(row_matrix_type_reference matrix_row,
-                                    matrix_type_reference matrix_second) = 0;
+    virtual void MatrixMultiplication_(
+                                    matrices_pair_reference matrices_ref) = 0;
 };
 
 class WinogradUsual : public WinogradParent{
@@ -64,18 +86,30 @@ public:
     WinogradUsual();
 
 private:
-   void MatrixMultiplication_(matrix_type_reference matrix_first, 
-                            matrix_type_reference matrix_second);
+    void MatrixMultiplication_(matrices_pair_reference matrices_ref);
 
-    void RowsMultiplication_(matrix_type_reference matrix_first, 
-                            matrix_type_reference matrix_second,
-                            multiply_func_signature element_calculation);
+    void RowsMultiplication_(matrices_pair_reference matrices_ref,
+                            extra_multiplier_func element_calculation);
 
-    result_matrix_rows_unique_ptr RowCalculation_(
-                                matrix_type_reference matrix_first, 
-                                matrix_type_reference matrix_second,
-                                row_size_type of_first_row_i,
-                                multiply_func_signature element_calculation);
+    matrix_rows_unique_ptr CalculateRow_(
+                        matrices_pair_reference matrices_ref,
+                        row_size_type of_first_row_i,
+                        extra_multiplier_func extra_muliplier,
+                        WhichMultiplicationCalculationSolution type_row_code);
+
+    elements_type CalculateElement_(matrices_pair_reference matrices_ref,
+                    row_size_type of_first_row_i,
+                    column_size_type of_second_colum_i,
+                    extra_multiplier_func extra_muliplier,
+                    multiplicators_func multiplicators_calculation);
+
+    multiplicators_func DefineMultiplicatorsFunc_(
+                                    WhitchMultiplicatorsCalculate code,
+                                    matrices_pair_reference matrices_ref);
+
+    multiplications_calculate_pair DefineMultiplicationCalculationSolution_(
+                                WhichMultiplicationCalculationSolution code
+                            );
 };
 
 class WinogradParellel : public WinogradParent{

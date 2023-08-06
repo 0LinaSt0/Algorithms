@@ -69,7 +69,7 @@ public:
     /**
      * @return the reference to the last row in Matrix
      */
-    reference Back() const;
+    reference Back();
 
     /**
      * @return the const reference to the last row in Matrix

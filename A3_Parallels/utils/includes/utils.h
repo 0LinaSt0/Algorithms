@@ -48,7 +48,7 @@ struct SleResult {
 template < class T >
 struct MatrixResult {
     using elements_type = T;
-    using rows_type     = std::vector<elements_type>
+    using rows_type     = std::vector<elements_type>;
     using matrix_type   = std::vector<rows_type>;
 
     matrix_type matrix_array;
@@ -85,7 +85,7 @@ std::ostream& operator<<(std::ostream& out, const s21::SleResult& sle_result);
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){
     for (size_t i = 0; i < v.size(); i++){
-        out << v[i] << " ";
+        out << v[i] << "\t";
     }
 
     return out;
