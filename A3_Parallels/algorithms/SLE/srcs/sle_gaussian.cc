@@ -228,15 +228,14 @@ void SleGaussianParellel::ReduceRows_(row_size_type current_i){
         for(row_size_type row_i = current_i + 1;
                 row_i < equations_count_;
                 row_i++
-            ){
+        ){
                 threads_array.push_back(std::thread(
                     &SleGaussianParellel::ParallelReducing_,
                     this,
                     row_i,
                     current_i
                 ));
-            }
-
+        }
         JoinThreads(threads_array);
     } catch(const std::exception &e) {
         std::string error = "Threads problems: ";

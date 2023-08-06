@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <thread>
+#include <mutex>
 #include <map>
 
 #include "../../../utils/includes/utils.h"
@@ -42,7 +43,7 @@ public:
     using matrices_pair             = std::pair<
                                         matrix_type_reference, 
                                         matrix_type_reference>;
-    using matrices_pair_reference   = matrices_pair&;
+    using matrices_pair_ptr         = matrices_pair*;
 
     //IN CHILD USUAL
     using matrix_rows_unique_ptr    = std::unique_ptr<result_matrix_rows_type>;
@@ -59,6 +60,8 @@ public:
                                         row_size_type,
                                         column_size_type,
                                         column_size_type)>;
+    // IN CHILE PARALLEL
+    using mutex_type                 = std::recursive_mutex;
 
     WinogradParent();
     ~WinogradParent() = default;
@@ -77,8 +80,29 @@ protected:
 
     void ResultMatrixReserveRowsStorage_(row_size_type row_count);
 
-    virtual void MatrixMultiplication_(
-                                    matrices_pair_reference matrices_ref) = 0;
+    void MatrixMultiplication_(matrices_pair_ptr matrices_ptr);
+    
+    virtual void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
+                            extra_multiplier_func element_calculation) = 0;
+
+    multiplicators_func DefineMultiplicatorsFunc_(
+                                    WhitchMultiplicatorsCalculate code,
+                                    matrices_pair_ptr matrices_ptr);
+
+    multiplications_calculate_pair DefineMultiplicationCalculationSolution_(
+                                WhichMultiplicationCalculationSolution code);
+
+    matrix_rows_unique_ptr CalculateRow_(
+                        matrices_pair_ptr matrices_ptr,
+                        row_size_type of_first_row_i,
+                        extra_multiplier_func extra_muliplier,
+                        WhichMultiplicationCalculationSolution type_row_code);
+
+    elements_type CalculateElement_(matrices_pair_ptr matrices_ptr,
+                    row_size_type of_first_row_i,
+                    column_size_type of_second_colum_i,
+                    extra_multiplier_func extra_muliplier,
+                    multiplicators_func multiplicators_calculation);
 };
 
 class WinogradUsual : public WinogradParent{
@@ -86,44 +110,40 @@ public:
     WinogradUsual();
 
 private:
-    void MatrixMultiplication_(matrices_pair_reference matrices_ref);
+    void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
+                        extra_multiplier_func element_calculation);
 
-    void RowsMultiplication_(matrices_pair_reference matrices_ref,
-                            extra_multiplier_func element_calculation);
+    // matrix_rows_unique_ptr CalculateRow_(
+    //                     matrices_pair_reference matrices_ptr,
+    //                     row_size_type of_first_row_i,
+    //                     extra_multiplier_func extra_muliplier,
+    //                     WhichMultiplicationCalculationSolution type_row_code);
 
-    matrix_rows_unique_ptr CalculateRow_(
-                        matrices_pair_reference matrices_ref,
-                        row_size_type of_first_row_i,
-                        extra_multiplier_func extra_muliplier,
-                        WhichMultiplicationCalculationSolution type_row_code);
-
-    elements_type CalculateElement_(matrices_pair_reference matrices_ref,
-                    row_size_type of_first_row_i,
-                    column_size_type of_second_colum_i,
-                    extra_multiplier_func extra_muliplier,
-                    multiplicators_func multiplicators_calculation);
-
-    multiplicators_func DefineMultiplicatorsFunc_(
-                                    WhitchMultiplicatorsCalculate code,
-                                    matrices_pair_reference matrices_ref);
-
-    multiplications_calculate_pair DefineMultiplicationCalculationSolution_(
-                                WhichMultiplicationCalculationSolution code
-                            );
+    // elements_type CalculateElement_(matrices_pair_reference matrices_ptr,
+    //                 row_size_type of_first_row_i,
+    //                 column_size_type of_second_colum_i,
+    //                 extra_multiplier_func extra_muliplier,
+    //                 multiplicators_func multiplicators_calculation);
 };
 
-class WinogradParellel : public WinogradParent{
+class WinogradParallel : public WinogradParent{
 public:
-    WinogradParellel();
+    WinogradParallel();
 
 private:
+    mutex_type lock_;
 
+    void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
+                        extra_multiplier_func element_calculation);
 
+    void RowsParallelism_(matrices_pair_ptr matrices_ptr,
+                    row_size_type of_first_row_i,
+                    extra_multiplier_func extra_muliplier);
 };
 
-class WinograPipelineParellel : public WinogradParent{
+class WinograPipelineParallel : public WinogradParent{
 public:
-    WinograPipelineParellel();
+    WinograPipelineParallel();
 
 private:
 
