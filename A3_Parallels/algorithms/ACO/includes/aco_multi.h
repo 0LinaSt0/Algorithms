@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ACO_MULTI_H
+#define ACO_MULTI_H
 
 #include <mutex>
 #include <thread>
@@ -33,3 +34,5 @@ private:
 };
 
 }
+
+#endif

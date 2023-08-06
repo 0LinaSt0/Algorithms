@@ -13,7 +13,7 @@ const std::string CLI::MSG_COLOR_ = CLI::CYAN_COLOR_;
 const std::string CLI::IDX_COLOR_ = CLI::CYAN_COLOR_;
 
 const std::string CLI::PROGRAM_PROMT_ = CLI::PROGRAM_PROMT_COLOR_ +
-                                        "SN: " +
+                                        "A3: " +
                                         CLI::DEFAULT_COLOR_;
 const std::string CLI::USER_PROMT_ = CLI::USER_PROMT_COLOR_ +
                                         "> " +
@@ -53,7 +53,7 @@ std::string CLI::ReadLine_() const{
     return line;
 }
 
-int CLI::ReadNum() const{
+int CLI::ReadNum_() const{
     try {
         return std::stoi(ReadLine_());
     } catch (std::invalid_argument& e){

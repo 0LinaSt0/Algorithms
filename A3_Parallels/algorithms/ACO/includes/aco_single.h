@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ACO_SINGLE_H
+#define ACO_SINGLE_H
 
 #include "aco_abs.h"
 
@@ -25,3 +26,5 @@ protected:
 };
 
 }
+
+#endif

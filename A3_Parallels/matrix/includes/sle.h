@@ -13,7 +13,7 @@ template< class T >
 class Sle : public Matrix<T>{
 public:
     template <typename Type>
-    friend std::ostream& operator<<(
+    friend std::ostream& ::operator<<(
         std::ostream& out,
         const Sle<Type>& sle
     );

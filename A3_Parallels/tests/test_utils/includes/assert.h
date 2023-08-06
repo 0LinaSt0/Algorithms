@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEST_ASSERT_H
+#define TEST_ASSERT_H
 
 #include <string>
 #include <iostream>
@@ -13,3 +14,4 @@ void Assert(
 
 }
 
+#endif

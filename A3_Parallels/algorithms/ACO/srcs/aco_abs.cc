@@ -3,6 +3,15 @@
 
 namespace s21{
 
+AcoAbs::AcoException::AcoException(const std::string& msg)
+    : ::s21::Exception(msg) {
+
+}
+
+std::string AcoAbs::AcoException::GetMessage() const{
+    return ::s21::Exception::msg_;
+}
+
 ::s21::TsmResult AcoAbs::run(int iters_count, int ants_count){    
     // Algorithm iterations
     for (int current_iter = 0; current_iter < iters_count; current_iter++){
@@ -25,6 +34,14 @@ namespace s21{
     }
     }
     
+    // Check if solution was found
+    if (
+        ::s21::DoubleCompare(
+            best_solution.distance,
+            std::numeric_limits<double>::max()
+        ) &&
+        best_solution.vertices.size() == 0
+    ) throw AcoException("No solution for such graph");
     return best_solution;
 }
 

@@ -31,7 +31,20 @@ public:
         int ants_count = 10
     );
 
-protected: 
+protected:
+    class AcoException : public ::s21::Exception{
+    public:
+        AcoException() = delete;
+        AcoException(const std::string& msg);
+        AcoException(AcoException&&) = delete;
+        ~AcoException() = default;
+
+        AcoException& operator=(const AcoException&) = delete;
+        AcoException& operator=(AcoException&&) = delete;
+
+        std::string GetMessage() const;
+    };
+
     const double ALPHA = 1.0;
     const double BETA = 1.0;
     const double EVAPOR = 0.5;

@@ -15,8 +15,8 @@ namespace s21{
 template < class T >
 class Matrix{
 public:
-    template < class Type >
-    friend std::ostream& operator<<(
+    template < typename Type >
+    friend std::ostream& ::operator<<(
         std::ostream& out, 
         const s21::Matrix<Type>& matrix
     );

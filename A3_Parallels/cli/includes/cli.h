@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CLI_H
+#define CLI_H
 
 #include <iostream>
 #include <stdexcept>
@@ -14,7 +15,7 @@ public:
     CLI() = default;
     CLI(const CLI&) = delete;
     CLI(CLI&&) = delete;
-    ~CLI() = default;
+    virtual ~CLI() = default;
 
     CLI& operator=(const CLI&) = delete;
     CLI& operator=(CLI&&) = delete;
@@ -24,7 +25,7 @@ public:
     */
     virtual void run() = 0;
 
-private:
+protected:
     class CliException : public ::s21::Exception{
     public:
         CliException() = delete;
@@ -71,7 +72,7 @@ private:
      * @return number entered by user.
      * @throw CliException on invalid input.
     */
-    int ReadNum() const;
+    int ReadNum_() const;
 
     /**
      * Remove white spaces from the start and end
@@ -82,3 +83,5 @@ private:
 };
 
 }
+
+#endif

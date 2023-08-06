@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANT_H
+#define ANT_H
 
 #include <vector>
 #include <ostream>
@@ -43,3 +44,5 @@ private:
 }
 
 std::ostream& operator<<(std::ostream& output, const s21::Ant& ant);
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEST_GRAPH_H
+#define TEST_GRAPH_H
 
 #include "../../test_utils/includes/assert.h"
 #include "../../../matrix/includes/s21_graph.h"
@@ -12,3 +13,5 @@ void TEST_GRAPH_LOAD_FROM_FILE();
 void RUN_ALL_TESTS();
 
 }
+
+#endif

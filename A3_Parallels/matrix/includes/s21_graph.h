@@ -19,7 +19,7 @@ template< class T >
 class Graph : public Matrix<T>{
 public:
     template <typename Type>
-    friend std::ostream& operator<<(
+    friend std::ostream& ::operator<<(
         std::ostream& out,
         const Graph<Type>& graph
     );

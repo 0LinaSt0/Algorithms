@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEST_MATRIX_H
+#define TEST_MATRIX_H
 
 #include "../../test_utils/includes/assert.h"
 #include "../../../matrix/includes/matrix.h"
@@ -12,3 +13,5 @@ void TEST_MTRX_LOAD_FROM_FILE();
 void RUN_ALL_TESTS();
 
 }
+
+#endif

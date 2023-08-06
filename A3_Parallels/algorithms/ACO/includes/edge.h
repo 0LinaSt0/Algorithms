@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EDGE_H
+#define EDGE_H
 
 #include <iostream>
 
@@ -42,3 +43,5 @@ bool operator<(const s21::Edge& lhs, const s21::Edge& rhs);
 
 std::istream& operator>>(std::istream& input, s21::Edge& edge);
 std::ostream& operator<<(std::ostream& output, const s21::Edge& edge);
+
+#endif

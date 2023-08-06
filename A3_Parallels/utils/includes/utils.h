@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <filesystem>
 #include <iostream>
@@ -101,3 +102,6 @@ std::ostream& operator<<(
 
     return out;
 }
+
+
+#endif
