@@ -41,7 +41,7 @@ public:
     using multiplicators_arrray_reference
                                     = multiplicators_arrray&;
     using matrices_pair             = std::pair<
-                                        matrix_type_reference, 
+                                        matrix_type_reference,
                                         matrix_type_reference>;
     using matrices_pair_ptr         = matrices_pair*;
 
@@ -49,7 +49,7 @@ public:
     using matrix_rows_unique_ptr    = std::unique_ptr<result_matrix_rows_type>;
     using multiplications_calculate_pair
                                     = std::pair<
-                                        WhitchMultiplicatorsCalculate, 
+                                        WhitchMultiplicatorsCalculate,
                                         WhitchMultiplicatorsCalculate>;
     using extra_multiplier_func     = std::function<elements_type(
                                             row_size_type,
@@ -67,7 +67,7 @@ public:
     ~WinogradParent() = default;
 
     result_matrix_type WinogradMultiplication(
-                            matrix_type_reference matrix_first, 
+                            matrix_type_reference matrix_first,
                             matrix_type_reference matrix_second);
 
 protected:
@@ -75,13 +75,13 @@ protected:
     elements_type first_matrix_multiplicator_;
     multiplicators_arrray second_matrix_multiplicators_;
 
-    bool IsMatricesInvalid_(column_size_type matrix_first_column_count, 
+    bool IsMatricesInvalid_(column_size_type matrix_first_column_count,
                         row_size_type matrix_second_row_count);
 
     void ResultMatrixReserveRowsStorage_(row_size_type row_count);
 
     void MatrixMultiplication_(matrices_pair_ptr matrices_ptr);
-    
+
     virtual void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
                             extra_multiplier_func element_calculation) = 0;
 
@@ -146,7 +146,8 @@ public:
     WinograPipelineParallel();
 
 private:
-
+    void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
+                        extra_multiplier_func extra_muliplier);
 
 };
 

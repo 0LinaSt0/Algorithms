@@ -29,7 +29,7 @@ std::pair<vec_type, vec_type> vectors(void){
             std::vector<double>{4,	9,	10,	12,	13,	14,	9,	12,	13,	14},
             std::vector<double>{5,	0,	5,	76,	23,	56,	0,	76,	23,	56},
             std::vector<double>{6,	3,	4,	89,	99,	77,	3,	89,	99,	77}
-        }; 
+        };
     }
     {
         // vec_pair.first = vec_type{
@@ -55,18 +55,18 @@ std::pair<vec_type, vec_type> vectors(void){
         //     std::vector<double>{1,	2,	3,	5,	6,	7,	2,	5,	6,	7},
         //     std::vector<double>{2,	5,	6,	8,	9,	10,	5,	8,	9,	10},
         //     std::vector<double>{3,	6,	7,	9,	10,	11,	6,	9,	10,	11}
-        // }; 
+        // };
 
     }
     {
         // vec_pair.first = vec_type{};
 
-        // vec_pair.second = vec_type{}; 
+        // vec_pair.second = vec_type{};
     }
     {
         // vec_pair.first = vec_type{std::vector<double>{}};
 
-        // vec_pair.second = vec_type{std::vector<double>{}}; 
+        // vec_pair.second = vec_type{std::vector<double>{}};
 
     }
 
@@ -79,8 +79,8 @@ void check(vec_type& av, vec_type& bv){
     s21::Matrix<double> a(av);
     s21::Matrix<double> b(bv);
 
-    s21::WinogradUsual alg;
-    // s21::WinogradParallel alg;
+    // s21::WinogradUsual alg;
+    s21::WinogradParallel alg;
 
     std::cout << alg.WinogradMultiplication(a, b).matrix_array << std::endl;
 }
