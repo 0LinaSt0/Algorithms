@@ -52,8 +52,8 @@ std::string Sle<T>::SleException::GetMessage() const{
 
 template< class T >
 Sle<T> Sle<T>::LoadFromFile(const std::string& filename){
-    std::ifstream file_stream;
-    int rows_count, columns_count;
+    // std::ifstream file_stream;
+    int rows_count = 0, columns_count = 0;
 
     // Open file
     std::ifstream input_file_stream;
@@ -66,8 +66,7 @@ Sle<T> Sle<T>::LoadFromFile(const std::string& filename){
     input_file_stream >> rows_count;
     input_file_stream >> columns_count;
     if (rows_count < 1 || columns_count < 1 ||
-            (rows_count == 1 && columns_count == 1) ||
-            rows_count + 1 != columns_count){
+            (rows_count == 1 && columns_count == 1)){
         throw SleException("Invalid SLE");
     }
 

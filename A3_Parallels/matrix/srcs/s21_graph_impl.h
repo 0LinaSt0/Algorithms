@@ -94,7 +94,7 @@ bool Graph<T>::IsConnected() const{
 
 template< class T >
 Graph<T> Graph<T>::LoadFromFile(const std::string& filename){
-    std::ifstream file_stream;
+    // std::ifstream file_stream;
     int rows_count, columns_count;
 
     // Open file

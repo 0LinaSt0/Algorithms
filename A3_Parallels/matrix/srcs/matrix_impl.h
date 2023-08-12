@@ -116,7 +116,7 @@ typename Matrix<T>::reverse_const_iterator_type Matrix<T>::Rend() const{
 
 template< class T >
 Matrix<T> Matrix<T>::LoadFromFile(const std::string& filename){
-    std::ifstream file_stream;
+    // std::ifstream file_stream;
     int rows_count, columns_count;
 
     // Open file
