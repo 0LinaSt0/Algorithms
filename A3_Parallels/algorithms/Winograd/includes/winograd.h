@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include <memory>
+#include <limits>
 #include <thread>
 #include <mutex>
 #include <map>
@@ -66,6 +67,7 @@ public:
     WinogradParent();
     ~WinogradParent() = default;
 
+    // Algo entry point
     result_matrix_type WinogradMultiplication(
                             matrix_type_reference matrix_first,
                             matrix_type_reference matrix_second);
@@ -75,11 +77,20 @@ protected:
     elements_type first_matrix_multiplicator_;
     multiplicators_arrray second_matrix_multiplicators_;
 
+    // Check if matrices' sizes are ok for multiplication
     bool IsMatricesInvalid_(column_size_type matrix_first_column_count,
                         row_size_type matrix_second_row_count);
 
+    // Reserve memory for result matrix
     void ResultMatrixReserveRowsStorage_(row_size_type row_count);
 
+
+    /**
+     * Create lambda which returns multiplicator of last element or
+     * pair of elements. It all depends on count of elements.
+     * 
+     * Call RowsMultiplication_ after that.
+    */   
     void MatrixMultiplication_(matrices_pair_ptr matrices_ptr);
 
     virtual void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
@@ -145,10 +156,27 @@ class WinograPipelineParallel : public WinogradParent{
 public:
     WinograPipelineParallel();
 
-private:
-    void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
-                        extra_multiplier_func extra_muliplier);
+private:    
+    // They lock each thread from auto running at startup
+    std::vector<std::mutex> start_thread_mutexes_;
+    // Multiplicators for columns
+    std::vector<double> multiplicators_b_;
+    // Mutex for columns' multiplicators
+    std::mutex multiplicators_b_mutex_;
 
+    void RowsMultiplication_(
+        matrices_pair_ptr matrices_ptr,
+        extra_multiplier_func extra_muliplier
+    );
+
+    // Init threads' startup mutexes and lock them
+    void InitThreadMutexes_(matrices_pair_ptr matrices_ptr);
+    // Fill result mtrx with default values
+    void InitResultMtrx_(matrices_pair_ptr matrices_ptr);
+    // Fill field multiplicators_b_ with NANs
+    void InitMultiplicators_(matrices_pair_ptr matrices_ptr);
+    // Return lambda function to run in thread
+    auto GetThreadBody_();
 };
 
 }

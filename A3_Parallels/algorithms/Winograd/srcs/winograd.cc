@@ -378,10 +378,56 @@ WinograPipelineParallel::WinograPipelineParallel() : WinogradParent() { }
 void WinograPipelineParallel::RowsMultiplication_(
                                         matrices_pair_ptr matrices_ptr,
                                         extra_multiplier_func extra_muliplier){
-    for(row_size_type of_first_row_i = 0;
-            of_first_row_i < matrices_ptr->first.RowsSize();
-            of_first_row_i++
-        )
+    (void) extra_muliplier;
+    
+    InitResultMtrx_(matrices_ptr);
+    InitMultiplicators_(matrices_ptr);
+}
+
+void WinograPipelineParallel::InitThreadMutexes_(matrices_pair_ptr matrices_ptr){
+    row_size_type rows_count = matrices_ptr->first.RowsSize();
+    
+    start_thread_mutexes_ = std::move(std::vector<std::mutex>(rows_count));
+    for (row_size_type i = 0; i < rows_count; i++){
+        start_thread_mutexes_.back().lock();
+    }
+}
+
+void WinograPipelineParallel::InitResultMtrx_(matrices_pair_ptr matrices_ptr){
+    row_size_type rows_count = matrices_ptr->first.RowsSize();
+    column_size_type columns_count = matrices_ptr->second.ColumnsSize();
+
+    result_matrix_.matrix_array.reserve(rows_count);
+    for (row_size_type i = 0; i < rows_count; i++){
+        result_matrix_type::rows_type new_row(columns_count);
+        result_matrix_.matrix_array.push_back(std::move(new_row));
+    }
+}
+
+void WinograPipelineParallel::InitMultiplicators_(
+    matrices_pair_ptr matrices_ptr
+){
+    column_size_type columns_count = matrices_ptr->second.ColumnsSize();
+
+    multiplicators_b_ = std::move(std::vector<double>(
+        columns_count, 
+        std::numeric_limits<double>::quiet_NaN()
+    ));
+}
+
+auto WinograPipelineParallel::GetThreadBody_(){
+    return [this](matrices_pair_ptr matrices_ptr, row_size_type row_num){
+        (void) matrices_ptr;
+        (void) row_num;
+
+        column_size_type columns_count = matrices_ptr->second.ColumnsSize();
+
+        // Wait for the start
+        this->start_thread_mutexes_[row_num].lock();
+        for (column_size_type col = 0; col < columns_count; col += 2){
+
+        }
+    };
 }
 
 }
