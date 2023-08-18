@@ -7,6 +7,7 @@
 #include <memory>
 #include <limits>
 #include <thread>
+#include <queue>
 #include <cmath>
 #include <mutex>
 #include <map>
@@ -158,27 +159,27 @@ public:
     WinograPipelineParallel();
 
 private:
-    struct Thread{
-        Thread() = default;
-        Thread(const Thread&) = delete;
-        Thread(Thread&&) = default;
-        ~Thread() = default;
+    struct Stage{
+        Stage() = default;
+        Stage(const Stage&) = delete;
+        Stage(Stage&& st) = default;
+        ~Stage() = default;
 
-        Thread& operator=(const Thread&) = delete;
-        Thread& operator=(Thread&&) = default;
+        Stage& operator=(const Stage&) = delete;
+        Stage& operator=(Stage&&) = default;
 
         std::thread thread;
-        row_size_type row;
+        std::queue<row_size_type> rows;
         int id;
     };
 
     const row_size_type MAX_STAGES = 4;
     // Stages
-    std::vector<Thread> threads_;
+    std::vector<Stage> stages_;
     // Stages mutex
-    std::mutex threads_mutex_;
-    // They lock each thread from auto running at startup
-    std::vector<std::mutex> start_thread_mutexes_;
+    std::mutex stages_mutex_;
+    // Start threads muteces
+    std::vector<std::mutex> start_muteces_;
     // Multiplicators for columns
     std::vector<double> multiplicators_b_;
     // Mutex for columns' multiplicators
@@ -189,15 +190,13 @@ private:
         extra_multiplier_func extra_muliplier
     );
 
-    // Init threads' startup mutexes and lock them
-    void InitThreadMutexes_(matrices_pair_ptr matrices_ptr);
     // Fill result mtrx with default values
     void InitResultMtrx_(matrices_pair_ptr matrices_ptr);
     // Fill field multiplicators_b_ with NANs
     void InitMultiplicators_(matrices_pair_ptr matrices_ptr);
     // Return lambda function to run in thread
     std::function<void ()> GetThreadBody_(
-        Thread& thread, 
+        Stage& stage,
         matrices_pair_ptr matrices_ptr
     );
 };
