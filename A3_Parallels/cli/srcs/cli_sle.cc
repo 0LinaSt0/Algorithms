@@ -9,28 +9,32 @@ void CliSle::run(){
         const std::string filepath = ReadLine_();
         Sle<double> mtrx = Sle<double>::LoadFromFile(filepath);
         
+        // Get algo iters count
         int iters_count;
         PrintMsg_("Enter algorithm iters count");
         iters_count = ReadNum_();
         if (iters_count < 1) {
             throw CliException("Iterations count cannot be non-positive");
         }
-        
+
+        // Execute
         SleGaussianUsual sle_usual(mtrx);
         SleGaussianParellel sle_parallel(mtrx);
+        SleResult result_usual, result_parallel;
+        long long duration_usual = 0, duration_parallel = 0;
 
-        Timer timer;
-        long long single_duration, multi_duration;
-        
-        timer.Start();
-        SleResult single_result = sle_usual.GaussianElimination();
-        timer.End();
-        single_duration = timer.GetDuration();
+        auto run_algo = [](
+            SleGaussianParent& sle,
+            SleResult& result,
+            long long& duration
+        ){
+            Timer timer;
 
-        timer.Start();
-        SleResult multi_result = sle_parallel.GaussianElimination();
-        timer.End();
-        multi_duration = timer.GetDuration();
+            timer.Start();
+            result = sle.GaussianElimination();
+            timer.End();
+            duration = timer.GetDuration();
+        };
 
         auto print_res = [](
             const std::string& title,
@@ -44,8 +48,22 @@ void CliSle::run(){
                 << "Execution time: " << (time / 1000) << " ms" << std::endl;
         };
 
-        print_res("Single thread", single_result, single_duration);
-        print_res("Multiple threads", multi_result, multi_duration);
+        // Execute
+        for (int i = 0; i < iters_count; i++){
+            SleGaussianUsual sle_usual(mtrx);
+            SleGaussianParellel sle_parallel(mtrx);
+            long long duration_usual_tmp, duration_parallel_tmp;
+
+            run_algo(sle_usual, result_usual, duration_usual_tmp);
+            run_algo(sle_parallel, result_parallel, duration_parallel_tmp);
+
+            duration_usual += duration_usual_tmp;
+            duration_parallel += duration_parallel_tmp;
+        }
+
+        // Print results
+        print_res("Single thread", result_usual, duration_usual);
+        print_res("Multiple threads", result_parallel, duration_parallel);
 
     } catch (Exception& e) {
         PrintMsg_(e.GetMessage());

@@ -9,29 +9,29 @@ void CliAco::run(){
         const std::string filepath = ReadLine_();
         Graph<double> graph = Graph<double>::LoadFromFile(filepath);
         
+        // Get algo iters count
         int iters_count;
         PrintMsg_("Enter algorithm iters count");
         iters_count = ReadNum_();
         if (iters_count < 1) {
             throw CliException("Iterations count cannot be non-positive");
         }
-        
-        AcoSingle aco_single(graph);
-        AcoMulti aco_multi(graph);
+    
+        // Run algo and save results
+        auto run_algo = [iters_count](
+            AcoAbs& aco,
+            TsmResult& result,
+            long long& duration
+        ){
+            Timer timer;
 
-        Timer timer;
-        long long single_duration, multi_duration;
-        
-        timer.Start();
-        TsmResult single_result = aco_single.run(iters_count);
-        timer.End();
-        single_duration = timer.GetDuration();
+            timer.Start();
+            result = aco.run(iters_count);
+            timer.End();
+            duration = timer.GetDuration();
+        };
 
-        timer.Start();
-        TsmResult multi_result = aco_multi.run(iters_count);
-        timer.End();
-        multi_duration = timer.GetDuration();
-
+        // Print info
         auto print_res = [](
             const std::string& title,
             const TsmResult& tsm_result,
@@ -45,8 +45,18 @@ void CliAco::run(){
                 << "Execution time: " << (time / 1000) << " ms" << std::endl;
         };
 
-        print_res("Single thread", single_result, single_duration);
-        print_res("Multiple threads", multi_result, multi_duration);
+        // Execute
+        AcoSingle aco_single(graph);
+        AcoMulti aco_multi(graph);
+        TsmResult result_single, result_multi;
+        long long duration_single, duration_multi;
+
+        run_algo(aco_single, result_single, duration_single);
+        run_algo(aco_multi, result_multi, duration_multi);
+
+        // Print results
+        print_res("Single thread", result_single, duration_single);
+        print_res("Multiple threads", result_multi, duration_multi);
 
     } catch (Exception& e) {
         PrintMsg_(e.GetMessage());

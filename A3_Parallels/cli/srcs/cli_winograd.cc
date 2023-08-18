@@ -22,6 +22,7 @@ void CliWinograd::run(){
             );
         }
                 
+        // Get algo iters count
         int iters_count;
         PrintMsg_("Enter algorithm iters count");
         iters_count = ReadNum_();
@@ -29,48 +30,39 @@ void CliWinograd::run(){
             throw CliException("Iterations count cannot be non-positive");
         }
 
+        // Print input matrices
+        Matrix<double>& A = mtrx.first;
+        Matrix<double>& B = mtrx.second;
         std::cout
             << "\tMatrix A"
             << std::endl
-            << mtrx.first 
+            << A 
             << std::endl
             << std::endl
             << "\tMatrix B"
             << std::endl
-            << mtrx.second
+            << B
             << std::endl
             << std::endl;
+
+        // Execute
+        MatrixResult<double> result_usual, result_parallel, result_pipeline;
+        long long duration_usual = 0, 
+                    duration_parallel = 0, 
+                    duration_pipeline = 0;
         
-        WinogradUsual win_usual;
-        WinogradParallel win_parallel;
-        WinograPipelineParallel win_pipeline;
+        auto run_algo = [&A, &B](
+            WinogradParent& algo, 
+            MatrixResult<double>& result,
+            long long& duration
+        ){
+            Timer timer;
 
-        Timer timer;
-        long long single_duration, multi_duration, pipeline_duration;
-        
-        timer.Start();
-        MatrixResult<double> single_result = win_usual.WinogradMultiplication(
-            mtrx.first,
-            mtrx.second
-        );
-        timer.End();
-        single_duration = timer.GetDuration();
-
-        timer.Start();
-        MatrixResult<double> multi_result = win_parallel.WinogradMultiplication(
-            mtrx.first,
-            mtrx.second
-        );
-        timer.End();
-        multi_duration = timer.GetDuration();
-
-        timer.Start();
-        MatrixResult<double> pipe_result = win_pipeline.WinogradMultiplication(
-            mtrx.first,
-            mtrx.second
-        );
-        timer.End();
-        pipeline_duration = timer.GetDuration();
+            timer.Start();
+            result = algo.WinogradMultiplication(A, B);
+            timer.End();
+            duration = timer.GetDuration();
+        };
 
         auto print_res = [](
             const std::string& title,
@@ -84,9 +76,27 @@ void CliWinograd::run(){
                 << "Execution time: " << (time / 1000) << " ms" << std::endl;
         };
 
-        print_res("Single thread", single_result, single_duration);
-        print_res("Multiple threads", multi_result, multi_duration);
-        print_res("Pipeline parallels", pipe_result, pipeline_duration);
+        for (int i = 0; i < iters_count; i++){
+            WinogradUsual win_usual;
+            WinogradParallel win_parallel;
+            WinograPipelineParallel win_pipeline;
+            long long duration_usual_tmp,
+                        duration_parallel_tmp,
+                        duration_pipeline_tmp;
+
+            run_algo(win_usual, result_usual, duration_usual_tmp);
+            run_algo(win_parallel, result_parallel, duration_parallel_tmp);
+            run_algo(win_pipeline, result_pipeline, duration_pipeline_tmp);
+
+            duration_usual += duration_usual_tmp;
+            duration_parallel += duration_parallel_tmp;
+            duration_pipeline += duration_pipeline_tmp;
+        }
+
+        // Print results
+        print_res("Single thread", result_usual, duration_usual);
+        print_res("Multiple threads", result_parallel, duration_parallel);
+        print_res("Pipeline parallels", result_pipeline, duration_pipeline);
 
     } catch (Exception& e) {
         PrintMsg_(e.GetMessage());
