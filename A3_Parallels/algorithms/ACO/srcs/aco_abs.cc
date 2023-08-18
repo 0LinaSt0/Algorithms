@@ -12,8 +12,10 @@ std::string AcoAbs::AcoException::GetMessage() const{
     return ::s21::Exception::msg_;
 }
 
-::s21::TsmResult AcoAbs::run(int iters_count, int ants_count){    
+::s21::TsmResult AcoAbs::run(int iters_count){    
     // Algorithm iterations
+    int ants_count = static_cast<int>(graph_.NodesSize());
+
     for (int current_iter = 0; current_iter < iters_count; current_iter++){
     for (
             int start_vertex = 0;

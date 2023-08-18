@@ -9,12 +9,7 @@ void CliAco::run(){
         const std::string filepath = ReadLine_();
         Graph<double> graph = Graph<double>::LoadFromFile(filepath);
         
-        int ants_count, iters_count;
-        PrintMsg_("Enter ants count");
-        ants_count = ReadNum_();
-        if (ants_count < 1) {
-            throw CliException("Ants count cannot be non-positive");
-        }
+        int iters_count;
         PrintMsg_("Enter algorithm iters count");
         iters_count = ReadNum_();
         if (iters_count < 1) {
@@ -28,12 +23,12 @@ void CliAco::run(){
         long long single_duration, multi_duration;
         
         timer.Start();
-        TsmResult single_result = aco_single.run();
+        TsmResult single_result = aco_single.run(iters_count);
         timer.End();
         single_duration = timer.GetDuration();
 
         timer.Start();
-        TsmResult multi_result = aco_multi.run();
+        TsmResult multi_result = aco_multi.run(iters_count);
         timer.End();
         multi_duration = timer.GetDuration();
 
@@ -62,4 +57,9 @@ void CliAco::PrintMenu_() const{
 
 }
 
+}
+
+int main(){
+    ::s21::CliAco cli;
+    cli.run();
 }

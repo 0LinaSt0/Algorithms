@@ -27,8 +27,7 @@ public:
     AcoAbs& operator=(AcoAbs&& other) = delete;
 
     ::s21::TsmResult run(
-        int iters_count = 10,
-        int ants_count = 10
+        int iters_count = 10
     );
 
 protected:
