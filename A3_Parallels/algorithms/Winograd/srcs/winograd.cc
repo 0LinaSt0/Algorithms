@@ -2,7 +2,7 @@
 
 namespace s21{
 
-WinogradParent::WinogradParent() : first_matrix_multiplicator_(0) { }
+WinogradParent::WinogradParent() { }
 
 WinogradParent::result_matrix_type WinogradParent::WinogradMultiplication(
                                         matrix_type_reference matrix_first,
@@ -12,7 +12,6 @@ WinogradParent::result_matrix_type WinogradParent::WinogradMultiplication(
     )){
         matrices_pair matrices{matrix_first, matrix_second};
 
-        ResultMatrixReserveRowsStorage_(matrix_first.RowsSize());
         MatrixMultiplication_(&matrices);
     }
 
@@ -41,10 +40,6 @@ bool WinogradParent::IsMatricesInvalid_(
         is_invalid = true;
     }
     return is_invalid;
-}
-
-void WinogradParent::ResultMatrixReserveRowsStorage_(row_size_type row_count){
-    result_matrix_.matrix_array.reserve(row_count);
 }
 
 void WinogradParent::MatrixMultiplication_(matrices_pair_ptr matrices_ptr){
@@ -84,15 +79,16 @@ WinogradParent::multiplicators_func WinogradParent::DefineMultiplicatorsFunc_(
         case WhitchMultiplicatorsCalculate::FIRST:
             return_func =
                 [matrices_ptr](
-                    elements_type& first_matrix_multiplicator,
+                    elements_type first_matrix_multiplicator,
                     multiplicators_arrray_reference,
                     row_size_type row_i,
                     column_size_type column_i,
                     column_size_type
-                ) -> void {
+                ) -> elements_type {
                     first_matrix_multiplicator +=
                         matrices_ptr->first[row_i][column_i] *
                         matrices_ptr->first[row_i][column_i + 1];
+                    return first_matrix_multiplicator;
                 };
             break;
 
@@ -102,12 +98,12 @@ WinogradParent::multiplicators_func WinogradParent::DefineMultiplicatorsFunc_(
         case WhitchMultiplicatorsCalculate::FIRST_SECOND:
             return_func =
                 [matrices_ptr](
-                    elements_type& first_matrix_multiplicator,
+                    elements_type first_matrix_multiplicator,
                     multiplicators_arrray_reference of_second_multiplicators,
                     row_size_type row_i,
                     column_size_type column_i,
                     column_size_type of_second_column_i
-                ) -> void {
+                ) -> elements_type {
                     first_matrix_multiplicator +=
                         matrices_ptr->first[row_i][column_i] *
                         matrices_ptr->first[row_i][column_i + 1];
@@ -115,6 +111,7 @@ WinogradParent::multiplicators_func WinogradParent::DefineMultiplicatorsFunc_(
                     of_second_multiplicators[of_second_column_i] +=
                         matrices_ptr->second[column_i][of_second_column_i] *
                         matrices_ptr->second[column_i + 1][of_second_column_i];
+                    return first_matrix_multiplicator;
                 };
             break;
 
@@ -124,15 +121,16 @@ WinogradParent::multiplicators_func WinogradParent::DefineMultiplicatorsFunc_(
         case WhitchMultiplicatorsCalculate::SECOND:
             return_func =
                 [matrices_ptr](
-                    elements_type&,
+                    elements_type first_matrix_multiplicator,
                     multiplicators_arrray_reference of_second_multiplicators,
                     row_size_type,
                     column_size_type column_i,
                     column_size_type of_second_column_i
-                ) -> void {
+                ) -> elements_type {
                     of_second_multiplicators[of_second_column_i] +=
                         matrices_ptr->second[column_i][of_second_column_i] *
                         matrices_ptr->second[column_i + 1][of_second_column_i];
+                return first_matrix_multiplicator;
                 };
             break;
 
@@ -142,12 +140,15 @@ WinogradParent::multiplicators_func WinogradParent::DefineMultiplicatorsFunc_(
         case WhitchMultiplicatorsCalculate::NO_ONE:
             return_func =
                 [matrices_ptr](
-                    elements_type&,
+                    elements_type first_matrix_multiplicator,
                     multiplicators_arrray_reference,
                     row_size_type,
                     column_size_type,
                     column_size_type
-                ) -> void { };
+                ) -> elements_type {
+                    (void) matrices_ptr;
+                    return first_matrix_multiplicator;
+                };
             break;
     }
     return return_func;
@@ -186,6 +187,7 @@ WinogradParent::matrix_rows_unique_ptr
     elements_type current_element_result;
     multiplications_calculate_pair execute_codes;
     multiplicators_func multiplicators_calculation;
+    elements_type first_matrix_multiplicator;
 
     execute_codes = DefineMultiplicationCalculationSolution_(type_row_code);
 
@@ -208,10 +210,10 @@ WinogradParent::matrix_rows_unique_ptr
         of_first_row_i,
         0,
         extra_muliplier,
-        multiplicators_calculation
+        multiplicators_calculation,
+        first_matrix_multiplicator
     );
     result_row->push_back(current_element_result);
-
 
     //For next elements
     multiplicators_calculation = DefineMultiplicatorsFunc_(
@@ -228,12 +230,13 @@ WinogradParent::matrix_rows_unique_ptr
             of_first_row_i,
             of_second_column_i,
             extra_muliplier,
-            multiplicators_calculation
+            multiplicators_calculation,
+            first_matrix_multiplicator
         );
         result_row->push_back(current_element_result);
 
     }
-    first_matrix_multiplicator_ = 0;
+    first_matrix_multiplicator = 0;
     return result_row;
 }
 
@@ -242,7 +245,8 @@ WinogradParent::elements_type
                     row_size_type of_first_row_i,
                     column_size_type of_second_column_i,
                     extra_multiplier_func extra_muliplier,
-                    multiplicators_func multiplicators_calculation){
+                    multiplicators_func multiplicators_calculation,
+                    elements_type& first_matrix_multiplicator){
     elements_type element_result;
 
     element_result = 0;
@@ -261,8 +265,8 @@ WinogradParent::elements_type
         //         << matrices_ptr.second[of_first_column_i + 1][of_second_column_i] << std::endl;
             // std::cout << first_matrix_multiplicator_ << " ";
         // }
-        multiplicators_calculation(
-            first_matrix_multiplicator_,
+        first_matrix_multiplicator = multiplicators_calculation(
+            first_matrix_multiplicator,
             second_matrix_multiplicators_,
             of_first_row_i,
             of_first_column_i,
@@ -283,7 +287,7 @@ WinogradParent::elements_type
     // }
     element_result += extra_muliplier(of_first_row_i, of_second_column_i);
     element_result -=
-        first_matrix_multiplicator_ +
+        first_matrix_multiplicator +
         second_matrix_multiplicators_[of_second_column_i];
     return element_result;
 }
@@ -301,7 +305,8 @@ void WinogradUsual::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
         matrices_ptr,
         0,
         extra_muliplier,
-        WhichMultiplicationCalculationSolution::FOR_FIRST_ELEM);
+        WhichMultiplicationCalculationSolution::FOR_FIRST_ELEM
+    );
     result_matrix_.matrix_array.push_back(*current_result_row);
 
     // For next rows
@@ -321,10 +326,19 @@ void WinogradUsual::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
 
 WinogradParallel::WinogradParallel() : WinogradParent() { }
 
+void WinogradParallel::ResultMatrixDefaultInitialization_(
+                                            row_size_type of_first_rows_count){
+    for(row_size_type i = 0; i < of_first_rows_count; i++){
+        result_matrix_.matrix_array.push_back(result_matrix_rows_type());
+    }
+}
+
 void WinogradParallel::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
                                     extra_multiplier_func extra_muliplier){
 
     matrix_rows_unique_ptr current_result_row;
+
+    ResultMatrixDefaultInitialization_(matrices_ptr->first.RowsSize());
 
     // For first row
     current_result_row = CalculateRow_(
@@ -332,7 +346,7 @@ void WinogradParallel::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
         0,
         extra_muliplier,
         WhichMultiplicationCalculationSolution::FOR_FIRST_ELEM);
-    result_matrix_.matrix_array.push_back(*current_result_row);
+    result_matrix_.matrix_array[0] = std::move(*current_result_row);
 
     // For next rows
     try{
@@ -369,7 +383,8 @@ void WinogradParallel::RowsParallelism_(matrices_pair_ptr matrices_ptr,
         WhichMultiplicationCalculationSolution::FOR_NEXT_ELEMS
     );
     std::lock_guard<mutex_type> locker(lock_);
-    result_matrix_.matrix_array.push_back(*current_result_row);
+    result_matrix_.matrix_array[of_first_row_i] = 
+                                                std::move(*current_result_row);
 }
 
 

@@ -34,6 +34,7 @@ class WinogradParent{
 public:
     using elements_type             = double;
     using matrix_type               = Matrix<elements_type>;
+    using row_matrix_type           = typename matrix_type::row_matrix_type;
     using matrix_type_reference     = matrix_type&;
     using result_matrix_type        = MatrixResult<elements_type>;
     using result_matrix_rows_type   = typename result_matrix_type::rows_type;
@@ -58,8 +59,8 @@ public:
     using extra_multiplier_func     = std::function<elements_type(
                                             row_size_type,
                                             column_size_type)>;
-    using multiplicators_func       = std::function<void(
-                                        elements_type&,
+    using multiplicators_func       = std::function<elements_type(
+                                        elements_type,
                                         multiplicators_arrray_reference,
                                         row_size_type,
                                         column_size_type,
@@ -77,7 +78,6 @@ public:
 
 protected:
     result_matrix_type result_matrix_;
-    elements_type first_matrix_multiplicator_;
     multiplicators_arrray second_matrix_multiplicators_;
 
     // Check if matrices' sizes are ok for multiplication
@@ -116,7 +116,8 @@ protected:
                     row_size_type of_first_row_i,
                     column_size_type of_second_colum_i,
                     extra_multiplier_func extra_muliplier,
-                    multiplicators_func multiplicators_calculation);
+                    multiplicators_func multiplicators_calculation, 
+                    elements_type& first_matrix_multiplicator);
 };
 
 class WinogradUsual : public WinogradParent{
@@ -146,6 +147,8 @@ public:
 
 private:
     mutex_type lock_;
+
+    void ResultMatrixDefaultInitialization_(row_size_type of_first_rows_count);
 
     void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
                         extra_multiplier_func element_calculation);
