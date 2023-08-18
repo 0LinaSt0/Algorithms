@@ -5,7 +5,8 @@
 GTEST				=	false
 
 ANT_EXE				=	ant.out
-SLE_EXE				=	sle.out
+SLE_EXE				=	gauss.out
+WIN_EXE				=	winograd.out
 TEST_EXE			=	test.out
 
 TEST_DIR			=	tests
@@ -13,11 +14,11 @@ TMP_DIR				=	tmp_handlers
 
 CC					=	g++
 ifeq ($(GTEST), true)
-	GCC				=	$(CC) -std=c++17 -lgtest -Wall -Wextra -Werror -MMD -g		\
+	GCC				=	$(CC) -std=c++17 -lgtest -Wall -Wextra -Werror -MMD -g	\
 							-fsanitize=leak -fsanitize=undefined -fsanitize=address
 else		
-	GCC				=	$(CC) -std=c++17 -Wall -Wextra -Werror -MMD -g				\
-					-fsanitize=leak -fsanitize=undefined -fsanitize=address
+	GCC				=	$(CC) -std=c++17 -Wall -Wextra -Werror -MMD -g			\
+							-fsanitize=leak -fsanitize=undefined -fsanitize=address
 endif
 
 ###########################
@@ -195,7 +196,7 @@ $(TMP_DIR)/%.o:				%.cc $(TEST_HDRS) $(HDRS)
 							@mkdir -p $(dir $@)
 							$(GCC) -c -o $@ $<
 
-all:						ant gauss
+all:						ant gauss winograd
 							
 ant:						$(PRJ_OBJS_ALGO_ACO) $(PRJ_OBJS_CLI_ACO) $(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL)
 							$(GCC) $(PRJ_OBJS_ALGO_ACO) $(PRJ_OBJS_CLI_ACO) \
@@ -207,6 +208,11 @@ gauss:						$(PRJ_OBJS_ALGO_SLE) $(PRJ_OBJS_CLI_SLE) $(PRJ_OBJS_MTRX) $(PRJ_OBJS
 								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) \
 								-o $(SLE_EXE)
 
+winograd:					$(PRJ_OBJS_ALGO_WIN) $(PRJ_OBJS_CLI_WIN) $(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL)
+							$(GCC) $(PRJ_OBJS_ALGO_WIN) $(PRJ_OBJS_CLI_WIN) \
+								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) \
+								-o $(WIN_EXE)
+
 test:						$(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
 								$(PRJ_OBJS_UTIL) $(TEST_OBJS)
 							$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
@@ -217,11 +223,13 @@ clean:
 							@rm -rf $(TMP_DIR)
 
 fclean:						clean
-							@rm -f $(MAIN_EXE)
+							@rm -f $(ANT_EXE)
+							@rm -f $(SLE_EXE)
+							@rm -f $(WIN_EXE)
 							@rm -f $(TEST_EXE)
 
 re:							fclean all
 
 -include $(DPNDS) $(TEST_DPNDS)
 
-.PHONY: ant gauss test clean fclean re
+.PHONY: ant gauss winograd test clean fclean re
