@@ -16,9 +16,6 @@ public:
 
     void run();
 
-protected:
-    void PrintMenu_() const;
-
 };
 
 }

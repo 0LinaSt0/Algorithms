@@ -52,10 +52,6 @@ void CliSle::run(){
     }
 }
 
-void CliSle::PrintMenu_() const{
-
-}
-
 }
 
 int main(){

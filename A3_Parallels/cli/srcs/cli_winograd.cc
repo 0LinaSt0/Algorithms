@@ -93,10 +93,6 @@ void CliWinograd::run(){
     }
 }
 
-void CliWinograd::PrintMenu_() const{
-
-}
-
 std::pair<Matrix<double>, Matrix<double>> CliWinograd::random_mtrx_() const{
     int A_row, A_col, B_row, B_col;
 

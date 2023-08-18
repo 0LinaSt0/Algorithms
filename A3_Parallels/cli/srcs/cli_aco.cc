@@ -53,10 +53,6 @@ void CliAco::run(){
     }
 }
 
-void CliAco::PrintMenu_() const{
-
-}
-
 }
 
 int main(){

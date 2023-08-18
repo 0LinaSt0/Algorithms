@@ -57,10 +57,6 @@ protected:
     const static std::string SEPARATOR_;
 
     /**
-     * Print list of available methods.
-    */
-    virtual void PrintMenu_() const = 0;
-    /**
      * Print message with awesome promt.
     */
     void PrintMsg_(const std::string& msg) const;

@@ -17,9 +17,7 @@ public:
 
     void run();
 
-protected:
-    void PrintMenu_() const;
-
+private:
     std::pair<Matrix<double>, Matrix<double>> random_mtrx_() const;
     std::pair<Matrix<double>, Matrix<double>> load_mtrx_() const;
 
