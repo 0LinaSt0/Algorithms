@@ -7,6 +7,7 @@
 #include <memory>
 #include <limits>
 #include <thread>
+#include <cmath>
 #include <mutex>
 #include <map>
 
@@ -176,7 +177,10 @@ private:
     // Fill field multiplicators_b_ with NANs
     void InitMultiplicators_(matrices_pair_ptr matrices_ptr);
     // Return lambda function to run in thread
-    auto GetThreadBody_();
+    std::function<void ()> GetThreadBody_(
+        matrices_pair_ptr matrices_ptr, 
+        row_size_type row
+    );
 };
 
 }

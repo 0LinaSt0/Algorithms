@@ -377,11 +377,25 @@ WinograPipelineParallel::WinograPipelineParallel() : WinogradParent() { }
 
 void WinograPipelineParallel::RowsMultiplication_(
                                         matrices_pair_ptr matrices_ptr,
-                                        extra_multiplier_func extra_muliplier){
-    (void) extra_muliplier;
-    
+                                        extra_multiplier_func){
+    InitThreadMutexes_(matrices_ptr);
     InitResultMtrx_(matrices_ptr);
     InitMultiplicators_(matrices_ptr);
+
+    row_size_type rows_count = matrices_ptr->first.RowsSize();
+    std::vector<std::thread> threads;
+    threads.reserve(rows_count);
+    for (row_size_type row = 0; row < rows_count; row++){
+        threads.push_back(
+            std::move(
+                std::thread(GetThreadBody_(matrices_ptr, row))
+            )
+        );
+    }
+    start_thread_mutexes_[0].unlock();
+    for (row_size_type row = 0; row < rows_count; row++){
+        threads[row].join();
+    }
 }
 
 void WinograPipelineParallel::InitThreadMutexes_(matrices_pair_ptr matrices_ptr){
@@ -389,7 +403,7 @@ void WinograPipelineParallel::InitThreadMutexes_(matrices_pair_ptr matrices_ptr)
     
     start_thread_mutexes_ = std::move(std::vector<std::mutex>(rows_count));
     for (row_size_type i = 0; i < rows_count; i++){
-        start_thread_mutexes_.back().lock();
+        start_thread_mutexes_[i].lock();
     }
 }
 
@@ -415,17 +429,55 @@ void WinograPipelineParallel::InitMultiplicators_(
     ));
 }
 
-auto WinograPipelineParallel::GetThreadBody_(){
-    return [this](matrices_pair_ptr matrices_ptr, row_size_type row_num){
-        (void) matrices_ptr;
-        (void) row_num;
+std::function<void ()> WinograPipelineParallel::GetThreadBody_(
+    matrices_pair_ptr matrices_ptr, 
+    row_size_type row
+){
+    return [this, matrices_ptr, row](){
+        matrix_type_reference A = matrices_ptr->first;
+        matrix_type_reference B = matrices_ptr->second;
 
-        column_size_type columns_count = matrices_ptr->second.ColumnsSize();
+        // Wait for the thrad's start
+        this->start_thread_mutexes_[row].lock();
 
-        // Wait for the start
-        this->start_thread_mutexes_[row_num].lock();
-        for (column_size_type col = 0; col < columns_count; col += 2){
+        // Create row's multiplicator
+        double multi_a = 0;
+        for (column_size_type col = 0; col + 1 < A.ColumnsSize(); col += 2){
+            multi_a += A[row][col] * A[row][col + 1];
+        }
 
+        // Calculate row of result mtrx
+        for (column_size_type col = 0; col < B.ColumnsSize(); col++){
+            double multi_b = multiplicators_b_[col];
+            // Create column's multiplicator
+            if (std::isnan(multi_b)){
+                multi_b = 0;
+                for (row_size_type i = 0; i + 1 < B.RowsSize(); i += 2){
+                    multi_b += B[i][col] * B[i + 1][col];
+                }
+                std::lock_guard(this->multiplicators_b_mutex_);
+                this->multiplicators_b_[col] = multi_b;
+            }
+                    
+            // Continue row calculation
+            double res = 0;
+            column_size_type columns_count = A.ColumnsSize();
+            for (column_size_type i = 0; i < columns_count; i++){
+                if (i + 1 < columns_count) {
+                    res += (A[row][i] + B[i + 1][col]) *
+                            (A[row][i + 1] + B[i][col]);
+                    i++;
+                } else {
+                    res += A[row][i] * B[i][col];
+                }
+            }
+            res -= multi_a + multi_b;
+            this->result_matrix_.matrix_array[row][col] = res;
+        
+            // Let next thread start
+            if (col == 0 && row + 1 != A.RowsSize()){
+                this->start_thread_mutexes_[row + 1].unlock();
+            }
         }
     };
 }
