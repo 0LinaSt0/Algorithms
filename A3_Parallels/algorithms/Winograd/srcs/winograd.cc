@@ -383,18 +383,23 @@ void WinograPipelineParallel::RowsMultiplication_(
     InitMultiplicators_(matrices_ptr);
 
     row_size_type rows_count = matrices_ptr->first.RowsSize();
-    std::vector<std::thread> threads;
-    threads.reserve(rows_count);
-    for (row_size_type row = 0; row < rows_count; row++){
-        threads.push_back(
-            std::move(
-                std::thread(GetThreadBody_(matrices_ptr, row))
+    threads_.clear();
+    threads_.reserve(MAX_STAGES);
+    int next_id = 0;
+    for (row_size_type row = 0; row < std::min(rows_count, MAX_STAGES); row++){
+        Thread thread;
+        thread.row = row;
+        thread.id = next_id++;
+        thread.thread = std::move(
+            std::thread(
+                GetThreadBody_(thread, matrices_ptr)
             )
         );
+        threads_.push_back(std::move(thread));
     }
     start_thread_mutexes_[0].unlock();
-    for (row_size_type row = 0; row < rows_count; row++){
-        threads[row].join();
+    for (size_t row = 0; row < threads_.size(); row++){
+        threads_[row].thread.join();
     }
 }
 
@@ -430,53 +435,60 @@ void WinograPipelineParallel::InitMultiplicators_(
 }
 
 std::function<void ()> WinograPipelineParallel::GetThreadBody_(
-    matrices_pair_ptr matrices_ptr, 
-    row_size_type row
+    Thread& thread,
+    matrices_pair_ptr matrices_ptr
 ){
-    return [this, matrices_ptr, row](){
+    return [this, &thread, matrices_ptr](){
         matrix_type_reference A = matrices_ptr->first;
         matrix_type_reference B = matrices_ptr->second;
 
-        // Wait for the thrad's start
-        this->start_thread_mutexes_[row].lock();
+        while (true){
+            row_size_type row = thread.row;
 
-        // Create row's multiplicator
-        double multi_a = 0;
-        for (column_size_type col = 0; col + 1 < A.ColumnsSize(); col += 2){
-            multi_a += A[row][col] * A[row][col + 1];
-        }
+            // Wait for the thrad's start
+            this->start_thread_mutexes_[row].lock();
+            this->start_thread_mutexes_[row].unlock();
 
-        // Calculate row of result mtrx
-        for (column_size_type col = 0; col < B.ColumnsSize(); col++){
-            double multi_b = multiplicators_b_[col];
-            // Create column's multiplicator
-            if (std::isnan(multi_b)){
-                multi_b = 0;
-                for (row_size_type i = 0; i + 1 < B.RowsSize(); i += 2){
-                    multi_b += B[i][col] * B[i + 1][col];
-                }
-                std::lock_guard(this->multiplicators_b_mutex_);
-                this->multiplicators_b_[col] = multi_b;
+            // Create row's multiplicator
+            double multi_a = 0;
+            for (column_size_type col = 0; col + 1 < A.ColumnsSize(); col += 2){
+                multi_a += A[row][col] * A[row][col + 1];
             }
-                    
-            // Continue row calculation
-            double res = 0;
-            column_size_type columns_count = A.ColumnsSize();
-            for (column_size_type i = 0; i < columns_count; i++){
-                if (i + 1 < columns_count) {
-                    res += (A[row][i] + B[i + 1][col]) *
-                            (A[row][i + 1] + B[i][col]);
-                    i++;
-                } else {
-                    res += A[row][i] * B[i][col];
+
+            // Calculate row of result mtrx
+            for (column_size_type col = 0; col < B.ColumnsSize(); col++){
+                double multi_b = multiplicators_b_[col];
+                // Create column's multiplicator
+                if (std::isnan(multi_b)){
+                    multi_b = 0;
+                    for (row_size_type i = 0; i + 1 < B.RowsSize(); i += 2){
+                        multi_b += B[i][col] * B[i + 1][col];
+                    }
+                    std::lock_guard guard(this->multiplicators_b_mutex_);
+                    this->multiplicators_b_[col] = multi_b;
                 }
-            }
-            res -= multi_a + multi_b;
-            this->result_matrix_.matrix_array[row][col] = res;
-        
-            // Let next thread start
-            if (col == 0 && row + 1 != A.RowsSize()){
-                this->start_thread_mutexes_[row + 1].unlock();
+                        
+                // Continue row calculation
+                double res = 0;
+                column_size_type columns_count = A.ColumnsSize();
+                for (column_size_type i = 0; i < columns_count; i++){
+                    if (i + 1 < columns_count) {
+                        res += (A[row][i] + B[i + 1][col]) *
+                                (A[row][i + 1] + B[i][col]);
+                        i++;
+                    } else {
+                        res += A[row][i] * B[i][col];
+                    }
+                }
+                res -= multi_a + multi_b;
+                this->result_matrix_.matrix_array[row][col] = res;
+            
+                // Let next thread start
+                if (col == 0 && row + 1 != A.RowsSize()){
+                    // FIND OUT NEXT THREAD ID
+                    // CHANGE ITS ROW
+                    // UNLCOCK MUTEX
+                }
             }
         }
     };

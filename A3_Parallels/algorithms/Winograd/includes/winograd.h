@@ -157,7 +157,26 @@ class WinograPipelineParallel : public WinogradParent{
 public:
     WinograPipelineParallel();
 
-private:    
+private:
+    struct Thread{
+        Thread() = default;
+        Thread(const Thread&) = delete;
+        Thread(Thread&&) = default;
+        ~Thread() = default;
+
+        Thread& operator=(const Thread&) = delete;
+        Thread& operator=(Thread&&) = default;
+
+        std::thread thread;
+        row_size_type row;
+        int id;
+    };
+
+    const row_size_type MAX_STAGES = 4;
+    // Stages
+    std::vector<Thread> threads_;
+    // Stages mutex
+    std::mutex threads_mutex_;
     // They lock each thread from auto running at startup
     std::vector<std::mutex> start_thread_mutexes_;
     // Multiplicators for columns
@@ -178,8 +197,8 @@ private:
     void InitMultiplicators_(matrices_pair_ptr matrices_ptr);
     // Return lambda function to run in thread
     std::function<void ()> GetThreadBody_(
-        matrices_pair_ptr matrices_ptr, 
-        row_size_type row
+        Thread& thread, 
+        matrices_pair_ptr matrices_ptr
     );
 };
 
