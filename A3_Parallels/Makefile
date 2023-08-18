@@ -5,6 +5,7 @@
 GTEST				=	false
 
 ANT_EXE				=	ant.out
+SLE_EXE				=	sle.out
 TEST_EXE			=	test.out
 
 TEST_DIR			=	tests
@@ -194,12 +195,17 @@ $(TMP_DIR)/%.o:				%.cc $(TEST_HDRS) $(HDRS)
 							@mkdir -p $(dir $@)
 							$(GCC) -c -o $@ $<
 
-all:						ant
+all:						ant gauss
 							
 ant:						$(PRJ_OBJS_ALGO_ACO) $(PRJ_OBJS_CLI_ACO) $(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL)
 							$(GCC) $(PRJ_OBJS_ALGO_ACO) $(PRJ_OBJS_CLI_ACO) \
 								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) \
 								-o $(ANT_EXE)
+
+gauss:						$(PRJ_OBJS_ALGO_SLE) $(PRJ_OBJS_CLI_SLE) $(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL)
+							$(GCC) $(PRJ_OBJS_ALGO_SLE) $(PRJ_OBJS_CLI_SLE) \
+								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) \
+								-o $(SLE_EXE)
 
 test:						$(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
 								$(PRJ_OBJS_UTIL) $(TEST_OBJS)
@@ -218,4 +224,4 @@ re:							fclean all
 
 -include $(DPNDS) $(TEST_DPNDS)
 
-.PHONY: test clean fclean re
+.PHONY: ant gauss test clean fclean re
