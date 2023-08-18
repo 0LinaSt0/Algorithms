@@ -1,6 +1,7 @@
 #ifndef WINOGRAD
 #define WINOGRAD
 
+#include <condition_variable>
 #include <functional>
 #include <utility>
 #include <vector>
@@ -174,12 +175,16 @@ private:
     };
 
     const row_size_type MAX_STAGES = 4;
+    // Count of finished rows in result matrix
+    row_size_type rows_done_;
+    // Value to make threads wait for signal
+    std::condition_variable cv_;
     // Stages
     std::vector<Stage> stages_;
     // Stages mutex
-    std::mutex stages_mutex_;
-    // Start threads muteces
-    std::vector<std::mutex> start_muteces_;
+    std::vector<std::mutex> stages_mutexes_;
+    // Start stages' threads muteces
+    std::vector<std::mutex> start_mutexes_;
     // Multiplicators for columns
     std::vector<double> multiplicators_b_;
     // Mutex for columns' multiplicators
