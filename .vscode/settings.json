@@ -87,6 +87,9 @@
 		"locale": "cpp",
 		"queue": "cpp",
 		"stack": "cpp",
-		"ranges": "cpp"
+		"ranges": "cpp",
+		"any": "cpp",
+		"set": "cpp",
+		"cinttypes": "cpp"
 	}
 }

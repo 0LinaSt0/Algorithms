@@ -402,18 +402,21 @@ void WinograPipelineParallel::RowsMultiplication_(
     rows_done_ = 0;
     stages_.clear();
     stages_.reserve(stages_count);
-    start_mutexes_ = std::move(std::vector<std::mutex>(stages_count));
-    stages_mutexes_ = std::move(std::vector<std::mutex>(stages_count));
+
+    std::vector<std::mutex> m1(stages_count);
+    std::vector<std::mutex> m2(stages_count);
+    start_mutexes_ = std::move(m1);
+    stages_mutexes_ = std::move(m2);
    
     int next_id = 0;
     for (row_size_type row = 0; row < stages_count; row++){
-        stages_.push_back(std::move(Stage()));
+        Stage s;
+        stages_.push_back(std::move(s));
         Stage& stage = stages_.back();
         stage.id = next_id++;
 
-        stage.thread = std::move(
-            std::thread(GetThreadBody_(stage, matrices_ptr))
-        );
+        std::thread th(GetThreadBody_(stage, matrices_ptr));
+        stage.thread = std::move(th);
     }
     stages_[0].rows.push(0);
     cv_.notify_all();
@@ -438,10 +441,11 @@ void WinograPipelineParallel::InitMultiplicators_(
 ){
     column_size_type columns_count = matrices_ptr->second.ColumnsSize();
 
-    multiplicators_b_ = std::move(std::vector<double>(
+    std::vector<double> mb(
         columns_count, 
         std::numeric_limits<double>::quiet_NaN()
-    ));
+    );
+    multiplicators_b_ = std::move(mb);
 }
 
 std::function<void ()> WinograPipelineParallel::GetThreadBody_(

@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "matrix/includes/sle.h"
 #include "matrix/includes/graph.h"
 #include "matrix/includes/matrix.h"
 

@@ -2,7 +2,10 @@
 ### ~~ Common variables ~~ ###
 ##############################
 
+OS_NAME 			=	$(shell uname)
+
 GTEST				=	false
+GTEST_LIB			=	/usr/lib/libgtest.a /usr/lib/libgtest_main.a
 
 ANT_EXE				=	ant.out
 SLE_EXE				=	gauss.out
@@ -12,7 +15,7 @@ TEST_EXE			=	test.out
 TEST_DIR			=	tests
 TMP_DIR				=	tmp_handlers
 
-CC					=	g++
+CC					=	clang++
 ifeq ($(GTEST), true)
 	GCC				=	$(CC) -std=c++17 -lgtest -Wall -Wextra -Werror -MMD -g	\
 							-fsanitize=leak -fsanitize=undefined -fsanitize=address
@@ -144,7 +147,7 @@ DPNDS				=	$(PRJ_OBJS:.o=.d)
 TEST_HDRS_MTRX		=	$(addprefix $(TEST_DIR)/,								\
 							$(addprefix matrix/,								\
 								$(addprefix includes/,							\
-									matrix.h graph.h							\
+									matrix.h graph.h sle.h						\
 								)												\
 							)													\
 						)
@@ -161,7 +164,7 @@ TEST_HDRS			=	$(TEST_HDRS_MTRX) $(TEST_HDRS_UTILS)
 TEST_SRCS_MTRX		=	$(addprefix $(TEST_DIR)/,								\
 							$(addprefix matrix/,								\
 								$(addprefix srcs/,								\
-									matrix.cc graph.cc							\
+									matrix.cc graph.cc sle.cc					\
 								)												\
 							)													\
 						)
@@ -215,9 +218,16 @@ winograd:					$(PRJ_OBJS_ALGO_WIN) $(PRJ_OBJS_CLI_WIN) $(PRJ_OBJS_MTRX) $(PRJ_OB
 
 test:						$(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
 								$(PRJ_OBJS_UTIL) $(TEST_OBJS)
-							$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
-								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) $(TEST_OBJS) \
-								-o $(TEST_EXE)
+							if [ $(OS_NAME) = "Linux" ]; then \
+								$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
+									$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) $(TEST_OBJS) \
+									$(GTEST_LIB) \
+									-o $(TEST_EXE); \
+							else \
+								$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
+									$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) $(TEST_OBJS) \
+									-o $(TEST_EXE); \
+							fi
 
 clean:						
 							@rm -rf $(TMP_DIR)

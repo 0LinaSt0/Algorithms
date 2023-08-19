@@ -22,7 +22,7 @@ public:
     Edge& operator=(const Edge& other) = default;
     Edge& operator=(Edge&& other) = default;
 
-    const int id = next_id_++;
+    int id = next_id_++;
     double value;
     double pheromone;
 

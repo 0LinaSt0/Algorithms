@@ -119,7 +119,7 @@ Graph<T> Graph<T>::LoadFromFile(const std::string& filename){
 
 template< class T >
 void Graph<T>::ExportGraphToDot(
-    const Graph<T> graph,
+    const Graph<T>,
     const std::string& filename
 ){
     try{
