@@ -80,7 +80,7 @@ TEST(TEST_SUITE_NAME_WIN, TEST_MULTIPLICATION){
 
     for (const MultiplicatorInfo& mi : info){
         ::s21::WinogradUsual usual;
-        ::s21::WinogradParallel parallel;
+        ::s21::WinogradParallel parallel(4);
         ::s21::WinograPipelineParallel pipeline;
 
         ::s21::MatrixResult<double> usual_res;

@@ -76,9 +76,16 @@ void CliWinograd::run(){
                 << "Execution time: " << (time / 1000) << " ms" << std::endl;
         };
 
+        int log_proc = std::thread::hardware_concurrency();
+        if (log_proc == 0) log_proc = 8;
+        size_t threads_count = 1;
+        size_t max_threads_count = 4 * log_proc;
+
         for (int i = 0; i < iters_count; i++){
+            if (threads_count * 2 <= max_threads_count) threads_count *= 2;
+            
             WinogradUsual win_usual;
-            WinogradParallel win_parallel;
+            WinogradParallel win_parallel(threads_count);
             WinograPipelineParallel win_pipeline;
             long long duration_usual_tmp,
                         duration_parallel_tmp,
