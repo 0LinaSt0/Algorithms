@@ -24,8 +24,6 @@ Edge::Edge(double value, double pheromone){
     this->pheromone = pheromone;
 }
 
-}
-
 bool operator==(const s21::Edge& lhs, const s21::Edge& rhs){
     return lhs.id == rhs.id;
 }
@@ -52,6 +50,8 @@ bool operator!=(const s21::Edge& edge, int value){
 
 bool operator<(const s21::Edge& lhs, const s21::Edge& rhs){
     return lhs.id < rhs.id;
+}
+
 }
 
 std::istream& operator>>(std::istream& input, s21::Edge& edge){
