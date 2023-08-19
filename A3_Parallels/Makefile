@@ -245,6 +245,12 @@ test:						$(PRJ_SRCS_ALGO_WIN) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
 							fi
 							./$(TEST_EXE) 2> /dev/null
 
+check-style:
+							@clang-format -style=Google -Werror --dry-run *.h *.cc
+
+set-style:
+							@find . -name "*.h" -or -name "*.cc" -type f | xargs clang-format -i -style=Google
+
 clean:						
 							@rm -rf $(TMP_DIR)
 
@@ -258,4 +264,4 @@ re:							fclean all
 
 -include $(DPNDS) $(TEST_DPNDS)
 
-.PHONY: ant gauss winograd test clean fclean re
+.PHONY: ant gauss winograd test clean check-style set-style fclean re
