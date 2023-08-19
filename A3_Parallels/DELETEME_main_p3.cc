@@ -10,6 +10,8 @@
 using vec_type = std::vector<std::vector<double>>;
 using pair_vec_type = std::pair<vec_type, vec_type>;
 
+size_t PARALLEL_COUNT = 20;
+
 std::array<pair_vec_type, 5> tasks_array = {
     /*0*/pair_vec_type{
         vec_type{std::vector<double>{}}, 
@@ -170,19 +172,19 @@ s21::WinogradParallel::result_matrix_type::matrix_type check_usuall(s21::Matrix<
 
     r = alg.WinogradMultiplication(a, b).matrix_array;
 
-    std::cout << "USUAL:" << std::endl
-            << r << std::endl << std::endl;
+    // std::cout << "USUAL:" << std::endl
+    //         << r << std::endl << std::endl;
     return r;
 }
 
 s21::WinogradParallel::result_matrix_type::matrix_type check_parallel(s21::Matrix<double>& a, s21::Matrix<double>& b){
-    s21::WinogradParallel alg;
+    s21::WinogradParallel alg(PARALLEL_COUNT);
     s21::WinogradParallel::result_matrix_type::matrix_type r;
 
     r = alg.WinogradMultiplication(a, b).matrix_array;
 
-    std::cout << "PARALLEL:" << std::endl
-            << r << std::endl << std::endl;
+    // std::cout << "PARALLEL:" << std::endl
+    //         << r << std::endl << std::endl;
     return r;
 }
 
@@ -197,8 +199,8 @@ int main(){
     // s21::Matrix<double> a(tasks_array[0].first); s21::Matrix<double> b(tasks_array[0].second);
     // s21::Matrix<double> a(tasks_array[1].first); s21::Matrix<double> b(tasks_array[1].second);
     // s21::Matrix<double> a(tasks_array[2].first); s21::Matrix<double> b(tasks_array[2].second);
-    // s21::Matrix<double> a(tasks_array[3].first); s21::Matrix<double> b(tasks_array[3].second);
-    s21::Matrix<double> a(tasks_array[4].first); s21::Matrix<double> b(tasks_array[4].second);
+    s21::Matrix<double> a(tasks_array[3].first); s21::Matrix<double> b(tasks_array[3].second);
+    // s21::Matrix<double> a(tasks_array[4].first); s21::Matrix<double> b(tasks_array[4].second);
 
     check_is_equal(check_usuall(a, b), check_parallel(a, b));
 }

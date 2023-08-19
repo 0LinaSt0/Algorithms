@@ -196,14 +196,6 @@ WinogradParent::matrix_rows_unique_ptr
         execute_codes.first,
         matrices_ptr
     );
-    // if (of_first_row_i == 1){
-    //     for (multiplicators_arrray::iterator it = second_matrix_multiplicators_.begin();
-    //             it != second_matrix_multiplicators_.end();
-    //             ++it){
-    //         std::cout << it->first << ": " << it->second << std::endl;
-    //     }
-    //     exit(0);
-    // }
 
     current_element_result = CalculateElement_(
         matrices_ptr,
@@ -260,11 +252,6 @@ WinogradParent::elements_type
             (matrices_ptr->first[of_first_row_i][of_first_column_i + 1] +
             matrices_ptr->second[of_first_column_i][of_second_column_i]);
 
-        // if (of_second_column_i == 1){
-        //     std::cout << matrices_ptr.first[of_first_row_i][of_first_column_i] << "  "
-        //         << matrices_ptr.second[of_first_column_i + 1][of_second_column_i] << std::endl;
-            // std::cout << first_matrix_multiplicator_ << " ";
-        // }
         first_matrix_multiplicator = multiplicators_calculation(
             first_matrix_multiplicator,
             second_matrix_multiplicators_,
@@ -273,18 +260,6 @@ WinogradParent::elements_type
             of_second_column_i
         );
     }
-    // std::cout << std::endl;
-    //         std::cout << element_result << std::endl;
-    //         std::cout << first_matrix_multiplicator_ << std::endl;
-    //         std::cout << second_matrix_multiplicators_[of_second_column_i] << std::endl;
-    //         exit(0);
-    // if (of_second_column_i == 1){
-    //     std::cout << std::endl;
-    //     std::cout << element_result << std::endl;
-    //     std::cout << first_matrix_multiplicator_ << std::endl;
-    //     std::cout << second_matrix_multiplicators_[of_second_column_i] << std::endl;
-    //     exit(0);
-    // }
     element_result += extra_muliplier(of_first_row_i, of_second_column_i);
     element_result -=
         first_matrix_multiplicator +
@@ -324,7 +299,8 @@ void WinogradUsual::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
 }
 
 
-WinogradParallel::WinogradParallel() : WinogradParent() { }
+WinogradParallel::WinogradParallel(size_t threads_count)
+                            : WinogradParent(), threads_count_(threads_count){ }
 
 void WinogradParallel::ResultMatrixDefaultInitialization_(
                                             row_size_type of_first_rows_count){
@@ -337,7 +313,9 @@ void WinogradParallel::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
                                     extra_multiplier_func extra_muliplier){
 
     matrix_rows_unique_ptr current_result_row;
+    row_size_type of_first_rows_count;
 
+    of_first_rows_count = matrices_ptr->first.RowsSize();
     ResultMatrixDefaultInitialization_(matrices_ptr->first.RowsSize());
 
     // For first row
@@ -352,15 +330,15 @@ void WinogradParallel::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
     try{
         threads_array_type threads_array;
 
-        for(row_size_type of_first_row_i = 1;
-            of_first_row_i < matrices_ptr->first.RowsSize();
-            of_first_row_i++
+        for(size_t thread_i = 0;
+            of_first_rows_count > 1 &&
+            thread_i < threads_count_;
+            thread_i++
         ){
             threads_array.push_back(std::thread(
                 &WinogradParallel::RowsParallelism_,
                 this,
                 matrices_ptr,
-                of_first_row_i,
                 extra_muliplier
             ));
         }
@@ -372,19 +350,25 @@ void WinogradParallel::RowsMultiplication_(matrices_pair_ptr matrices_ptr,
 }
 
 void WinogradParallel::RowsParallelism_(matrices_pair_ptr matrices_ptr,
-                                    row_size_type of_first_row_i,
                                     extra_multiplier_func extra_muliplier){
     matrix_rows_unique_ptr current_result_row;
 
-    current_result_row = CalculateRow_(
-        matrices_ptr,
-        of_first_row_i,
-        extra_muliplier,
-        WhichMultiplicationCalculationSolution::FOR_NEXT_ELEMS
-    );
-    std::lock_guard<mutex_type> locker(lock_);
-    result_matrix_.matrix_array[of_first_row_i] = 
-                                                std::move(*current_result_row);
+    for(row_size_type of_first_row_i = 1;
+            of_first_row_i < matrices_ptr->first.RowsSize();
+            of_first_row_i++
+        ){
+            std::lock_guard<mutex_type> locker(lock_);
+            if (result_matrix_.matrix_array[of_first_row_i].empty()){
+                current_result_row = CalculateRow_(
+                    matrices_ptr,
+                    of_first_row_i,
+                    extra_muliplier,
+                    WhichMultiplicationCalculationSolution::FOR_NEXT_ELEMS
+                );
+                result_matrix_.matrix_array[of_first_row_i] =
+                                            std::move(*current_result_row);
+            }
+        }
 }
 
 
