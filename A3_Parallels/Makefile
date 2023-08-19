@@ -151,6 +151,13 @@ TEST_HDRS_MTRX		=	$(addprefix $(TEST_DIR)/,								\
 								)												\
 							)													\
 						)
+TEST_HDRS_WIN		=	$(addprefix $(TEST_DIR)/,								\
+							$(addprefix algorithms/,							\
+								$(addprefix includes/,							\
+									winograd.h									\
+								)												\
+							)													\
+						)
 TEST_HDRS_UTILS		=	$(addprefix $(TEST_DIR)/,								\
 							$(addprefix test_utils/,							\
 								$(addprefix includes/,							\
@@ -158,13 +165,20 @@ TEST_HDRS_UTILS		=	$(addprefix $(TEST_DIR)/,								\
 								)												\
 							)													\
 						)
-TEST_HDRS			=	$(TEST_HDRS_MTRX) $(TEST_HDRS_UTILS)
+TEST_HDRS			=	$(TEST_HDRS_MTRX) $(TEST_HDRS_WIN) $(TEST_HDRS_UTILS)
 
 ### SOURCES ###	
 TEST_SRCS_MTRX		=	$(addprefix $(TEST_DIR)/,								\
 							$(addprefix matrix/,								\
 								$(addprefix srcs/,								\
 									matrix.cc graph.cc sle.cc					\
+								)												\
+							)													\
+						)
+TEST_SRCS_WIN		=	$(addprefix $(TEST_DIR)/,								\
+							$(addprefix algorithms/,							\
+								$(addprefix srcs/,								\
+									winograd.cc									\
 								)												\
 							)													\
 						)
@@ -178,13 +192,14 @@ TEST_SRCS_UTILS		=	$(addprefix $(TEST_DIR)/,								\
 TEST_SRCS_MAIN		=	$(addprefix $(TEST_DIR)/, 								\
 							main.cc												\
 						)
-TEST_SRCS			=	$(TEST_SRCS_MTRX) $(TEST_SRCS_UTILS) $(TEST_SRCS_MAIN)
+TEST_SRCS			=	$(TEST_SRCS_MTRX) $(TEST_SRCS_WIN) $(TEST_SRCS_UTILS) $(TEST_SRCS_MAIN)
 
 ### OBJECTS ###	
 TEST_OBJS_MTRX		=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_MTRX:.cc=.o))
+TEST_OBJS_WIN		=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_WIN:.cc=.o))
 TEST_OBJS_UTILS		=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_UTILS:.cc=.o))
 TEST_OBJS_MAIN		=	$(addprefix $(TMP_DIR)/, $(TEST_SRCS_MAIN:.cc=.o))
-TEST_OBJS			=	$(TEST_OBJS_MTRX) $(TEST_OBJS_MAIN) $(TEST_OBJS_UTILS)
+TEST_OBJS			=	$(TEST_OBJS_MTRX) $(TEST_OBJS_WIN) $(TEST_OBJS_MAIN) $(TEST_OBJS_UTILS)
 
 ### DEPENDENCIES ###
 TEST_DPNDS			=	$(TEST_OBJS:.o=.d)
@@ -216,18 +231,19 @@ winograd:					$(PRJ_OBJS_ALGO_WIN) $(PRJ_OBJS_CLI_WIN) $(PRJ_OBJS_MTRX) $(PRJ_OB
 								$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) \
 								-o $(WIN_EXE)
 
-test:						$(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
+test:						$(PRJ_SRCS_ALGO_WIN) $(PRJ_OBJS_CLI) $(PRJ_OBJS_MTRX) \
 								$(PRJ_OBJS_UTIL) $(TEST_OBJS)
 							if [ $(OS_NAME) = "Linux" ]; then \
-								$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
+								$(GCC) $(PRJ_SRCS_ALGO_WIN) $(PRJ_OBJS_CLI) \
 									$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) $(TEST_OBJS) \
 									$(GTEST_LIB) \
 									-o $(TEST_EXE); \
 							else \
-								$(GCC) $(PRJ_OBJS_ALGO) $(PRJ_OBJS_CLI) \
+								$(GCC) $(PRJ_SRCS_ALGO_WIN) $(PRJ_OBJS_CLI) \
 									$(PRJ_OBJS_MTRX) $(PRJ_OBJS_UTIL) $(TEST_OBJS) \
 									-o $(TEST_EXE); \
 							fi
+							./$(TEST_EXE) 2> /dev/null
 
 clean:						
 							@rm -rf $(TMP_DIR)
