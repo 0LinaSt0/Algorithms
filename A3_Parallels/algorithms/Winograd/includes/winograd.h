@@ -3,6 +3,7 @@
 
 #include <condition_variable>
 #include <functional>
+#include <unistd.h>
 #include <utility>
 #include <vector>
 #include <memory>
@@ -155,8 +156,8 @@ private:
         Stage& operator=(const Stage&) = delete;
         Stage& operator=(Stage&&) = default;
 
-        std::thread thread;
         std::queue<row_size_type> rows;
+        std::thread thread;
         int id;
     };
 
@@ -188,6 +189,7 @@ private:
     // Return lambda function to run in thread
     std::function<void ()> GetThreadBody_(
         Stage& stage,
+        row_size_type max_stage,
         matrices_pair_ptr matrices_ptr
     );
 };

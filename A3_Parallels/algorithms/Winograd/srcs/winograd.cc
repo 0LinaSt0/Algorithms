@@ -384,9 +384,8 @@ void WinograPipelineParallel::RowsMultiplication_(
     row_size_type stages_count = std::min(rows_count, MAX_STAGES);
 
     rows_done_ = 0;
-    stages_.clear();
     stages_.reserve(stages_count);
-
+    
     std::vector<std::mutex> m1(stages_count);
     std::vector<std::mutex> m2(stages_count);
     start_mutexes_ = std::move(m1);
@@ -396,16 +395,19 @@ void WinograPipelineParallel::RowsMultiplication_(
     for (row_size_type row = 0; row < stages_count; row++){
         Stage s;
         stages_.push_back(std::move(s));
+        
         Stage& stage = stages_.back();
         stage.id = next_id++;
 
-        std::thread th(GetThreadBody_(stage, matrices_ptr));
+        std::thread th = std::thread(
+            GetThreadBody_(stages_.back(), stages_count, matrices_ptr)
+        );
         stage.thread = std::move(th);
     }
+
     stages_[0].rows.push(0);
-    cv_.notify_all();
-    for (size_t row = 0; row < stages_.size(); row++){
-        stages_[row].thread.join();
+    for (Stage& stage : stages_){
+        stage.thread.join();
     }
 }
 
@@ -434,23 +436,21 @@ void WinograPipelineParallel::InitMultiplicators_(
 
 std::function<void ()> WinograPipelineParallel::GetThreadBody_(
     Stage& stage,
+    row_size_type max_stage,
     matrices_pair_ptr matrices_ptr
 ){
-    return [this, &stage, matrices_ptr](){
+    return [this, &stage, max_stage, matrices_ptr](){
         matrix_type_reference A = matrices_ptr->first;
         matrix_type_reference B = matrices_ptr->second;
         row_size_type max_rows = A.RowsSize();
 
         while (true){
-            // Wait for the thread's start
-            std::unique_lock lock(this->start_mutexes_[stage.id]);
-            this->cv_.wait(
-                lock,
-                [this, max_rows, &stage](){
-                    return this->rows_done_ == max_rows ||
-                            !stage.rows.empty();
+            while (true) {
+                if (this->rows_done_ == max_rows || !stage.rows.empty()) {
+                    break;
                 }
-            );
+                usleep(500);
+            }
 
             // Get next row number
             if (this->rows_done_ == max_rows) break;
@@ -497,7 +497,7 @@ std::function<void ()> WinograPipelineParallel::GetThreadBody_(
                 if (col == 0 && row + 1 != A.RowsSize()){
                     row_size_type next_row = row + 1;
                     int next_stage_id = 
-                        (stage.id + 1 == static_cast<int>(this->MAX_STAGES)) ?
+                        (stage.id + 1 == static_cast<int>(max_stage)) ?
                         0 :
                         stage.id + 1;
 
@@ -505,14 +505,10 @@ std::function<void ()> WinograPipelineParallel::GetThreadBody_(
                     this->stages_mutexes_[next_stage_id].lock();
                     this->stages_[next_stage_id].rows.push(next_row);
                     this->stages_mutexes_[next_stage_id].unlock();
-                    // Let it start
-                    this->cv_.notify_all();
                 }
             }
             
-            // Notify on exit
             this->rows_done_++;
-            this->cv_.notify_all();
         }
     };
 }

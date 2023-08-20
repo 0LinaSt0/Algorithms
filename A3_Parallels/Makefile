@@ -4,7 +4,7 @@
 
 OS_NAME 			=	$(shell uname)
 
-GTEST				=	false
+GTEST				=	true
 GTEST_LIB			=	/usr/lib/libgtest.a /usr/lib/libgtest_main.a
 
 ANT_EXE				=	ant.out
@@ -15,7 +15,7 @@ TEST_EXE			=	test.out
 TEST_DIR			=	tests
 TMP_DIR				=	tmp_handlers
 
-CC					=	clang++
+CC					=	g++
 ifeq ($(GTEST), true)
 	GCC				=	$(CC) -std=c++17 -lgtest -Wall -Wextra -Werror -MMD -g	\
 							-fsanitize=leak -fsanitize=undefined -fsanitize=address
