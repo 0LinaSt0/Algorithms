@@ -199,6 +199,7 @@ WinogradParent::matrix_rows_unique_ptr
     elements_type first_matrix_multiplicator;
 
     execute_codes = DefineMultiplicationCalculationSolution_(type_row_code);
+    first_matrix_multiplicator = 0;
 
     //For first element
     multiplicators_calculation = DefineMultiplicatorsFunc_(
@@ -448,7 +449,7 @@ std::function<void ()> WinograPipelineParallel::GetThreadBody_(
     row_size_type max_stage,
     matrices_pair_ptr matrices_ptr
 ){
-    return [this, &stage, matrices_ptr](){
+    return [this, &stage, max_stage, matrices_ptr](){
         matrix_type_const_ref A = matrices_ptr->first;
         matrix_type_const_ref B = matrices_ptr->second;
         row_size_type max_rows = A.RowsSize();

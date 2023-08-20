@@ -172,8 +172,8 @@ s21::WinogradParallel::result_matrix_type::matrix_type check_usuall(s21::Matrix<
 
     r = alg.WinogradMultiplication(a, b).matrix_array;
 
-    // std::cout << "USUAL:" << std::endl
-    //         << r << std::endl << std::endl;
+    std::cout << "USUAL:" << std::endl
+            << r << std::endl << std::endl;
     return r;
 }
 
@@ -183,8 +183,8 @@ s21::WinogradParallel::result_matrix_type::matrix_type check_parallel(s21::Matri
 
     r = alg.WinogradMultiplication(a, b).matrix_array;
 
-    // std::cout << "PARALLEL:" << std::endl
-    //         << r << std::endl << std::endl;
+    std::cout << "PARALLEL:" << std::endl
+            << r << std::endl << std::endl;
     return r;
 }
 
@@ -201,6 +201,16 @@ int main(){
     // s21::Matrix<double> a(tasks_array[2].first); s21::Matrix<double> b(tasks_array[2].second);
     // s21::Matrix<double> a(tasks_array[3].first); s21::Matrix<double> b(tasks_array[3].second);
     s21::Matrix<double> a(tasks_array[4].first); s21::Matrix<double> b(tasks_array[4].second);
+    // s21::Matrix<double> a = s21::Matrix<double>::LoadFromFile("materials/matrix/valid/graphs/09_with_several_soltuions");
+    // s21::Matrix<double> b{
+    //     vec_type{
+    //          std::vector<double>{0,	0,	3,	0},
+    //          std::vector<double>{1,	0,	0,	0},
+    //          std::vector<double>{0,	10,	0,	3},
+    //          std::vector<double>{0,	2,	7,	0},
+    //          std::vector<double>{4,	4,	0,	0}
+    //     }
+    // };
 
     check_is_equal(check_usuall(a, b), check_parallel(a, b));
 }
