@@ -35,7 +35,7 @@ class WinogradParent{
 public:
     using elements_type             = double;
     using matrix_type               = Matrix<elements_type>;
-    using matrix_type_reference     = matrix_type&;
+    using matrix_type_const_ref     = const matrix_type&;
     using result_matrix_type        = MatrixResult<elements_type>;
     using result_matrix_rows_type   = typename result_matrix_type::rows_type;
     using row_size_type             = typename matrix_type::row_size_type;
@@ -44,8 +44,8 @@ public:
     using multiplicators_arrray_reference
                                     = multiplicators_arrray&;
     using matrices_pair             = std::pair<
-                                        matrix_type_reference,
-                                        matrix_type_reference>;
+                                        matrix_type_const_ref,
+                                        matrix_type_const_ref>;
     using matrices_pair_ptr         = matrices_pair*;
     using matrix_rows_unique_ptr    = std::unique_ptr<result_matrix_rows_type>;
     using multiplications_calculate_pair
@@ -65,38 +65,53 @@ public:
     WinogradParent();
     ~WinogradParent() = default;
 
-    
+    /**
+     * Multiplying [matrix_first] and [matrix_second] by Winograd method
+     * @return result_matrix_type object
+     */
     result_matrix_type WinogradMultiplication(
-                            matrix_type_reference matrix_first,
-                            matrix_type_reference matrix_second);
+                            matrix_type_const_ref matrix_first,
+                            matrix_type_const_ref matrix_second);
 
 protected:
     result_matrix_type result_matrix_;
     multiplicators_arrray second_matrix_multiplicators_;
 
-    // Check if matrices' sizes are ok for multiplication
+    /**
+     * Check if matrices' sizes [matrix_first_column_count] and 
+     * [matrix_second_row_count] are ok for multiplication
+     * @return true if size if valid
+     * @return false otherwise
+     */
     bool IsMatricesInvalid_(column_size_type matrix_first_column_count,
                         row_size_type matrix_second_row_count);
 
-    // Reserve memory for result matrix
-    void ResultMatrixReserveRowsStorage_(row_size_type row_count);
-
+    void StartMultiplication_(matrices_pair_ptr matrices_ptr);
 
     /**
-     * Create lambda which returns multiplicator of last element or
-     * pair of elements. It all depends on count of elements.
-     * 
-     * Call RowsMultiplication_ after that.
-    */   
-    void MatrixMultiplication_(matrices_pair_ptr matrices_ptr);
+     * Creating lambda function which returns extra multiplicator for
+     * [matrices_ptr] first matrix, if odd size of elements in row, or zero
+     * @return extra_multiplier_func object
+     */
+    extra_multiplier_func MatrixMultiplication_(matrices_pair_ptr matrices_ptr);
 
     virtual void RowsMultiplication_(matrices_pair_ptr matrices_ptr,
                             extra_multiplier_func element_calculation) = 0;
 
+    /**
+     * Defining pattern for calculating multiplicators depending 
+     * of the calculating element of matrices in [matrices_ptr]
+     * @return multiplicators_func object
+     */
     multiplicators_func DefineMultiplicatorsFunc_(
                                     WhitchMultiplicatorsCalculate code,
                                     matrices_pair_ptr matrices_ptr);
 
+    /**
+     * Defining ways for calculating multiplicators depending 
+     * of the calculating element of matrices in [matrices_ptr]
+     * @return multiplications_calculate_pair object
+     */
     multiplications_calculate_pair DefineMultiplicationCalculationSolution_(
                                 WhichMultiplicationCalculationSolution code);
 

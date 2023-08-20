@@ -199,8 +199,8 @@ int main(){
     // s21::Matrix<double> a(tasks_array[0].first); s21::Matrix<double> b(tasks_array[0].second);
     // s21::Matrix<double> a(tasks_array[1].first); s21::Matrix<double> b(tasks_array[1].second);
     // s21::Matrix<double> a(tasks_array[2].first); s21::Matrix<double> b(tasks_array[2].second);
-    s21::Matrix<double> a(tasks_array[3].first); s21::Matrix<double> b(tasks_array[3].second);
-    // s21::Matrix<double> a(tasks_array[4].first); s21::Matrix<double> b(tasks_array[4].second);
+    // s21::Matrix<double> a(tasks_array[3].first); s21::Matrix<double> b(tasks_array[3].second);
+    s21::Matrix<double> a(tasks_array[4].first); s21::Matrix<double> b(tasks_array[4].second);
 
     check_is_equal(check_usuall(a, b), check_parallel(a, b));
 }

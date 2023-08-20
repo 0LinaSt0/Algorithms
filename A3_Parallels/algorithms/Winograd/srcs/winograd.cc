@@ -5,14 +5,14 @@ namespace s21{
 WinogradParent::WinogradParent() { }
 
 WinogradParent::result_matrix_type WinogradParent::WinogradMultiplication(
-                                        matrix_type_reference matrix_first,
-                                        matrix_type_reference matrix_second){
+                                    matrix_type_const_ref matrix_first,
+                                    matrix_type_const_ref matrix_second){
     if(!IsMatricesInvalid_(
         matrix_first.ColumnsSize(), matrix_second.RowsSize()
     )){
         matrices_pair matrices{matrix_first, matrix_second};
 
-        MatrixMultiplication_(&matrices);
+        StartMultiplication_(&matrices);
     }
 
     return result_matrix_;
@@ -42,7 +42,18 @@ bool WinogradParent::IsMatricesInvalid_(
     return is_invalid;
 }
 
-void WinogradParent::MatrixMultiplication_(matrices_pair_ptr matrices_ptr){
+void WinogradParent::StartMultiplication_(matrices_pair_ptr matrices_ptr){
+    extra_multiplier_func extra_muliplier;
+
+    extra_muliplier = MatrixMultiplication_(matrices_ptr);
+    RowsMultiplication_(
+        matrices_ptr,
+        extra_muliplier
+    );
+}
+
+WinogradParent::extra_multiplier_func WinogradParent::MatrixMultiplication_(
+                                                matrices_pair_ptr matrices_ptr){
     extra_multiplier_func extra_muliplier;
 
     if (matrices_ptr->first.ColumnsSize() % 2){
@@ -61,11 +72,9 @@ void WinogradParent::MatrixMultiplication_(matrices_pair_ptr matrices_ptr){
         extra_muliplier =
             [](row_size_type, column_size_type) -> elements_type { return 0; };
     }
-    RowsMultiplication_(
-        matrices_ptr,
-        extra_muliplier
-    );
+    return extra_muliplier;
 }
+
 
 WinogradParent::multiplicators_func WinogradParent::DefineMultiplicatorsFunc_(
                                         WhitchMultiplicatorsCalculate code,
@@ -439,9 +448,9 @@ std::function<void ()> WinograPipelineParallel::GetThreadBody_(
     row_size_type max_stage,
     matrices_pair_ptr matrices_ptr
 ){
-    return [this, &stage, max_stage, matrices_ptr](){
-        matrix_type_reference A = matrices_ptr->first;
-        matrix_type_reference B = matrices_ptr->second;
+    return [this, &stage, matrices_ptr](){
+        matrix_type_const_ref A = matrices_ptr->first;
+        matrix_type_const_ref B = matrices_ptr->second;
         row_size_type max_rows = A.RowsSize();
 
         while (true){
