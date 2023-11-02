@@ -1,6 +1,9 @@
+**/googletest/
+
 **/.*
 **/tmp*
 **/*.dSYM
+**/*.vscode
 
 **/*.o
 **/*.d
@@ -8,8 +11,8 @@
 **/*.gch
 **/*.java
 
-**/*.out
-**/*.exe
+**/*.out*
+**/*.exe*
 
 **/materials/dot_representations/*
 
